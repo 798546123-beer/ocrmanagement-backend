@@ -24,10 +24,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistration;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -39,12 +36,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Spring Boot 2.0 解决跨域问题
- *
- * @Author qinfeng
- *
- */
+
 @Configuration
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
@@ -70,10 +62,6 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         resourceHandlerRegistration.addResourceLocations(staticLocations.split(","));
     }
 
-    /**
-     * 方案一： 默认访问根路径跳转 doc.html页面 （swagger文档页面）
-     * 方案二： 访问根路径改成跳转 index.html页面 （简化部署方案： 可以把前端打包直接放到项目的 webapp，上面的配置）
-     */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("doc.html");
@@ -89,12 +77,16 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         // 允许访问的客户端域名
         ArrayList<String> allowOrigins = new ArrayList<>();
         allowOrigins.add("http://localhost:9528");
+        allowOrigins.add("*");
         // 需要什么允许的源就在这里添加
         corsConfiguration.setAllowedOrigins(allowOrigins); // 注意这里的方法是 setAllowedOrigins
-        corsConfiguration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin","Access-Control-Allow-Origin")); // 允许的HTTP头部
+        corsConfiguration.addAllowedOrigin("http://localhost:9528");
+        corsConfiguration.addAllowedOrigin("*");
+        corsConfiguration.addAllowedHeader("");
+        corsConfiguration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin")); // 允许的HTTP头部
         corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-        corsConfiguration.setExposedHeaders(Arrays.asList("Access-Control-Allow-Origin","*"));
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+        System.out.println("cors被配置");
         return new CorsFilter(urlBasedCorsConfigurationSource);
     }
     @Override
@@ -102,23 +94,24 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter(objectMapper());
         converters.add(jackson2HttpMessageConverter);
     }
-
-    /**
-     * 自定义ObjectMapper
-     */
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:9528")
+                .allowCredentials(true)
+                .allowedMethods("GET", "POST", "DELETE", "PUT")
+                .maxAge(3600);
+    }
     @Bean
     @Primary
     public ObjectMapper objectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
-        //处理bigDecimal
         objectMapper.enable(JsonGenerator.Feature.WRITE_BIGDECIMAL_AS_PLAIN);
         objectMapper.enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
-        //处理失败
         objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.configure(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES, false);
         objectMapper.configure(DeserializationFeature.FAIL_ON_NULL_CREATOR_PROPERTIES, false);
-        //默认的处理日期时间格式
         objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
         JavaTimeModule javaTimeModule = new JavaTimeModule();
         javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
