@@ -1,0 +1,140 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "TestIpUtil",
+            "request": "launch",
+            "mainClass": "org.jeecg.test.sqlparse.TestIpUtil",
+            "projectName": "jeecg-boot-base-core"
+        },
+        {
+            "type": "java",
+            "name": "JeecgGatewayApplication",
+            "request": "launch",
+            "mainClass": "org.jeecg.JeecgGatewayApplication",
+            "projectName": "jeecg-cloud-gateway"
+        },
+        {
+            "type": "java",
+            "name": "JeecgMonitorApplication",
+            "request": "launch",
+            "mainClass": "org.jeecg.monitor.JeecgMonitorApplication",
+            "projectName": "jeecg-cloud-monitor"
+        },
+        {
+            "type": "java",
+            "name": "JeecgNacosApplication",
+            "request": "launch",
+            "mainClass": "com.alibaba.nacos.JeecgNacosApplication",
+            "projectName": "jeecg-cloud-nacos"
+        },
+        {
+            "type": "java",
+            "name": "JeecgSentinelApplication",
+            "request": "launch",
+            "mainClass": "com.alibaba.csp.sentinel.dashboard.JeecgSentinelApplication",
+            "projectName": "jeecg-cloud-sentinel"
+        },
+        {
+            "type": "java",
+            "name": "SeataAccountApplication",
+            "request": "launch",
+            "mainClass": "org.jeecg.SeataAccountApplication",
+            "projectName": "jeecg-cloud-test-seata-account"
+        },
+        {
+            "type": "java",
+            "name": "SeataOrderApplication",
+            "request": "launch",
+            "mainClass": "org.jeecg.SeataOrderApplication",
+            "projectName": "jeecg-cloud-test-seata-order"
+        },
+        {
+            "type": "java",
+            "name": "SeataProductApplication",
+            "request": "launch",
+            "mainClass": "org.jeecg.SeataProductApplication",
+            "projectName": "jeecg-cloud-test-seata-product"
+        },
+        {
+            "type": "java",
+            "name": "XxlJobAdminApplication",
+            "request": "launch",
+            "mainClass": "com.xxl.job.admin.XxlJobAdminApplication",
+            "projectName": "jeecg-cloud-xxljob"
+        },
+        {
+            "type": "java",
+            "name": "JeecgDemoCloudApplication",
+            "request": "launch",
+            "mainClass": "org.jeecg.JeecgDemoCloudApplication",
+            "projectName": "jeecg-demo-cloud-start"
+        },
+        {
+            "type": "java",
+            "name": "CasServiceUtil",
+            "request": "launch",
+            "mainClass": "org.jeecg.modules.cas.util.CasServiceUtil",
+            "projectName": "jeecg-system-biz"
+        },
+        {
+            "type": "java",
+            "name": "XmlUtils",
+            "request": "launch",
+            "mainClass": "org.jeecg.modules.cas.util.XmlUtils",
+            "projectName": "jeecg-system-biz"
+        },
+        {
+            "type": "java",
+            "name": "SecurityUtil",
+            "request": "launch",
+            "mainClass": "org.jeecg.modules.system.util.SecurityUtil",
+            "projectName": "jeecg-system-biz"
+        },
+        {
+            "type": "java",
+            "name": "XssUtils",
+            "request": "launch",
+            "mainClass": "org.jeecg.modules.system.util.XssUtils",
+            "projectName": "jeecg-system-biz"
+        },
+        {
+            "type": "java",
+            "name": "JeecgSystemCloudApplication",
+            "request": "launch",
+            "mainClass": "org.jeecg.JeecgSystemCloudApplication",
+            "projectName": "jeecg-system-cloud-start"
+        },
+        {
+            "type": "java",
+            "name": "JeecgSystemApplication",
+            "request": "launch",
+            "mainClass": "org.jeecg.JeecgSystemApplication",
+            "projectName": "jeecg-system-start"
+        },
+        {
+            "type": "java",
+            "name": "JeecgOneGUI",
+            "request": "launch",
+            "mainClass": "org.jeecg.codegenerate.JeecgOneGUI",
+            "projectName": "jeecg-system-start"
+        },
+        {
+            "type": "java",
+            "name": "JeecgOneToMainUtil",
+            "request": "launch",
+            "mainClass": "org.jeecg.codegenerate.JeecgOneToMainUtil",
+            "projectName": "jeecg-system-start"
+        }
+    ]
+}

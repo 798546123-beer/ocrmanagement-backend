@@ -88,7 +88,8 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/sys/randomImage/**", "anon"); //登录验证码接口排除
         filterChainDefinitionMap.put("/sys/checkCaptcha", "anon"); //登录验证码接口排除
         filterChainDefinitionMap.put("/sys/smsCheckCaptcha", "anon"); //短信次数发送太多验证码排除
-        filterChainDefinitionMap.put("/sys/login", "anon"); //登录接口排除
+//        filterChainDefinitionMap.put("/sys/login", "anon"); //登录接口排除
+        filterChainDefinitionMap.put("test/**", "anon"); //获取token验证
         filterChainDefinitionMap.put("/sys/mLogin", "anon"); //登录接口排除
         filterChainDefinitionMap.put("/sys/logout", "anon"); //登出接口排除
         filterChainDefinitionMap.put("/sys/thirdLogin/**", "anon"); //第三方登录

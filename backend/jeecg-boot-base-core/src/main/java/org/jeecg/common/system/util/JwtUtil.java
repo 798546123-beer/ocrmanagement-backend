@@ -271,7 +271,6 @@ public class JwtUtil {
 				}
 			}
 		}
-
 		// 替换为当前登录用户的角色code（多个逗号分割）
 		else if (key.equals(DataBaseConstant.SYS_ROLE_CODE) || key.equalsIgnoreCase(DataBaseConstant.SYS_ROLE_CODE_TABLE)) {
 			if (user == null) {
@@ -280,8 +279,6 @@ public class JwtUtil {
 				returnValue = user.getSysRoleCode();
 			}
 		}
-
-		//update-begin-author:taoyan date:20210330 for:多租户ID作为系统变量
 		else if (key.equals(TenantConstant.TENANT_ID) || key.toLowerCase().equals(TenantConstant.TENANT_ID_TABLE)){
 			try {
 				returnValue = SpringContextUtils.getHttpServletRequest().getHeader(CommonConstant.TENANT_ID);
@@ -289,13 +286,7 @@ public class JwtUtil {
 				log.warn("获取系统租户异常：" + e.getMessage());
 			}
 		}
-		//update-end-author:taoyan date:20210330 for:多租户ID作为系统变量
 		if(returnValue!=null){returnValue = returnValue + moshi;}
 		return returnValue;
 	}
-	
-//	public static void main(String[] args) {
-//		 String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjUzMzY1MTMsInVzZXJuYW1lIjoiYWRtaW4ifQ.xjhud_tWCNYBOg_aRlMgOdlZoWFFKB_givNElHNw3X0";
-//		 System.out.println(JwtUtil.getUsername(token));
-//	}
 }
