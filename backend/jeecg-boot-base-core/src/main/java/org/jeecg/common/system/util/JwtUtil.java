@@ -38,8 +38,8 @@ import org.jeecg.common.util.oConvertUtils;
 @Slf4j
 public class JwtUtil {
 
-	/**Token有效期为7天（Token在reids中缓存时间为两倍）*/
-	public static final long EXPIRE_TIME = (7 * 12) * 60 * 60 * 1000;
+	/**Token有效期为5分钟（Token在reids中缓存时间为两倍）*/
+	public static final long EXPIRE_TIME = 5 * 1000;
 	static final String WELL_NUMBER = SymbolConstant.WELL_NUMBER + SymbolConstant.LEFT_CURLY_BRACKET;
 
     /**
@@ -118,7 +118,7 @@ public class JwtUtil {
 
 	/**
 	 * 根据request中的token获取用户账号
-	 * 
+	 *
 	 * @param request
 	 * @return
 	 * @throws JeecgBootException
@@ -131,7 +131,7 @@ public class JwtUtil {
 		}
 		return username;
 	}
-	
+
 	/**
 	  *  从session中获取变量
 	 * @param key
@@ -158,7 +158,7 @@ public class JwtUtil {
 		if(returnValue!=null){returnValue = returnValue + moshi;}
 		return returnValue;
 	}
-	
+
 	/**
 	  * 从当前用户中获取变量
 	 * @param key
@@ -212,7 +212,7 @@ public class JwtUtil {
 		if(sysUser==null && user==null){
 			return null;
 		}
-		
+
 		//替换为系统登录用户帐号
 		if (key.equals(DataBaseConstant.SYS_USER_CODE)|| key.toLowerCase().equals(DataBaseConstant.SYS_USER_CODE_TABLE)) {
 			if(user==null) {
@@ -239,7 +239,7 @@ public class JwtUtil {
 				returnValue = user.getSysUserName();
 			}
 		}
-		
+
 		//替换为系统用户登录所使用的机构编码
 		else if (key.equals(DataBaseConstant.SYS_ORG_CODE)|| key.toLowerCase().equals(DataBaseConstant.SYS_ORG_CODE_TABLE)) {
 			if(user==null) {
