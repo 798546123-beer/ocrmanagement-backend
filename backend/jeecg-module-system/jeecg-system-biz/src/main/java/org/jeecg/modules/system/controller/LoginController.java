@@ -98,8 +98,8 @@ public class LoginController {
         userInfo(sysUser, result, request);
 
         // step.5  登录成功删除验证码
-        redisUtil.del(realKey);
-        redisUtil.del(CommonConstant.LOGIN_FAIL + username);
+//        redisUtil.del(realKey);
+//        redisUtil.del(CommonConstant.LOGIN_FAIL + username);
 
         // step.6  记录用户登录日志
         LoginUser loginUser = new LoginUser();
