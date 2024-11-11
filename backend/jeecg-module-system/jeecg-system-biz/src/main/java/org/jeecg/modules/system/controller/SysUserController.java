@@ -104,7 +104,7 @@ public class SysUserController {
 
     @Autowired
     private JeecgRedisClient jeecgRedisClient;
-    
+
     /**
      * 获取租户下用户数据（支持租户隔离）
      * @param user
@@ -914,7 +914,7 @@ public class SysUserController {
         }
         return result;
     }
-    
+
     /**
          *  查询当前用户的所有公司/当前公司编码
      * @return
@@ -937,12 +937,12 @@ public class SysUserController {
         return result;
     }
 
-    
+
 
 
 	/**
 	 * 用户注册接口
-	 * 
+	 *
 	 * @param jsonObject
 	 * @param user
 	 * @return
@@ -1005,7 +1005,7 @@ public class SysUserController {
         if(oConvertUtils.isEmpty(realname)){
             realname = username;
         }
-        
+
 		try {
 			user.setCreateTime(new Date());// 设置创建时间
 			String salt = oConvertUtils.randomGen(8);
@@ -1100,7 +1100,7 @@ public class SysUserController {
 		result.setSuccess(true);
 		return result;
 	}
-	
+
 	/**
 	 * 用户更改密码
 	 */
@@ -1152,11 +1152,11 @@ public class SysUserController {
             return result;
         }
     }
-	
+
 
 	/**
 	 * 根据TOKEN获取用户的部分信息（返回的数据是可供表单设计器使用的数据）
-	 * 
+	 *
 	 * @return
 	 */
 	@GetMapping("/getUserSectionInfoByToken")
@@ -1167,7 +1167,7 @@ public class SysUserController {
 			if (oConvertUtils.isEmpty(token)) {
 				 username = JwtUtil.getUserNameByToken(request);
 			} else {
-				 username = JwtUtil.getUsername(token);				
+				 username = JwtUtil.getUsername(token);
 			}
 
 			log.debug(" ------ 通过令牌获取部分用户信息，当前用户： " + username);
@@ -1188,7 +1188,7 @@ public class SysUserController {
 			return Result.error(500, "查询失败:" + e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * 【APP端接口】获取用户列表  根据用户名和真实名 模糊匹配
 	 * @param keyword
@@ -1225,7 +1225,7 @@ public class SysUserController {
 			log.error(e.getMessage(), e);
 			return Result.error(500, "查询失败:" + e.getMessage());
 		}
-		
+
 	}
 
     /**
@@ -1519,7 +1519,7 @@ public class SysUserController {
         }
         return ls;
     }
-    
+
     /**
      * 聊天 创建聊天组件专用  根据用户账号、用户姓名、公司id分页查询
      * @param departId 公司id
@@ -1791,7 +1791,7 @@ public class SysUserController {
         Integer tenantId = sysUser.getLoginTenantId();
         LoginUser loginUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
         String userId = loginUser.getId();
-        
+
         // 判断 指定的租户ID是不是当前登录用户的租户
         LambdaQueryWrapper<SysUserTenant> query = new LambdaQueryWrapper<>();
         query.eq(SysUserTenant::getTenantId, tenantId);
@@ -1800,7 +1800,7 @@ public class SysUserController {
         if(null == one){
             return result.error500("非租户下的用户，不允许修改！");
         }
-        
+
         // 修改 loginTenantId
         LambdaQueryWrapper<SysUser> update = new LambdaQueryWrapper<SysUser>()
                 .eq(SysUser::getId, userId);
@@ -1808,7 +1808,7 @@ public class SysUserController {
         updateUser.setLoginTenantId(tenantId);
         sysUserService.update(updateUser, update);
         return Result.ok();
-    } 
+    }
 
     /**
      * 应用用户导出
@@ -1819,7 +1819,7 @@ public class SysUserController {
     public ModelAndView exportAppUser(HttpServletRequest request) {
         return sysUserService.exportAppUser(request);
     }
-    
+
    /**
      * 应用用户导入
      * @param request

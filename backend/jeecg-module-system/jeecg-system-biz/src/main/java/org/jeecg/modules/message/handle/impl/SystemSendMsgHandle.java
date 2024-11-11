@@ -37,7 +37,7 @@ public class SystemSendMsgHandle implements ISendMsgHandle {
     private SysAnnouncementMapper sysAnnouncementMapper;
 
     @Resource
-    private SysUserMapper userMapper;
+    private SysUserMapper sysUserMapper;
 
     @Resource
     private SysAnnouncementSendMapper sysAnnouncementSendMapper;
@@ -116,7 +116,7 @@ public class SystemSendMsgHandle implements ISendMsgHandle {
         String anntId = announcement.getId();
         for(int i=0;i<userIds.length;i++) {
             if(oConvertUtils.isNotEmpty(userIds[i])) {
-                SysUser sysUser = userMapper.getUserByName(userIds[i]);
+                SysUser sysUser = sysUserMapper.getUserByName(userIds[i]);
                 if(sysUser==null) {
                     continue;
                 }

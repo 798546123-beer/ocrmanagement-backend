@@ -74,7 +74,7 @@ import java.util.stream.Collectors;
 /**
  * @Description: 底层共通业务API，提供其他独立模块调用
  * @Author: scott
- * @Date:2019-4-20 
+ * @Date:2019-4-20
  * @Version:V1.0
  */
 @Slf4j
@@ -86,7 +86,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	@Autowired
 	private ISysMessageTemplateService sysMessageTemplateService;
 	@Resource
-	private SysUserMapper userMapper;
+	private SysUserMapper sysUserMapper;
 	@Resource
 	private SysUserRoleMapper sysUserRoleMapper;
 	@Autowired
@@ -100,7 +100,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	@Resource
     private WebSocket webSocket;
 	@Resource
-	private SysRoleMapper roleMapper;
+	private SysRoleMapper sysRoleMapper;
 	@Resource
 	private SysDepartMapper departMapper;
 	@Resource
@@ -164,10 +164,10 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		if (oConvertUtils.isEmpty(username)) {
 			return null;
 		}
-		String userId = userMapper.getUserIdByName(username);
+		String userId = sysUserMapper.getUserIdByName(username);
 		return userId;
 	}
-	
+
 
 	@Override
 	public String translateDictFromTable(String table, String text, String code, String key) {
@@ -193,17 +193,17 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 			LambdaQueryWrapper<SysPermission> query = new LambdaQueryWrapper<SysPermission>();
 			query.eq(SysPermission::getMenuType,2);
 			query.eq(SysPermission::getDelFlag,0);
-			
+
 			//update-begin-author:taoyan date:2023-2-21 for: 解决参数顺序问题
 			List<String> allPossiblePaths = this.getOnlinePossiblePaths(requestPath);
 			log.info("获取的菜单地址= {}", allPossiblePaths.toString());
 			if(allPossiblePaths.size()==1){
 				query.eq(SysPermission::getUrl, requestPath);
 			}else{
-				query.in(SysPermission::getUrl, allPossiblePaths);	
+				query.in(SysPermission::getUrl, allPossiblePaths);
 			}
 			//update-end-author:taoyan date:2023-2-21 for: 解决参数顺序问题
-			
+
 			currentSyspermission = sysPermissionMapper.selectList(query);
 			//2.未找到 再通过自定义匹配URL 获取菜单
 			if(currentSyspermission==null || currentSyspermission.size()==0) {
@@ -310,7 +310,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 			return null;
 		}
 		LoginUser loginUser = new LoginUser();
-		SysUser sysUser = userMapper.selectById(id);
+		SysUser sysUser = sysUserMapper.selectById(id);
 		if(sysUser==null) {
 			return null;
 		}
@@ -326,7 +326,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	public List<String> getRolesByUsername(String username) {
 		return sysUserRoleMapper.getRoleByUserName(username);
 	}
-	
+
 	@Override
 	public List<String> getRolesByUserId(String userId) {
 		return sysUserRoleMapper.getRoleCodeByUserId(userId);
@@ -341,7 +341,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		}
 		return result;
 	}
-	
+
 	@Override
 	public List<String> getDepartIdsByUserId(String userId) {
 		return sysDepartService.queryDepartsByUserId(userId);
@@ -495,7 +495,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		String anntId = announcement.getId();
 		for(int i=0;i<userIds.length;i++) {
 			if(oConvertUtils.isNotEmpty(userIds[i])) {
-				SysUser sysUser = userMapper.getUserByName(userIds[i]);
+				SysUser sysUser = sysUserMapper.getUserByName(userIds[i]);
 				if(sysUser==null) {
 					continue;
 				}
@@ -558,7 +558,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		announcement.setMsgType(CommonConstant.MSG_TYPE_UESR);
 		announcement.setSendStatus(CommonConstant.HAS_SEND);
 		announcement.setSendTime(new Date());
-		
+
 		if(tmplateParam!=null && oConvertUtils.isNotEmpty(tmplateParam.get(CommonSendStatus.MSG_ABSTRACT_JSON))){
 			announcement.setMsgAbstract(tmplateParam.get(CommonSendStatus.MSG_ABSTRACT_JSON));
 		}
@@ -566,7 +566,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		if(tmplateParam!=null && oConvertUtils.isNotEmpty(tmplateParam.get(CommonConstant.MSG_HREF_URL))){
 			mobileOpenUrl = tmplateParam.get(CommonConstant.MSG_HREF_URL);
 		}
-	
+
 		announcement.setMsgCategory(CommonConstant.MSG_CATEGORY_2);
 		announcement.setDelFlag(String.valueOf(CommonConstant.DEL_FLAG_0));
 		announcement.setBusId(busId);
@@ -580,7 +580,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		String anntId = announcement.getId();
 		for(int i=0;i<userIds.length;i++) {
 			if(oConvertUtils.isNotEmpty(userIds[i])) {
-				SysUser sysUser = userMapper.getUserByName(userIds[i]);
+				SysUser sysUser = sysUserMapper.getUserByName(userIds[i]);
 				if(sysUser==null) {
 					continue;
 				}
@@ -716,7 +716,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	@Override
 	public List<ComboModel> queryAllUserBackCombo() {
 		List<ComboModel> list = new ArrayList<ComboModel>();
-		List<SysUser> userList = userMapper.selectList(new QueryWrapper<SysUser>().eq("status",1).eq("del_flag",0));
+		List<SysUser> userList = sysUserMapper.selectList(new QueryWrapper<SysUser>().eq("status",1).eq("del_flag",0));
 		for(SysUser user : userList){
 			ComboModel model = new ComboModel();
 			model.setTitle(user.getRealname());
@@ -733,7 +733,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		QueryWrapper<SysUser> queryWrapper = new QueryWrapper<SysUser>().eq("status",1).eq("del_flag",0);
 		List<ComboModel> list = new ArrayList<ComboModel>();
 		Page<SysUser> page = new Page<SysUser>(pageNo, pageSize);
-		IPage<SysUser> pageList = userMapper.selectPage(page, queryWrapper);
+		IPage<SysUser> pageList = sysUserMapper.selectPage(page, queryWrapper);
 		for(SysUser user : pageList.getRecords()){
 			ComboModel model = new ComboModel();
 			model.setUsername(user.getUsername());
@@ -758,7 +758,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	@Override
 	public List<ComboModel> queryAllRole() {
 		List<ComboModel> list = new ArrayList<ComboModel>();
-		List<SysRole> roleList = roleMapper.selectList(new QueryWrapper<SysRole>());
+		List<SysRole> roleList = sysRoleMapper.selectList(new QueryWrapper<SysRole>());
 		for(SysRole role : roleList){
 			ComboModel model = new ComboModel();
 			model.setTitle(role.getRoleName());
@@ -771,7 +771,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
     @Override
     public List<ComboModel> queryAllRole(String[] roleIds) {
         List<ComboModel> list = new ArrayList<ComboModel>();
-        List<SysRole> roleList = roleMapper.selectList(new QueryWrapper<SysRole>());
+        List<SysRole> roleList = sysRoleMapper.selectList(new QueryWrapper<SysRole>());
         for(SysRole role : roleList){
             ComboModel model = new ComboModel();
             model.setTitle(role.getRoleName());
@@ -848,8 +848,8 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		} else {
 			queryWrapper.like("depart_ids", deptId);
 		}
-		
-		List<SysUser> userList = userMapper.selectList(queryWrapper);
+
+		List<SysUser> userList = sysUserMapper.selectList(queryWrapper);
 		List<String> list = new ArrayList<>();
 		for(SysUser user : userList){
 			list.add(user.getUsername());
@@ -869,7 +869,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		QueryWrapper<SysUser> queryWrapper = new QueryWrapper<SysUser>().eq("status",1).eq("del_flag",0);
 		queryWrapper.in("id",userIds);
 		List<UserAccountInfo> loginUsers = new ArrayList<>();
-		List<SysUser> sysUsers = userMapper.selectList(queryWrapper);
+		List<SysUser> sysUsers = sysUserMapper.selectList(queryWrapper);
 		for (SysUser user:sysUsers) {
 			UserAccountInfo loginUser=new UserAccountInfo();
 			BeanUtils.copyProperties(user, loginUser);
@@ -896,7 +896,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		QueryWrapper<SysUser> queryWrapper = new QueryWrapper<SysUser>().eq("status",1).eq("del_flag",0);
 		queryWrapper.in("username",userNames);
 		List<UserAccountInfo> loginUsers = new ArrayList<>();
-		List<SysUser> sysUsers = userMapper.selectList(queryWrapper);
+		List<SysUser> sysUsers = sysUserMapper.selectList(queryWrapper);
 		for (SysUser user:sysUsers) {
 			UserAccountInfo loginUser=new UserAccountInfo();
 			BeanUtils.copyProperties(user, loginUser);
@@ -915,7 +915,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		QueryWrapper<SysUser> queryWrapper = QueryGenerator.initQueryWrapper(sysUser, parameterMap);
 		List<SysUser> list= sysUserService.list(queryWrapper);
 		if(ObjectUtils.isNotEmpty(list)){
-		
+
 			//update-begin-author:taoyan date:2023-5-19 for: QQYUN-5326【简流】获取组织人员 单/多 筛选条件 没有公司筛选
 			String departKey = "depart";
 			QueryCondition departCondition = null;
@@ -931,7 +931,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 			} catch (UnsupportedEncodingException e) {
 				log.error("查询用户信息，查询条件json转化失败", e);
 			}
-			
+
 			for (SysUser user : list) {
 				JSONObject userJson = JSONObject.parseObject(JSONObject.toJSONString(user));
 				List<SysDepart> departList = sysDepartService.queryDepartsByUsername(user.getUsername());
@@ -947,7 +947,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 					result.add(userJson);
 				}
 				//update-end-author:taoyan date:2023-5-19 for: QQYUN-5326【简流】获取组织人员 单/多 筛选条件 没有公司筛选
-				
+
 			}
 		}
 		return result;
@@ -1117,8 +1117,8 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		log.info("-------通过数据库读取用户拥有的角色Rules------username： " + username + ",Roles size: " + (roles == null ? 0 : roles.size()));
 		return new HashSet<>(roles);
 	}
-	
-	
+
+
 	/**
 	 * 查询用户拥有的角色集合
 	 * @param useId
@@ -1238,14 +1238,14 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 	public List<JSONObject> queryUsersByUsernames(String usernames) {
 		LambdaQueryWrapper<SysUser> queryWrapper =  new LambdaQueryWrapper<>();
 		queryWrapper.in(SysUser::getUsername,usernames.split(","));
-		return JSON.parseArray(JSON.toJSONString(userMapper.selectList(queryWrapper))).toJavaList(JSONObject.class);
+		return JSON.parseArray(JSON.toJSONString(sysUserMapper.selectList(queryWrapper))).toJavaList(JSONObject.class);
 	}
 
 	@Override
 	public List<JSONObject> queryUsersByIds(String ids) {
 		LambdaQueryWrapper<SysUser> queryWrapper =  new LambdaQueryWrapper<>();
 		queryWrapper.in(SysUser::getId,ids.split(","));
-		return JSON.parseArray(JSON.toJSONString(userMapper.selectList(queryWrapper))).toJavaList(JSONObject.class);
+		return JSON.parseArray(JSON.toJSONString(sysUserMapper.selectList(queryWrapper))).toJavaList(JSONObject.class);
 	}
 
 	/**
@@ -1293,7 +1293,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		String anntId = announcement.getId();
 		for(int i=0;i<userIds.length;i++) {
 			if(oConvertUtils.isNotEmpty(userIds[i])) {
-				SysUser sysUser = userMapper.getUserByName(userIds[i]);
+				SysUser sysUser = sysUserMapper.getUserByName(userIds[i]);
 				if(sysUser==null) {
 					continue;
 				}
@@ -1345,7 +1345,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		String anntId = announcement.getId();
 		for(int i=0;i<userIds.length;i++) {
 			if(oConvertUtils.isNotEmpty(userIds[i])) {
-				SysUser sysUser = userMapper.getUserByName(userIds[i]);
+				SysUser sysUser = sysUserMapper.getUserByName(userIds[i]);
 				if(sysUser==null) {
 					continue;
 				}
@@ -1375,7 +1375,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 			EmailSendMsgHandle emailHandle=new EmailSendMsgHandle();
 			emailHandle.sendMsg(email, title, content);
 	}
-	
+
 	/**
 	 * 发送html模版邮件消息
 	 * @param email
@@ -1671,7 +1671,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 
 	@Override
 	public String getRoleCodeById(String id) {
-		SysRole role = roleMapper.selectById(id);
+		SysRole role = sysRoleMapper.selectById(id);
 		if(role!=null){
 			return role.getRoleCode();
 		}
@@ -1686,7 +1686,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		List<String> codeList = Arrays.asList(roleCodes.split(","));
 		LambdaQueryWrapper<SysRole> queryWrapper = new LambdaQueryWrapper<>();
 		queryWrapper.in(SysRole::getRoleCode, codeList);
-		List<SysRole> list = roleMapper.selectList(queryWrapper);
+		List<SysRole> list = sysRoleMapper.selectList(queryWrapper);
 		// 转换成SysRoleVo
 		return list.stream().map(sysRole -> {
 			DictModel model = new DictModel();
@@ -1702,7 +1702,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		queryWrapper.lambda().select(SysUserDepart::getUserId).in(true,SysUserDepart::getDepId,deptIds);
 		return sysUserDepartService.listObjs(queryWrapper,e->e.toString());
 	}
-	
+
 	@Override
 	public List<String> queryUserAccountsByDeptIds(List<String> deptIds) {
 		return departMapper.queryUserAccountByDepartIds(deptIds);
@@ -1802,7 +1802,7 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 
 	@Override
 	public List<String> getUserAccountsByDepCode(String orgCode) {
-		return userMapper.getUserAccountsByDepCode(orgCode);
+		return sysUserMapper.getUserAccountsByDepCode(orgCode);
 	}
 
 	@Override

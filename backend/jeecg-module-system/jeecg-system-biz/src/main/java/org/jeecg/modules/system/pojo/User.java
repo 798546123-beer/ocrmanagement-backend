@@ -20,7 +20,7 @@ public class User {
     @Autowired
     private Role role;
     //根据roleId 查一下数据库对应的角色类型名称
-public User(org.jeecg.modules.system.entity.User user){
+public User(@Autowired org.jeecg.modules.system.entity.User user){
     this.id=user.getId();
     this.age=user.getUser_age();
     this.username=user.getUser_name();

@@ -27,7 +27,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("/user")
-public class UserController {
+public class  {
 
     @Resource
     private XxlJobUserDao xxlJobUserDao;

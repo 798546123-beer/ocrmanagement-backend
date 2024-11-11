@@ -38,11 +38,16 @@
 			<groupId>org.jeecgframework.jimureport</groupId>
 			<artifactId>drag-free</artifactId>
 		</dependency>
-	<!-- 积木报表 mongo redis 支持包 
-		<dependency>
-			<groupId>org.jeecgframework.jimureport</groupId>
-			<artifactId>jimureport-nosql-starter</artifactId>
-		</dependency>-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-core</artifactId>
+            <version>3.5.6</version>
+        </dependency>
+        <!-- 积木报表 mongo redis 支持包
+            <dependency>
+                <groupId>org.jeecgframework.jimureport</groupId>
+                <artifactId>jimureport-nosql-starter</artifactId>
+            </dependency>-->
 	</dependencies>
-	
+
 </project>
