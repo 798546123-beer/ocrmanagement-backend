@@ -9,6 +9,7 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.config.shiro.IgnoreAuth;
 import org.jeecg.modules.system.entity.User;
 import org.jeecg.modules.system.mapper.UserMapper;
+import org.jeecg.modules.system.pojo.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "用户相关接口")
 public class UserController {
     @Autowired
-    private org.jeecg.modules.system.pojo.User user;
+    private UserInfo userInfo;
     @Autowired
     private UserMapper userMapper;
     @ApiOperation(value = "用户基础信息接口")
@@ -36,7 +37,8 @@ public class UserController {
     public Result<JSONObject> GetUserInfo(@Param(value = "user_id") String user_id) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_id", user_id);
-        System.out.println(userMapper.selectOne(queryWrapper));
+        System.out.println(userMapper.selectList(queryWrapper));
+        System.out.println("usermapper");
         return null;
     }
 

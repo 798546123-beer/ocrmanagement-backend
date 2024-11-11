@@ -3,6 +3,7 @@ package org.jeecg.modules.system.vo;
 import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 import org.jeecg.common.system.util.JwtUtil;
+import org.jeecg.modules.system.pojo.UserInfo;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,16 +21,16 @@ public class User {
     private String role;
     private String permission;
     private JSONObject  information;
-    public User(org.jeecg.modules.system.pojo.User user){
+    public User(UserInfo userInfo){
         JSONObject information = new JSONObject();
-        information.put("name",user.getUsername());
-        information.put("number",user.getNumber());
-        information.put("phone",user.getPhone());
-        information.put("gender",user.getGender());
+        information.put("name", userInfo.getUsername());
+        information.put("number", userInfo.getNumber());
+        information.put("phone", userInfo.getPhone());
+        information.put("gender", userInfo.getGender());
         this.information=information;
-        this.role=user.getType_name();
-        this.username=user.getUsername();
-        this.token= JwtUtil.sign(user.getUsername(),user.getPassword());
+        this.role= userInfo.getType_name();
+        this.username= userInfo.getUsername();
+        this.token= JwtUtil.sign(userInfo.getUsername(), userInfo.getPassword());
     }
 
 }

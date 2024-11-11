@@ -7,6 +7,7 @@ import lombok.Data;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,15 +17,17 @@ import javax.persistence.Entity;
  * @Date: 2024/11/11/19:11
  * @Description:
  */
-//@Entity
+@Entity
 @Data
 @Component
 @TableName("role")
 public class Role {
+    @Id
     @TableId(value = "role_id")
     private Integer role_id;
     @TableField(value = "permission")
     private String permission;
     @TableField(value = "role_name")
     private String role_name;
+
 }
