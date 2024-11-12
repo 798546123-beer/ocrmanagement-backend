@@ -3,6 +3,7 @@ package org.jeecg.modules.system.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.jeecg.modules.system.entity.Role;
+import org.springframework.stereotype.Component;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,6 +14,7 @@ import org.jeecg.modules.system.entity.Role;
  * @Description:
  */
 @Mapper
+@Component
 public interface RoleMapper extends BaseMapper<Role> {
 
 }

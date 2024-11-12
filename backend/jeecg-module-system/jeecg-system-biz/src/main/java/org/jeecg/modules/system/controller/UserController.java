@@ -29,8 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "用户相关接口")
 public class UserController {
     @Autowired
-    private UserInfo userInfo;
-    @Autowired
     private UserMapper userMapper;
 
     @ApiOperation(value = "用户基础信息接口")
@@ -41,7 +39,11 @@ public class UserController {
         queryWrapper.eq("id", user_id);
         User user = userMapper.selectOne(queryWrapper);
         if (user != null) {
-            return Result.OK((new org.jeecg.modules.system.vo.User(new UserInfo(user))).toString());
+            UserInfo userInfo = new UserInfo(user);
+            System.out.println(userInfo);
+            System.out.println("userInfo");
+
+            return Result.OK((new org.jeecg.modules.system.vo.User(userInfo)).toString());
         }
         return null;
     }
