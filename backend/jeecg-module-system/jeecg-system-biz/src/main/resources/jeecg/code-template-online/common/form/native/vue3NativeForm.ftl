@@ -59,7 +59,7 @@
 					<#elseif po.classType =='sel_user'>
 								<#assign need_dept_user = true>
 						<#-- update-begin---author:chenrui ---date:20240102  for：[issue/#5711]修复用户选择组件在生成代码后变成公司用户选择组件---------- -->
-						<j-select-user v-model:value="formData.${po.fieldName}"  <#if po.extendParams?exists && po.extendParams.text?exists>labelKey="${po.extendParams.text}"</#if> <#if po.extendParams?exists && po.extendParams.store?exists>rowKey="${po.extendParams.store}"</#if>  <#if po.readonly=='Y'>disabled</#if> allow-clear />
+						<j-select-userInfo v-model:value="formData.${po.fieldName}"  <#if po.extendParams?exists && po.extendParams.text?exists>labelKey="${po.extendParams.text}"</#if> <#if po.extendParams?exists && po.extendParams.store?exists>rowKey="${po.extendParams.store}"</#if>  <#if po.readonly=='Y'>disabled</#if> allow-clear />
 						<#-- update-end---author:chenrui ---date:20240102  for：[issue/#5711]修复用户选择组件在生成代码后变成公司用户选择组件---------- -->
 					<#elseif po.classType =='textarea'>
 								<a-textarea v-model:value="formData.${autoStringSuffixForModel(po)}" :rows="4" placeholder="请输入${po.filedComment}" <#if po.readonly=='Y'>disabled</#if>/>

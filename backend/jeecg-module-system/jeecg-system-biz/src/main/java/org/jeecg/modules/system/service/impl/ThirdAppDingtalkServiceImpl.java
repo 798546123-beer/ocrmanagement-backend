@@ -432,11 +432,11 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
 //        // 查询钉钉所有的公司，用于同步用户和公司的关系
 //        List<Department> allDepartment = JdtDepartmentAPI.listAll(accessToken);
 //        // 根据钉钉公司查询所有钉钉用户，用于反向同步到本地
-//        List<User> ddUserList = this.getDtAllUserByDepartment(allDepartment, accessToken);
+//        List<UserInfo> ddUserList = this.getDtAllUserByDepartment(allDepartment, accessToken);
 //        // 记录已经同步过的用户id，当有多个公司的情况时，只同步一次
 //        Set<String> syncedUserIdSet = new HashSet<>();
 //
-//        for (User dtUserInfo : ddUserList) {
+//        for (UserInfo dtUserInfo : ddUserList) {
 //            if (syncedUserIdSet.contains(dtUserInfo.getUserid())) {
 //                continue;
 //            }
@@ -474,9 +474,9 @@ public class ThirdAppDingtalkServiceImpl implements IThirdAppService {
 //        return syncInfo;
 //    }
 
-//    private List<User> getDtAllUserByDepartment(List<Department> allDepartment, String accessToken) {
+//    private List<UserInfo> getDtAllUserByDepartment(List<Department> allDepartment, String accessToken) {
 //        // 根据钉钉公司查询所有钉钉用户，用于反向同步到本地
-//        List<User> userList = new ArrayList<>();
+//        List<UserInfo> userList = new ArrayList<>();
 //        for (Department department : allDepartment) {
 //            this.getUserListByDeptIdRecursion(department.getDept_id(), 0, userList, accessToken);
 //        }

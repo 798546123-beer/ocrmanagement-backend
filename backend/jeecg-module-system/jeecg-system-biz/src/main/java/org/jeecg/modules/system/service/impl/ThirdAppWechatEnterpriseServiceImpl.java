@@ -339,7 +339,7 @@ public class ThirdAppWechatEnterpriseServiceImpl implements IThirdAppService {
             return syncInfo;
         }
         // 获取企业微信所有的用户
-//        List<User> qwUsers = JwUserAPI.getDetailUsersByDepartid("1", null, null, accessToken);
+//        List<UserInfo> qwUsers = JwUserAPI.getDetailUsersByDepartid("1", null, null, accessToken);
         // 获取企业微信所有的用户（只能获取userid）
         List<User> qwUsers = JwUserAPI.getUserIdList(accessToken);
 
@@ -417,7 +417,7 @@ public class ThirdAppWechatEnterpriseServiceImpl implements IThirdAppService {
 //            return syncInfo;
 //        }
 //        // 获取企业微信所有的用户
-//        List<User> qwUsersList = JwUserAPI.getDetailUsersByDepartid("1", null, null, accessToken);
+//        List<UserInfo> qwUsersList = JwUserAPI.getDetailUsersByDepartid("1", null, null, accessToken);
 //        if (qwUsersList == null) {
 //            syncInfo.addFailInfo("企业微信用户列表查询失败！");
 //            return syncInfo;
@@ -425,7 +425,7 @@ public class ThirdAppWechatEnterpriseServiceImpl implements IThirdAppService {
 //        //查询本地用户
 //        List<SysUser> sysUsersList = userMapper.selectList(Wrappers.emptyWrapper());
 //        // 循环判断新用户和需要更新的用户
-//        for (User qwUser : qwUsersList) {
+//        for (UserInfo qwUser : qwUsersList) {
 //            /*
 //             * 判断是否同步过的逻辑：
 //             * 1. 查询 sys_third_account（第三方账号表）是否有数据，如果有代表已同步

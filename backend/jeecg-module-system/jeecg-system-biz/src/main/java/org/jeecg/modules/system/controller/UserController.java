@@ -1,5 +1,6 @@
 package org.jeecg.modules.system.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
@@ -31,14 +32,17 @@ public class UserController {
     private UserInfo userInfo;
     @Autowired
     private UserMapper userMapper;
+
     @ApiOperation(value = "用户基础信息接口")
     @IgnoreAuth
     @GetMapping("getUserInfo")
     public Result<JSONObject> GetUserInfo(@Param(value = "user_id") String user_id) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id", user_id);
-        System.out.println(userMapper.selectList(queryWrapper));
-        System.out.println("usermapper");
+        queryWrapper.eq("id", user_id);
+        User user = userMapper.selectOne(queryWrapper);
+        if (user != null) {
+            return Result.OK((new org.jeecg.modules.system.vo.User(new UserInfo(user))).toString());
+        }
         return null;
     }
 
