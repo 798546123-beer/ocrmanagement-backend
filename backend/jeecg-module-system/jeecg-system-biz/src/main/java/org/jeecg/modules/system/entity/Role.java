@@ -24,10 +24,10 @@ import javax.persistence.Id;
 public class Role {
     @Id
     @TableId(value = "role_id")
-    private Integer role_id;
+    private Integer roleId;
     @TableField(value = "permission")
     private String permission;
     @TableField(value = "role_name")
-    private String role_name;
+    private String roleName;
 
 }
