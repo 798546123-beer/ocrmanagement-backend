@@ -1,9 +1,12 @@
 package org.jeecg.modules.system.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Entity;
@@ -17,13 +20,13 @@ import javax.persistence.Id;
  * @Date: 2024/11/11/19:11
  * @Description:
  */
-@Entity
 @Data
 @Component
 @TableName("role")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Role {
-    @Id
-    @TableId(value = "role_id")
+    @TableId(value = "role_id", type = IdType.ASSIGN_ID)
     private Integer roleId;
     @TableField(value = "permission")
     private String permission;
