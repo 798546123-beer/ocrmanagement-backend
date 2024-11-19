@@ -24,13 +24,13 @@ import org.jeecg.config.shiro.IgnoreAuth;
 import org.jeecg.modules.base.service.BaseCommonService;
 import org.jeecg.modules.system.entity.SysRoleIndex;
 import org.jeecg.modules.system.entity.SysUser;
+import org.jeecg.modules.system.entity.User;
 import org.jeecg.modules.system.model.SysLoginModel;
 import org.jeecg.modules.system.service.*;
 import org.jeecg.modules.system.service.impl.SysBaseApiImpl;
 import org.jeecg.modules.system.util.RandImageUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -62,7 +62,8 @@ public class LoginController {
     private BaseCommonService baseCommonService;
     @Autowired
     private JeecgBaseConfig jeecgBaseConfig;
-
+    @Autowired
+    private UserService userService;
     private final String BASE_CHECK_CODES = "qwertyuiplkjhgfdsazxcvbnmQWERTYUPLKJHGFDSAZXCVBNM1234567890";
 
     @ApiOperation("登录接口")
@@ -75,35 +76,33 @@ public class LoginController {
         if(isLoginFailOvertimes(username)){
             return result.error500("该用户登录失败次数过多，请于10分钟后再次登录！");
         }
-
         //  校验用户是否存在且有效
-        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysUser::getUsername,username);
-        SysUser sysUser = sysUserService.getOne(queryWrapper);
-        result = sysUserService.checkUserIsEffective(sysUser);
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getName, username);
+        User user = userService.getOne(queryWrapper);
+        result = userService.checkUserIsEffective(user);
+        System.out.println(result.toString()+"result");
         if(!result.isSuccess()) {
             return result;
         }
 
         // step.3 校验用户名或密码是否正确
-        String userpassword = PasswordUtil.encrypt(username, password, sysUser.getSalt());
-        String syspassword = sysUser.getPassword();
-        if (!syspassword.equals(userpassword)) {
-            addLoginFailOvertimes(username);
-            result.error500("用户名或密码错误");
-            return result;
-        }
+//        String userpassword = PasswordUtil.encrypt(username, password, user.getSalt());
+//        String syspassword = user.getPassword();
+//        if (!syspassword.equals(userpassword)) {
+//            addLoginFailOvertimes(username);
+//            result.error500("用户名或密码错误");
+//            return result;
+//        }
 
         // step.4  登录成功获取用户信息
-        userInfo(sysUser, result, request);
-
+//        userInfo(user, result, request);
         // step.5  登录成功删除验证码
 //        redisUtil.del(realKey);
 //        redisUtil.del(CommonConstant.LOGIN_FAIL + username);
-
         // step.6  记录用户登录日志
         LoginUser loginUser = new LoginUser();
-        BeanUtils.copyProperties(sysUser, loginUser);
+        BeanUtils.copyProperties(user, loginUser);
         baseCommonService.addLog("用户名: " + username + ",登录成功！", CommonConstant.LOG_TYPE_1, null,loginUser);
         return result;
     }
@@ -126,23 +125,23 @@ public class LoginController {
             //update-begin---author:scott ---date:2022-06-20  for：vue3前端，支持自定义首页-----------
             String vue3Version = request.getHeader(CommonConstant.VERSION);
             //update-begin---author:liusq ---date:2022-06-29  for：接口返回值修改，同步修改这里的判断逻辑-----------
-            SysRoleIndex roleIndex = sysUserService.getDynamicIndexByUserRole(username, vue3Version);
-            if (oConvertUtils.isNotEmpty(vue3Version) && roleIndex != null && oConvertUtils.isNotEmpty(roleIndex.getUrl())) {
-                String homePath = roleIndex.getUrl();
-                if (!homePath.startsWith(SymbolConstant.SINGLE_SLASH)) {
-                    homePath = SymbolConstant.SINGLE_SLASH + homePath;
-                }
-                sysUser.setHomePath(homePath);
-            }
+//            SysRoleIndex roleIndex = sysUserService.getDynamicIndexByUserRole(username, vue3Version);
+//            if (oConvertUtils.isNotEmpty(vue3Version) && roleIndex != null && oConvertUtils.isNotEmpty(roleIndex.getUrl())) {
+//                String homePath = roleIndex.getUrl();
+//                if (!homePath.startsWith(SymbolConstant.SINGLE_SLASH)) {
+//                    homePath = SymbolConstant.SINGLE_SLASH + homePath;
+//                }
+//                sysUser.setHomePath(homePath);
+//            }
             //update-begin---author:liusq ---date:2022-06-29  for：接口返回值修改，同步修改这里的判断逻辑-----------
             //update-end---author:scott ---date::2022-06-20  for：vue3前端，支持自定义首页--------------
 //			log.info("2 获取用户信息耗时 (首页面配置)" + (System.currentTimeMillis() - start) + "毫秒");
 
-            obj.put("userInfo",sysUser);
+//            obj.put("userInfo",sysUser);
 //			obj.put("sysAllDictItems", sysDictService.queryAllDictItems());
 //			log.info("3 获取用户信息耗时 (字典数据)" + (System.currentTimeMillis() - start) + "毫秒");
 
-            result.setResult(obj);
+//            result.setResult(obj);
             result.success("");
         }
         log.info("end 获取用户信息耗时 " + (System.currentTimeMillis() - start) + "毫秒");
