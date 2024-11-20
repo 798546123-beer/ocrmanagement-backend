@@ -23,43 +23,35 @@ import java.util.Map;
 @Slf4j
 @Configuration
 public class FlywayConfig {
-
     @Autowired
     private DataSource dataSource;
-
     @Autowired
     private Environment environment;
-
     /**
      * 是否开启flyway
      */
     @Value("${spring.flyway.enabled:false}")
     private Boolean enabled;
-    
     /**
      * 编码格式，默认UTF-8
      */
     @Value("${spring.flyway.encoding:UTF-8}")
     private String encoding;
-
     /**
      * 迁移sql脚本文件存放路径，官方默认db/migration
      */
     @Value("${spring.flyway.locations:classpath:flyway/sql/mysql}")
     private String locations;
-
     /**
      * 迁移sql脚本文件名称的前缀，默认V
      */
     @Value("${spring.flyway.sql-migration-prefix:V}")
     private String sqlMigrationPrefix;
-
     /**
      * 迁移sql脚本文件名称的分隔符，默认2个下划线__
      */
     @Value("${spring.flyway.sql-migration-separator:__}")
     private String sqlMigrationSeparator;
-
     /**
      * 文本前缀
      */

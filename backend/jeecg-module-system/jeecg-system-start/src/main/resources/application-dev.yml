@@ -199,9 +199,7 @@ mybatis-plus:
 minidao:
   base-package: org.jeecg.modules.jmreport.*,org.jeecg.modules.drag.*
 jeecg:
-  # 平台上线安全配置
   firewall:
-    # 数据源安全 (开启后，Online报表和图表的数据源为必填)
     dataSourceSafe: false
     # 低代码模式（dev:开发模式，prod:发布模式——关闭所有在线开发配置能力）
     lowCodeMode: dev
@@ -288,8 +286,9 @@ cas:
 #Mybatis输出sql日志
 logging:
   level:
-    org.flywaydb: debug
-    org.jeecg.modules.system.mapper: info
+    root: error
+    org.flywaydb: error
+    org.jeecg.modules.system.mapper: error
 #swagger
 knife4j:
   #开启增强配置
