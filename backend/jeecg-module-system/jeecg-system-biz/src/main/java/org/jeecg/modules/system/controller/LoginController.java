@@ -70,6 +70,7 @@ public class LoginController {
     @IgnoreAuth
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result<JSONObject> login(@RequestBody SysLoginModel sysLoginModel, HttpServletRequest request){
+
         Result<JSONObject> result = new Result<JSONObject>();
         String username = sysLoginModel.getUsername();
         String password = sysLoginModel.getPassword();
@@ -80,6 +81,7 @@ public class LoginController {
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(User::getName, username);
         User user = userService.getOne(queryWrapper);
+        System.out.println(user.toString()+"user");
         result = userService.checkUserIsEffective(user);
         System.out.println(result.toString()+"result");
         if(!result.isSuccess()) {
