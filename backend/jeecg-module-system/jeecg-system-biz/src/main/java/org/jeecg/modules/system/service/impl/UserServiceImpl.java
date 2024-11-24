@@ -1,5 +1,6 @@
 package org.jeecg.modules.system.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.constant.CommonConstant;
@@ -22,6 +23,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService{
     public UserService userService;
+	@Autowired
+	public UserMapper userMapper;
     @Autowired
     public BaseCommonService baseCommonService;
     @Override
@@ -49,5 +52,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 //			result.error500("该用户已冻结");
 //			return result;
 //		}
+	}
+	@Override
+	public Result<JSONObject> updateUserInfo(User user) {
+		Result<JSONObject> result = new Result<>();
+		try{
+			userService.updateById(user);
+		}catch (Exception e){
+			return result.error500("修改失败");
+		}
+		return result.success("修改成功");
 	}
 }

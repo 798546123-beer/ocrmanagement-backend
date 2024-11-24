@@ -15,5 +15,6 @@ import org.springframework.stereotype.Service;
  */
 public interface UserService extends IService<User> {
 	Result checkUserIsEffective(User user);
+	Result updateUserInfo(User user);
 
 }
