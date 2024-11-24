@@ -62,8 +62,17 @@ public class Result<T> implements Serializable {
 		this.code = code;
 		this.message = message;
 	}
-	
-	public Result<T> success(String message) {
+
+	// 静态方法: 用于返回错误
+	public static <T> Result<T> Error(String message) {
+		Result<T> result = new Result<>();
+		result.setCode(500); // 自定义错误状态码，例如 500 表示服务器错误
+		result.setMessage(message);
+
+		return result;
+	}
+
+    public Result<T> success(String message) {
 		this.message = message;
 		this.code = CommonConstant.SC_OK_200;
 		this.success = true;
