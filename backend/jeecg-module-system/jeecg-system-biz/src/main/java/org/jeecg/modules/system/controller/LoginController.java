@@ -52,10 +52,6 @@ public class LoginController {
     private ISysLogService logService;
     @Autowired
     private RedisUtil redisUtil;
-    //	@Autowired
-//    private ISysDepartService sysDepartService;
-//	@Autowired
-//    private ISysDictService sysDictService;
     @Resource
     private BaseCommonService baseCommonService;
     @Autowired
@@ -63,7 +59,6 @@ public class LoginController {
     @Autowired
     private UserService userService;
     private final String BASE_CHECK_CODES = "qwertyuiplkjhgfdsazxcvbnmQWERTYUPLKJHGFDSAZXCVBNM1234567890";
-
 
     @ApiOperation("登录接口")
     @IgnoreAuth

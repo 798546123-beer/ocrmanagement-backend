@@ -23,14 +23,11 @@ public class RoleController {
     @ApiOperation("获取角色权限")
     @RequestMapping("/getRolePermission")
     @IgnoreAuth
-    public Result<JSONObject> getRolePermission(@Param(value = "role_id") Integer role_id){
+    public Result<JSONObject> getRolePermission(@Param(value = "role_id") String role_id){
         QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("role_id",role_id);
         Role role = roleMapper.selectOne(queryWrapper);
         return Result.ok(role.getPermission());
-
-//        return Result.OK();
-//        return null;
     }
     // 新增角色接口
     @ApiOperation("新增角色")
@@ -55,7 +52,7 @@ public class RoleController {
     @ApiOperation("删除角色")
     @DeleteMapping("/deleteRole")
     @IgnoreAuth
-    public Result<String> deleteRole(@Param("roleId") Integer roleId) {
+    public Result<String> deleteRole(@Param("roleId") String roleId) {
         try {
             roleMapper.deleteById(roleId);
             return Result.OK("角色删除成功！");
@@ -83,5 +80,4 @@ public class RoleController {
             return Result.Error("更新角色权限失败: " + e.getMessage());
         }
     }
-
 }
