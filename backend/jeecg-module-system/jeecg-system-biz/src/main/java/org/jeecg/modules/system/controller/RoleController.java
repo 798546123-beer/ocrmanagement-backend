@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/role")
-@Api("角色管理")
+@Api(tags="角色管理")
 @Slf4j
 public class RoleController {
     @Autowired
@@ -54,6 +54,11 @@ public class RoleController {
     @IgnoreAuth
     public Result<String> deleteRole(@Param("roleId") String roleId) {
         try {
+            //先查询数据库中有没有，没有的话报错不存在
+            Role role = roleMapper.selectById(roleId);
+            if (role == null) {
+                return Result.Error("角色不存在！");
+            }
             roleMapper.deleteById(roleId);
             return Result.OK("角色删除成功！");
         } catch (Exception e) {
@@ -62,17 +67,21 @@ public class RoleController {
         }
     }
 
-    // 修改角色权限接口
+    /*
+    * 根据角色ID修改权限
+    * @param roleId
+    * @param permission
+     */
     @ApiOperation("根据角色ID修改权限")
     @PutMapping("/updateRolePermission")
     @IgnoreAuth
-    public Result<String> updateRolePermission(@RequestParam("roleId") Integer roleId, @RequestParam("permissions") String permissions) {
+    public Result<String> updateRolePermission(@RequestParam("roleId") Integer roleId, @RequestParam("permission") String permission) {
         try {
             Role role = roleMapper.selectById(roleId);
             if (role == null) {
                 return Result.Error("角色不存在！");
             }
-            role.setPermissions(permissions); // 假设Role实体有permissions字段
+            role.setPermission(permission); // 假设Role实体有permissions字段
             roleMapper.updateById(role);
             return Result.OK("角色权限更新成功！");
         } catch (Exception e) {
