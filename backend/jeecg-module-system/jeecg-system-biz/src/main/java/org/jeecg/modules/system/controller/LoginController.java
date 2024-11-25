@@ -46,8 +46,6 @@ import java.util.*;
 public class LoginController {
     @Autowired
     private ISysUserService sysUserService;
-    //	@Autowired
-//	private ISysPermissionService sysPermissionService;
     @Autowired
     private SysBaseApiImpl sysBaseApi;
     @Autowired
@@ -66,10 +64,12 @@ public class LoginController {
     private UserService userService;
     private final String BASE_CHECK_CODES = "qwertyuiplkjhgfdsazxcvbnmQWERTYUPLKJHGFDSAZXCVBNM1234567890";
 
+
     @ApiOperation("登录接口")
     @IgnoreAuth
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result<JSONObject> login(@RequestBody SysLoginModel sysLoginModel, HttpServletRequest request){
+
         Result<JSONObject> result = new Result<JSONObject>();
         String username = sysLoginModel.getUsername();
         String password = sysLoginModel.getPassword();
