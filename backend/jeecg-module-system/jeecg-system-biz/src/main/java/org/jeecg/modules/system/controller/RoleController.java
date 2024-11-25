@@ -35,7 +35,13 @@ public class RoleController {
     // 新增角色接口
     @ApiOperation("新增角色")
     @PostMapping("/addRole")
+    @IgnoreAuth
     public Result<String> addRole(@RequestBody Role role) {
+        QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role_name", role.getRoleName());
+        if (roleMapper.selectOne(queryWrapper) != null) {
+            return Result.Error("角色名已存在！");
+        }
         try {
             roleMapper.insert(role);
             return Result.OK("角色新增成功！");
@@ -47,8 +53,9 @@ public class RoleController {
 
     // 删除角色接口
     @ApiOperation("删除角色")
-    @DeleteMapping("/deleteRole/{roleId}")
-    public Result<String> deleteRole(@PathVariable("roleId") Integer roleId) {
+    @DeleteMapping("/deleteRole")
+    @IgnoreAuth
+    public Result<String> deleteRole(@Param("roleId") Integer roleId) {
         try {
             roleMapper.deleteById(roleId);
             return Result.OK("角色删除成功！");
@@ -61,6 +68,7 @@ public class RoleController {
     // 修改角色权限接口
     @ApiOperation("根据角色ID修改权限")
     @PutMapping("/updateRolePermission")
+    @IgnoreAuth
     public Result<String> updateRolePermission(@RequestParam("roleId") Integer roleId, @RequestParam("permissions") String permissions) {
         try {
             Role role = roleMapper.selectById(roleId);

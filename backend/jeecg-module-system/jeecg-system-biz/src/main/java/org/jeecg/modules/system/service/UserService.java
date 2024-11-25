@@ -3,7 +3,6 @@ package org.jeecg.modules.system.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.system.entity.User;
-import org.springframework.stereotype.Service;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,5 +15,6 @@ import org.springframework.stereotype.Service;
 public interface UserService extends IService<User> {
 	Result checkUserIsEffective(User user);
 	Result updateUserInfo(User user);
+	boolean save(User user);
 
 }
