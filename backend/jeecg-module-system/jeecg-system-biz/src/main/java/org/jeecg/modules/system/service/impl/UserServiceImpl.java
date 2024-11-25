@@ -42,6 +42,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return result.success("查询成功");
         //情况2：根据用户信息查询，该用户已注销
         //update-begin---author:王帅   Date:20200601  for：if条件永远为falsebug------------
+
 //		if (CommonConstant.DEL_FLAG_1.equals(user.getDelFlag())) {
 //		//update-end---author:王帅   Date:20200601  for：if条件永远为falsebug------------
 //			baseCommonService.addLog("用户登录失败，用户名:" + sysUser.getUsername() + "已注销！", CommonConstant.LOG_TYPE_1, null);
@@ -54,6 +55,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 //			result.error500("该用户已冻结");
 //			return result;
 //		}
+
     }
 
     @Override
@@ -78,4 +80,5 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         return true;
     }
+
 }
