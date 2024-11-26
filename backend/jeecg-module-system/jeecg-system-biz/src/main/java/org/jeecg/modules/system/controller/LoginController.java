@@ -64,14 +64,12 @@ public class LoginController {
     @IgnoreAuth
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result<JSONObject> login(@RequestBody SysLoginModel sysLoginModel, HttpServletRequest request){
-
         Result<JSONObject> result = new Result<JSONObject>();
         String username = sysLoginModel.getUsername();
         String password = sysLoginModel.getPassword();
         if(isLoginFailOvertimes(username)){
             return result.error500("该用户登录失败次数过多，请于10分钟后再次登录！");
         }
-        //  校验用户是否存在且有效
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(User::getName, username);
         User user = userService.getOne(queryWrapper);
@@ -80,8 +78,6 @@ public class LoginController {
         if(!result.isSuccess()) {
             return result;
         }
-
-        // step.3 校验用户名或密码是否正确
         String userpassword = user.getPwd();
         if (!password.equals(userpassword)) {
             addLoginFailOvertimes(username);

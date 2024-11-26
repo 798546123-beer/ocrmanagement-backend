@@ -30,5 +30,4 @@ public class Role {
     private String permission;
     @TableField(value = "role_name")
     private String roleName;
-
 }

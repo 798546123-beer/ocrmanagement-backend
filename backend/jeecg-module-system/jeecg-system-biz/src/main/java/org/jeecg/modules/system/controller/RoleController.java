@@ -13,21 +13,25 @@ import org.jeecg.modules.system.mapper.RoleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
+
 @RestController
 @RequestMapping("/role")
 @Api(tags="角色管理")
 @Slf4j
 public class RoleController {
-    @Autowired
+    @Resource
     private RoleMapper roleMapper;
     @ApiOperation("获取角色权限")
-    @RequestMapping("/getRolePermission")
+    @GetMapping("/getRolePermission")
     @IgnoreAuth
     public Result<JSONObject> getRolePermission(@Param(value = "role_id") String role_id){
-        QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("role_id",role_id);
-        Role role = roleMapper.selectOne(queryWrapper);
-        return Result.ok(role.getPermission());
+        Role role = roleMapper.selectById(role_id);
+        //如果是空的就报错
+        if(role==null){
+            return Result.Error("角色不存在！");
+        }
+        return Result.ok(String.valueOf(role));
     }
     // 新增角色接口
     @ApiOperation("新增角色")
@@ -88,5 +92,12 @@ public class RoleController {
             log.error("更新角色权限失败", e);
             return Result.Error("更新角色权限失败: " + e.getMessage());
         }
+
+    }
+    public  Role getRoleById(Integer roleId) {
+        Role role=roleMapper.selectById(roleId);
+        System.out.println(role);
+        System.out.println("role");
+        return role;
     }
 }

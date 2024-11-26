@@ -7,6 +7,8 @@ import org.jeecg.modules.system.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+
 /**
  * Created with IntelliJ IDEA.
  *
@@ -17,5 +19,4 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
-    public RoleService roleService;
 }
