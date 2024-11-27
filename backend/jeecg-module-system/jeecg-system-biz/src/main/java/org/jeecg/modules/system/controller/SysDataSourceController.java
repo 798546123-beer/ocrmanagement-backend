@@ -43,7 +43,7 @@ import java.util.List;
  * @Version: V1.0
  */
 @Slf4j
-@Api(tags = "多数据源管理")
+//@Api(tags = "多数据源管理")
 @RestController
 @RequestMapping("/sys/dataSource")
 public class SysDataSourceController extends JeecgController<SysDataSource, ISysDataSourceService> {

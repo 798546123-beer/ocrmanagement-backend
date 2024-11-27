@@ -30,7 +30,7 @@ import java.util.Arrays;
  * @Version: V1.0
  */
 @Slf4j
-@Api(tags = "编码校验规则")
+//@Api(tags = "编码校验规则")
 @RestController
 @RequestMapping("/sys/checkRule")
 public class SysCheckRuleController extends JeecgController<SysCheckRule, ISysCheckRuleService> {

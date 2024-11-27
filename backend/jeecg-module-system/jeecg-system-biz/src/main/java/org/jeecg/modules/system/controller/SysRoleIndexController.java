@@ -29,7 +29,6 @@ import java.util.Arrays;
  * @Version: V1.0
  */
 @Slf4j
-@Api(tags = "角色首页配置")
 @RestController
 @RequestMapping("/sys/sysRoleIndex")
 public class SysRoleIndexController extends JeecgController<SysRoleIndex, ISysRoleIndexService> {

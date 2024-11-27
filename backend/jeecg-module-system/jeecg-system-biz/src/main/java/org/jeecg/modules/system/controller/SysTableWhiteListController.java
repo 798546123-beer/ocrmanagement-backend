@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
  * @Version: V1.0
  */
 @Slf4j
-@Api(tags = "系统表白名单")
 @RestController
 @RequestMapping("/sys/tableWhiteList")
 public class SysTableWhiteListController extends JeecgController<SysTableWhiteList, ISysTableWhiteListService> {

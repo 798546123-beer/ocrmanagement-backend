@@ -27,6 +27,7 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("user")
 @Api(tags = "用户相关接口")
+//目前写了三个查询，增删查改还剩下增加、删除、修改
 public class UserController {
     @Autowired
     private UserMapper userMapper;

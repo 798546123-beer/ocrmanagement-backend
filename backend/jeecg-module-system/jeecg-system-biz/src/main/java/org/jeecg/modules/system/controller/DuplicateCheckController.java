@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @RestController
 @RequestMapping("/sys/duplicate")
-@Api(tags="重复校验")
+//@Api(tags="重复校验")
 public class DuplicateCheckController {
 
 	@Autowired
