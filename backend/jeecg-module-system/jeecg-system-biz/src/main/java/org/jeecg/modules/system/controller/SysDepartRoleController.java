@@ -39,7 +39,6 @@ import io.swagger.annotations.ApiOperation;
  * @Version: V1.0
  */
 @Slf4j
-@Api(tags="公司角色")
 @RestController
 @RequestMapping("/sys/sysDepartRole")
 public class SysDepartRoleController extends JeecgController<SysDepartRole, ISysDepartRoleService> {

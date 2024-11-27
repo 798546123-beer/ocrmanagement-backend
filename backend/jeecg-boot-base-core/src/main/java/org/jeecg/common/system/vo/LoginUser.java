@@ -131,11 +131,5 @@ public class LoginUser {
 	@SensitiveField
 	private String telephone;
 
-	/** 多租户ids临时用，不持久化数据库(数据库字段不存在) */
-	@SensitiveField
-	private String relTenantIds;
-
-	/**设备id uniapp推送用*/
-	private String clientId;
 
 }

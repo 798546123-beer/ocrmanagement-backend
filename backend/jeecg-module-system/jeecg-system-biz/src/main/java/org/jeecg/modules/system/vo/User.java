@@ -3,7 +3,9 @@ package org.jeecg.modules.system.vo;
 import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 import org.jeecg.common.system.util.JwtUtil;
+import org.jeecg.modules.system.entity.Role;
 import org.jeecg.modules.system.pojo.UserInfo;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,17 +20,20 @@ public class User {
     //权限
     private String username;
     private String token;
-    private String role;
     private String permission;
     private JSONObject  information;
+    private Role role;
     public User(UserInfo userInfo){
+        this.role=userInfo.getRole();
         JSONObject information = new JSONObject();
         information.put("name", userInfo.getUsername());
         information.put("number", userInfo.getNumber());
         information.put("phone", userInfo.getPhone());
         information.put("gender", userInfo.getGender());
+        information.put("roleName", role.getRoleName());
+        information.put("permission", role.getPermission());
+
         this.information=information;
-        this.role= userInfo.getType_name();
         this.username= userInfo.getUsername();
         this.token= JwtUtil.sign(userInfo.getUsername(), userInfo.getPassword());
     }

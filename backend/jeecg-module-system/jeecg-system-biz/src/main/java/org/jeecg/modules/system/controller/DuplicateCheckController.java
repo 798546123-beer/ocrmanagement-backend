@@ -14,17 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * @Title: DuplicateCheckAction
- * @Description: 重复校验工具
- * @Author 张代浩
- * @Date 2019-03-25
- * @Version V1.0
- */
+
 @Slf4j
 @RestController
 @RequestMapping("/sys/duplicate")
-@Api(tags="重复校验")
+//@Api(tags="重复校验")
 public class DuplicateCheckController {
 
 	@Autowired

@@ -317,7 +317,6 @@ public class SysBaseApiImpl implements ISysBaseAPI {
 		BeanUtils.copyProperties(sysUser, loginUser);
 		//去掉用户敏感信息
 		loginUser.setPassword(null);
-		loginUser.setRelTenantIds(null);
 		loginUser.setDepartIds(null);
 		return loginUser;
 	}

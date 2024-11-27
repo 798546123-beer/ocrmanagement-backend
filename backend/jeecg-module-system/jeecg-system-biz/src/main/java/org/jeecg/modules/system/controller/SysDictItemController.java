@@ -40,7 +40,6 @@ import lombok.extern.slf4j.Slf4j;
  * @Author zhangweijian
  * @since 2018-12-28
  */
-@Api(tags = "数据字典")
 @RestController
 @RequestMapping("/sys/dictItem")
 @Slf4j

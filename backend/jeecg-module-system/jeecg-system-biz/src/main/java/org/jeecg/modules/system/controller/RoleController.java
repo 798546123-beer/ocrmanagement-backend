@@ -11,26 +11,93 @@ import org.jeecg.config.shiro.IgnoreAuth;
 import org.jeecg.modules.system.entity.Role;
 import org.jeecg.modules.system.mapper.RoleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/role")
-@Api("角色管理")
+@Api(tags="角色管理")
 @Slf4j
 public class RoleController {
-    @Autowired
+    @Resource
     private RoleMapper roleMapper;
     @ApiOperation("获取角色权限")
-    @RequestMapping("/getRolePermission")
+    @GetMapping("/getRolePermission")
     @IgnoreAuth
-    public Result<JSONObject> getRolePermission(@Param(value = "role_id") Integer role_id){
+    public Result<JSONObject> getRolePermission(@Param(value = "role_id") String role_id){
+        Role role = roleMapper.selectById(role_id);
+        //如果是空的就报错
+        if(role==null){
+            return Result.Error("角色不存在！");
+        }
+        return Result.ok(String.valueOf(role));
+    }
+    // 新增角色接口
+    @ApiOperation("新增角色")
+    @PostMapping("/addRole")
+    @IgnoreAuth
+    public Result<String> addRole(@RequestBody Role role) {
         QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("role_id",role_id);
-        Role role = roleMapper.selectOne(queryWrapper);
-        return Result.ok(role.getPermission());
+        queryWrapper.eq("role_name", role.getRoleName());
+        if (roleMapper.selectOne(queryWrapper) != null) {
+            return Result.Error("角色名已存在！");
+        }
+        try {
+            roleMapper.insert(role);
+            return Result.OK("角色新增成功！");
+        } catch (Exception e) {
+            log.error("新增角色失败", e);
+            return Result.Error("新增角色失败: " + e.getMessage());
+        }
+    }
 
-//        return Result.OK();
-//        return null;
+    // 删除角色接口
+    @ApiOperation("删除角色")
+    @DeleteMapping("/deleteRole")
+    @IgnoreAuth
+    public Result<String> deleteRole(@Param("roleId") String roleId) {
+        try {
+            //先查询数据库中有没有，没有的话报错不存在
+            Role role = roleMapper.selectById(roleId);
+            if (role == null) {
+                return Result.Error("角色不存在！");
+            }
+            roleMapper.deleteById(roleId);
+            return Result.OK("角色删除成功！");
+        } catch (Exception e) {
+            log.error("删除角色失败", e);
+            return Result.Error("删除角色失败: " + e.getMessage());
+        }
+    }
+
+    /*
+    * 根据角色ID修改权限
+    * @param roleId
+    * @param permission
+     */
+    @ApiOperation("根据角色ID修改权限")
+    @PutMapping("/updateRolePermission")
+    @IgnoreAuth
+    public Result<String> updateRolePermission(@RequestParam("roleId") Integer roleId, @RequestParam("permission") String permission) {
+        try {
+            Role role = roleMapper.selectById(roleId);
+            if (role == null) {
+                return Result.Error("角色不存在！");
+            }
+            role.setPermission(permission); // 假设Role实体有permissions字段
+            roleMapper.updateById(role);
+            return Result.OK("角色权限更新成功！");
+        } catch (Exception e) {
+            log.error("更新角色权限失败", e);
+            return Result.Error("更新角色权限失败: " + e.getMessage());
+        }
+
+    }
+    public  Role getRoleById(Integer roleId) {
+        Role role=roleMapper.selectById(roleId);
+        System.out.println(role);
+        System.out.println("role");
+        return role;
     }
 }

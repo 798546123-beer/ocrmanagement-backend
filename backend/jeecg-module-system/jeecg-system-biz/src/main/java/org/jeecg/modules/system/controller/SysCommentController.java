@@ -34,7 +34,7 @@ import java.util.List;
  * @Date: 2022-07-19
  * @Version: V1.0
  */
-@Api(tags = "系统评论回复表")
+//@Api(tags = "系统评论回复表")
 @RestController
 @RequestMapping("/sys/comment")
 @Slf4j

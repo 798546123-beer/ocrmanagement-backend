@@ -30,7 +30,7 @@ import java.util.Arrays;
  * @Version: V1.0
  */
 @Slf4j
-@Api(tags = "填值规则")
+//@Api(tags = "填值规则")
 @RestController
 @RequestMapping("/sys/fillRule")
 public class SysFillRuleController extends JeecgController<SysFillRule, ISysFillRuleService> {

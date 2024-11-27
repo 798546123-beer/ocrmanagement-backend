@@ -26,12 +26,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Set;
 
-/**
- * @Description: 用户登录鉴权和获取用户授权
- * @Author: Scott
- * @Date: 2019-4-23 8:13
- * @Version: 1.1
- */
+
 @Component
 @Slf4j
 public class ShiroRealm extends AuthorizingRealm {
@@ -103,7 +98,7 @@ public class ShiroRealm extends AuthorizingRealm {
         // 校验token有效性
         LoginUser loginUser = null;
         try {
-            loginUser = this.checkUserTokenIsEffect(token);
+//            loginUser = this.checkUserTokenIsEffect(token);
         } catch (AuthenticationException e) {
             JwtUtil.responseError(SpringContextUtils.getHttpServletResponse(),401,e.getMessage());
             e.printStackTrace();
@@ -123,60 +118,15 @@ public class ShiroRealm extends AuthorizingRealm {
         if (username == null) {
             throw new AuthenticationException("token非法无效!");
         }
-
         // 查询用户信息
-        log.debug("———校验token是否有效————checkUserTokenIsEffect——————— "+ token);
-        LoginUser loginUser = TokenUtils.getLoginUser(username, commonApi, redisUtil);
-        //LoginUser loginUser = commonApi.getUserByName(username);
-        if (loginUser == null) {
-            throw new AuthenticationException("用户不存在!");
-        }
+//        LoginUser loginUser = TokenUtils.getLoginUser(username, commonApi, redisUtil);
+        LoginUser loginUser = commonApi.getUserByName(username);
         // 判断用户状态
-        if (loginUser.getStatus() != 1) {
-            throw new AuthenticationException("账号已被锁定,请联系管理员!");
-        }
         // 校验token是否超时失效 & 或者账号密码是否错误
-        if (!jwtTokenRefresh(token, username, loginUser.getPassword())) {
-            throw new AuthenticationException(CommonConstant.TOKEN_IS_INVALID_MSG);
-        }
-        //update-begin-author:taoyan date:20210609 for:校验用户的tenant_id和前端传过来的是否一致
-        String userTenantIds = loginUser.getRelTenantIds();
-        if(oConvertUtils.isNotEmpty(userTenantIds)){
-            String contextTenantId = TenantContext.getTenant();
-            log.debug("登录租户：" + contextTenantId);
-            log.debug("用户拥有那些租户：" + userTenantIds);
-             //登录用户无租户，前端header中租户ID值为 0
-            String str ="0";
-            if(oConvertUtils.isNotEmpty(contextTenantId) && !str.equals(contextTenantId)){
-                //update-begin-author:taoyan date:20211227 for: /issues/I4O14W 用户租户信息变更判断漏洞
-                String[] arr = userTenantIds.split(",");
-                if(!oConvertUtils.isIn(contextTenantId, arr)){
-                    boolean isAuthorization = false;
-                    //========================================================================
-                    // 查询用户信息（如果租户不匹配从数据库中重新查询一次用户信息）
-                    String loginUserKey = CacheConstant.SYS_USERS_CACHE + "::" + username;
-                    redisUtil.del(loginUserKey);
-                    LoginUser loginUserFromDb = commonApi.getUserByName(username);
-                    if (oConvertUtils.isNotEmpty(loginUserFromDb.getRelTenantIds())) {
-                        String[] newArray = loginUserFromDb.getRelTenantIds().split(",");
-                        if (oConvertUtils.isIn(contextTenantId, newArray)) { 
-                            isAuthorization = true;
-                        }
-                    }
-                    //========================================================================
-
-                    //*********************************************
-                    if(!isAuthorization){
-                        log.info("租户异常——登录租户：" + contextTenantId);
-                        log.info("租户异常——用户拥有租户组：" + userTenantIds);
-                        throw new AuthenticationException("登录租户授权变更，请重新登陆!");
-                    }
-                    //*********************************************
-                }
-                //update-end-author:taoyan date:20211227 for: /issues/I4O14W 用户租户信息变更判断漏洞
-            }
-        }
-        //update-end-author:taoyan date:20210609 for:校验用户的tenant_id和前端传过来的是否一致
+//        if (!jwtTokenRefresh(token, username, loginUser.getPassword())) {
+//            throw new AuthenticationException(CommonConstant.TOKEN_IS_INVALID_MSG);
+//        }
+//        return null;
         return loginUser;
     }
 
@@ -213,7 +163,6 @@ public class ShiroRealm extends AuthorizingRealm {
             //update-end--Author:scott  Date:20191005   for：解决每次请求，都重写redis中 token缓存问题
             return true;
         }
-
         //redis中不存在此TOEKN，说明token非法返回false
         return false;
     }
@@ -226,8 +175,6 @@ public class ShiroRealm extends AuthorizingRealm {
     @Override
     public void clearCache(PrincipalCollection principals) {
         super.clearCache(principals);
-        //update-begin---author:scott ---date::2024-06-18  for：【TV360X-1320】分配权限必须退出重新登录才生效，造成很多用户困扰---
         super.clearCachedAuthorizationInfo(principals);
-        //update-end---author:scott ---date::2024-06-18  for：【TV360X-1320】分配权限必须退出重新登录才生效，造成很多用户困扰---
     }
 }
