@@ -3,6 +3,7 @@ package org.jeecg.modules.system.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.system.entity.User;
+import org.jeecg.modules.system.pojo.UserInfo;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,6 +15,9 @@ import org.jeecg.modules.system.entity.User;
  */
 public interface UserService extends IService<User> {
 	Result checkUserIsEffective(User user);
+
+	UserInfo getUserInfo(User user);
+
 	Result updateUserInfo(User user);
 	boolean save(User user);
 

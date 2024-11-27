@@ -4,9 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Entity;
@@ -32,7 +30,4 @@ public class Role {
     private String permission;
     @TableField(value = "role_name")
     private String roleName;
-
-    public void setPermissions(String permissions) {
-    }
 }

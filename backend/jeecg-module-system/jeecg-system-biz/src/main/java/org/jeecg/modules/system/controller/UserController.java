@@ -10,8 +10,11 @@ import org.jeecg.config.shiro.IgnoreAuth;
 import org.jeecg.modules.system.entity.User;
 import org.jeecg.modules.system.mapper.UserMapper;
 import org.jeecg.modules.system.pojo.UserInfo;
+import org.jeecg.modules.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,9 +27,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("user")
 @Api(tags = "用户相关接口")
+//目前写了三个查询，增删查改还剩下增加、删除、修改
 public class UserController {
     @Autowired
     private UserMapper userMapper;
+    @Resource
+    private UserService userService;
 
     //这个类里写用户的新增，删除（根据id删除），修改，查询，分页查询
     @ApiOperation(value = "用户基础信息接口")
@@ -44,12 +50,12 @@ public class UserController {
     @ApiOperation(value = "根据用户名模糊查询用户")
     @IgnoreAuth
     @GetMapping("getUserByLikeName")
-    public Result<JSONObject> GetUserByLikeName(@Param(value = "likeUame") String likeName) {
+    public Result<JSONObject> GetUserByLikeName(@Param(value = "likeName") String likeName) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.like("username", likeName);
         User user = userMapper.selectOne(queryWrapper);
         if (user != null) {
-            return Result.OK(String.valueOf(new org.jeecg.modules.system.vo.User(new UserInfo(user))));
+            return Result.OK(String.valueOf(new org.jeecg.modules.system.vo.User(userService.getUserInfo(user))));
         }
         return Result.error("没有查找到对应的用户！");
     }
@@ -62,7 +68,7 @@ public class UserController {
         queryWrapper.eq("id", id);
         User user = userMapper.selectOne(queryWrapper);
         if (user != null) {
-            return Result.OK(String.valueOf(new org.jeecg.modules.system.vo.User(new UserInfo(user))));
+            return Result.OK(String.valueOf(new org.jeecg.modules.system.vo.User(userService.getUserInfo(user))));
         }
         return Result.error("没有查找到对应的用户！");
     }

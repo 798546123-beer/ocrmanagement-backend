@@ -27,7 +27,7 @@ import java.util.Arrays;
  * @Version: V1.0
  */
 @Slf4j
-@Api(tags = "表单评论文件")
+//@Api(tags = "表单评论文件")
 @RestController
 @RequestMapping("/sys/formFile")
 public class SysFormFileController extends JeecgController<SysFormFile, ISysFormFileService> {

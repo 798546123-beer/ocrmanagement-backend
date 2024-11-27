@@ -2,8 +2,8 @@ package org.jeecg.modules.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.jeecg.modules.system.entity.Role;
-import org.springframework.stereotype.Component;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @Description:
  */
 @Mapper
-@Component
 public interface RoleMapper extends BaseMapper<Role> {
-
+    @Select("SELECT * FROM role WHERE role_id = #{roleId}")
+    Role getRoleById(Integer roleId);
 }

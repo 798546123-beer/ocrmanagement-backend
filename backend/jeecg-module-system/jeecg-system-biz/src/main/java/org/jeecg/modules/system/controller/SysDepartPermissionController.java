@@ -44,7 +44,7 @@ import io.swagger.annotations.ApiOperation;
  * @Version: V1.0
  */
 @Slf4j
-@Api(tags="公司权限表")
+//@Api(tags="公司权限表")
 @RestController
 @RequestMapping("/sys/sysDepartPermission")
 public class SysDepartPermissionController extends JeecgController<SysDepartPermission, ISysDepartPermissionService> {

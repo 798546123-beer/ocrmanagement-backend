@@ -23,7 +23,7 @@ import java.util.List;
  * @Date: 2020-05-26
  * @Version: V1.0
  */
-@Api(tags = "gateway路由管理")
+//@Api(tags = "gateway路由管理")
 @RestController
 @RequestMapping("/sys/gatewayRoute")
 @Slf4j

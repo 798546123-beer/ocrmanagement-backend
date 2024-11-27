@@ -52,10 +52,6 @@ public class LoginController {
     private ISysLogService logService;
     @Autowired
     private RedisUtil redisUtil;
-    //	@Autowired
-//    private ISysDepartService sysDepartService;
-//	@Autowired
-//    private ISysDictService sysDictService;
     @Resource
     private BaseCommonService baseCommonService;
     @Autowired
@@ -64,19 +60,16 @@ public class LoginController {
     private UserService userService;
     private final String BASE_CHECK_CODES = "qwertyuiplkjhgfdsazxcvbnmQWERTYUPLKJHGFDSAZXCVBNM1234567890";
 
-
     @ApiOperation("登录接口")
     @IgnoreAuth
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result<JSONObject> login(@RequestBody SysLoginModel sysLoginModel, HttpServletRequest request){
-
         Result<JSONObject> result = new Result<JSONObject>();
         String username = sysLoginModel.getUsername();
         String password = sysLoginModel.getPassword();
         if(isLoginFailOvertimes(username)){
             return result.error500("该用户登录失败次数过多，请于10分钟后再次登录！");
         }
-        //  校验用户是否存在且有效
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(User::getName, username);
         User user = userService.getOne(queryWrapper);
@@ -85,15 +78,11 @@ public class LoginController {
         if(!result.isSuccess()) {
             return result;
         }
-
-        // step.3 校验用户名或密码是否正确
-//        String userpassword = PasswordUtil.encrypt(username, password, user.getSalt());
-//        String syspassword = user.getPassword();
-//        if (!syspassword.equals(userpassword)) {
-//            addLoginFailOvertimes(username);
-//            result.error500("用户名或密码错误");
-//            return result;
-//        }
+        String userpassword = user.getPwd();
+        if (!password.equals(userpassword)) {
+            addLoginFailOvertimes(username);
+            return new Result<JSONObject>(500,"用户名或密码错误");
+        }
 
         // step.4  登录成功获取用户信息
 //        userInfo(user, result, request);
@@ -411,11 +400,8 @@ public class LoginController {
         userInfo(sysUser, result, request);
         //添加日志
         baseCommonService.addLog("用户名: " + sysUser.getUsername() + ",登录成功！", CommonConstant.LOG_TYPE_1, null);
-
         return result;
     }
-
-
     /**
      * 用户信息
      *
@@ -441,7 +427,6 @@ public class LoginController {
         if (loginTenantError != null) {
             return loginTenantError;
         }
-
         //3.设置登录用户信息
         obj.put("userInfo", sysUser);
 
@@ -463,7 +448,6 @@ public class LoginController {
         // update-end--Author:wangshuai Date:20200805 for：如果用戶为选择公司，数据库为存在上一次登录公司，则取一条存进去
 //			obj.put("multi_depart", 2);
 //		}
-
         //update-begin---author:scott ---date:2024-01-05  for：【QQYUN-7802】前端在登录时加载了两次数据字典，建议优化下，避免数据字典太多时可能产生的性能问题 #956---
         // login接口，在vue3前端下不加载字典数据，vue2下加载字典
         String vue3Version = request.getHeader(CommonConstant.VERSION);
@@ -471,7 +455,6 @@ public class LoginController {
 //			obj.put("sysAllDictItems", sysDictService.queryAllDictItems());
 //		}
         //end-begin---author:scott ---date:2024-01-05  for：【QQYUN-7802】前端在登录时加载了两次数据字典，建议优化下，避免数据字典太多时可能产生的性能问题 #956---
-
         result.setResult(obj);
         result.success("登录成功");
         return result;
@@ -505,7 +488,6 @@ public class LoginController {
             String code = RandomUtil.randomString(BASE_CHECK_CODES,4);
             //存到redis中
             String lowerCaseCode = code.toLowerCase();
-
             //update-begin-author:taoyan date:2022-9-13 for: VUEN-2245 【漏洞】发现新漏洞待处理20220906
             // 加入密钥作为混淆，避免简单的拼接，被外部利用，用户自定义该密钥即可
             String origin = lowerCaseCode+key+jeecgBaseConfig.getSignatureSecret();
