@@ -1,6 +1,7 @@
 package org.jeecg.modules.system.controller;
 
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.config.shiro.IgnoreAuth;
 import org.jeecg.modules.system.entity.PageEntity;
 import org.jeecg.modules.system.service.IPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class PermissionController {
 
     @Autowired
     private IPermissionService permissionService;
-
+    @IgnoreAuth
     @GetMapping("/getPermissionList")
     public Result<List<PageEntity>> getPermissionList() {
         List<PageEntity> permissionList = permissionService.getPermissionList();

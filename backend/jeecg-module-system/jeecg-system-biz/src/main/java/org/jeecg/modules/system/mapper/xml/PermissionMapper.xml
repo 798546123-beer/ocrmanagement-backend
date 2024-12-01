@@ -4,7 +4,7 @@
 <mapper namespace="org.jeecg.modules.system.mapper.PermissionMapper">
 
     <select id="getPermissionList" resultType="org.jeecg.modules.system.entity.PageEntity">
-        SELECT * FROM rolepage
+        SELECT * FROM role_page
     </select>
 
 </mapper>
