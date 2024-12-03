@@ -130,9 +130,7 @@ public class UserController {
             if (existUser == null) {
                 return Result.error("用户不存在！");
             }
-
-            // 如果密码有更新，需要重新加密
-            if (user.getPwd() != null && !user.getPwd().equals(existUser.getPwd())) {
+            if (user.getPwd() != null && !(EncodeUtil.encodePassword(user.getPwd())).equals(existUser.getPwd())) {
                 user.setPwd(EncodeUtil.encodePassword(user.getPwd()));
             }
             

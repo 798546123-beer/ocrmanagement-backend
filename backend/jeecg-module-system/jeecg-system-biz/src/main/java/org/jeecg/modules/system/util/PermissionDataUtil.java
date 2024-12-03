@@ -10,10 +10,7 @@ import org.jeecg.modules.system.service.ISysRoleIndexService;
 
 import java.util.List;
 
-/**
- * @Author: scott
- * @Date: 2019-04-03
- */
+
 public class PermissionDataUtil {
 
     /**
