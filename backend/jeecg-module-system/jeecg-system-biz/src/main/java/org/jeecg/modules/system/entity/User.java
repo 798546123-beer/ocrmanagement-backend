@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 
-//@Entity
 @Data
 @TableName("user")
 @Component
@@ -36,6 +35,9 @@ public class User implements Serializable {
     private String userNumber;
     @TableField(value = "user_company_id")
     private Integer userCompanyId;
-
+    @TableField(value = "del_flag")
+    private Boolean isDelete;
+    @TableField(value = "real_name")
+    private String realName;
 
 }
