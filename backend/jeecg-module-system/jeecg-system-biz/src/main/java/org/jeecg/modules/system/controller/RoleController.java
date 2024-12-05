@@ -92,12 +92,5 @@ public class RoleController {
             log.error("更新角色权限失败", e);
             return Result.Error("更新角色权限失败: " + e.getMessage());
         }
-
-    }
-    public  Role getRoleById(Integer roleId) {
-        Role role=roleMapper.selectById(roleId);
-        System.out.println(role);
-        System.out.println("role");
-        return role;
     }
 }

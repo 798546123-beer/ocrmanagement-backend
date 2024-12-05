@@ -21,6 +21,5 @@ public class UserInfo {
     private Role role;
 
 
-
 }
 

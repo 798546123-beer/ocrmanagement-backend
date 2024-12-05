@@ -7,6 +7,8 @@ import org.jeecg.modules.system.entity.Role;
 import org.jeecg.modules.system.pojo.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  *
@@ -32,7 +34,19 @@ public class User {
         information.put("gender", userInfo.getGender());
         information.put("roleName", role.getRoleName());
         information.put("permission", role.getPermission());
-
+        this.information=information;
+        this.username= userInfo.getUsername();
+        this.token= JwtUtil.sign(userInfo.getUsername(), userInfo.getPassword());
+    }
+    public User(UserInfo userInfo, List<?> permissionList){
+        this.role=userInfo.getRole();
+        JSONObject information = new JSONObject();
+        information.put("name", userInfo.getUsername());
+        information.put("number", userInfo.getNumber());
+        information.put("phone", userInfo.getPhone());
+        information.put("gender", userInfo.getGender());
+        information.put("roleName", role.getRoleName());
+        information.put("permissionList", permissionList);
         this.information=information;
         this.username= userInfo.getUsername();
         this.token= JwtUtil.sign(userInfo.getUsername(), userInfo.getPassword());

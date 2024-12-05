@@ -14,11 +14,11 @@ import org.jeecg.modules.system.pojo.UserInfo;
  * @Description:
  */
 public interface UserService extends IService<User> {
-	Result checkUserIsEffective(User user);
-
+	boolean checkUserIsEffective(String username);
 	UserInfo getUserInfo(User user);
 
-	Result updateUserInfo(User user);
+	org.jeecg.modules.system.vo.User getUserVO(UserInfo userInfo);
+
 	boolean save(User user);
 
 

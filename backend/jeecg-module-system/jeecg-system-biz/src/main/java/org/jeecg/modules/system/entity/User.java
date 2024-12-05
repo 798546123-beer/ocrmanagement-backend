@@ -21,8 +21,8 @@ public class User implements Serializable {
     private String name;
     @TableField(value = "pwd")
     private String pwd;
-    @TableField(value = "avatar")
-    private String avatar;
+    @TableField(value = "avatar_id")
+    private Integer avatarId;
     @TableField(value = "user_gender")
     private String userGender;
     @TableField(value = "user_type_id")

@@ -4,16 +4,13 @@ import cn.hutool.core.util.RandomUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.exceptions.ClientException;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.constant.CacheConstant;
 import org.jeecg.common.constant.CommonConstant;
-import org.jeecg.common.constant.SymbolConstant;
 import org.jeecg.common.constant.enums.DySmsEnum;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.system.vo.LoginUser;
@@ -22,14 +19,17 @@ import org.jeecg.common.util.encryption.EncryptedString;
 import org.jeecg.config.JeecgBaseConfig;
 import org.jeecg.config.shiro.IgnoreAuth;
 import org.jeecg.modules.base.service.BaseCommonService;
-import org.jeecg.modules.system.entity.SysRoleIndex;
+import org.jeecg.modules.system.entity.Role;
 import org.jeecg.modules.system.entity.SysUser;
 import org.jeecg.modules.system.entity.User;
 import org.jeecg.modules.system.model.SysLoginModel;
-import org.jeecg.modules.system.service.*;
+import org.jeecg.modules.system.service.ISysLogService;
+import org.jeecg.modules.system.service.ISysUserService;
+import org.jeecg.modules.system.service.RoleService;
+import org.jeecg.modules.system.service.UserService;
 import org.jeecg.modules.system.service.impl.SysBaseApiImpl;
+import org.jeecg.modules.system.util.EncodeUtil;
 import org.jeecg.modules.system.util.RandImageUtil;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,9 +41,10 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/login")
-@Api(tags="用户登录")
+@Api(tags = "用户登录")
 @Slf4j
 public class LoginController {
+    private final String BASE_CHECK_CODES = "qwertyuiplkjhgfdsazxcvbnmQWERTYUPLKJHGFDSAZXCVBNM1234567890";
     @Autowired
     private ISysUserService sysUserService;
     @Autowired
@@ -51,37 +52,48 @@ public class LoginController {
     @Autowired
     private ISysLogService logService;
     @Autowired
+    private RoleService roleService;
+    @Resource
     private RedisUtil redisUtil;
     @Resource
     private BaseCommonService baseCommonService;
     @Autowired
     private JeecgBaseConfig jeecgBaseConfig;
-    @Autowired
+    @Resource
     private UserService userService;
-    private final String BASE_CHECK_CODES = "qwertyuiplkjhgfdsazxcvbnmQWERTYUPLKJHGFDSAZXCVBNM1234567890";
 
     @ApiOperation("登录接口")
     @IgnoreAuth
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Result<JSONObject> login(@RequestBody SysLoginModel sysLoginModel, HttpServletRequest request){
-        Result<JSONObject> result = new Result<JSONObject>();
+    public Result<?> login(@RequestBody SysLoginModel sysLoginModel, HttpServletRequest request) {
+        Result<org.jeecg.modules.system.vo.User> result = new Result<>();
         String username = sysLoginModel.getUsername();
         String password = sysLoginModel.getPassword();
-        if(isLoginFailOvertimes(username)){
+        if (username == null || password == null) {
+            log.debug("{}" + CommonConstant.LOG_TYPE_1 + "账号或密码为空！", username);
+            return result.error500("用户账号或密码为空");
+        }
+        if (isLoginFailOvertimes(username)) {
+            log.debug("{}" + CommonConstant.LOG_TYPE_1 + "用户登录次数过多",username);
             return result.error500("该用户登录失败次数过多，请于10分钟后再次登录！");
         }
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(User::getName, username);
         User user = userService.getOne(queryWrapper);
-        result = userService.checkUserIsEffective(user);
-        System.out.println(result.toString()+"result");
-        if(!result.isSuccess()) {
-            return result;
+        if (user == null) {
+            log.debug("{}" + CommonConstant.LOG_TYPE_1 + "失败，用户不存在！",username);
+            return result.error500("该用户不存在，请注册");
         }
+        if (user.getIsDelete()) {
+            log.debug("{}" + CommonConstant.LOG_TYPE_1 + "失败，账号被停用！",username);
+            return result.error500("账号已停用！");
+        }
+        result.setResult(userService.getUserVO(userService.getUserInfo(user)));
+        System.out.println(result + "result");
         String userpassword = user.getPwd();
-        if (!password.equals(userpassword)) {
+        if (!userpassword.equals(EncodeUtil.encodePassword(password))) {
             addLoginFailOvertimes(username);
-            return new Result<JSONObject>(500,"用户名或密码错误");
+            return new Result<JSONObject>(500, "用户名或密码错误");
         }
 
         // step.4  登录成功获取用户信息
@@ -89,10 +101,9 @@ public class LoginController {
         // step.5  登录成功删除验证码
 //        redisUtil.del(realKey);
 //        redisUtil.del(CommonConstant.LOGIN_FAIL + username);
-        // step.6  记录用户登录日志
-        LoginUser loginUser = new LoginUser();
-        BeanUtils.copyProperties(user, loginUser);
-        baseCommonService.addLog("用户名: " + username + ",登录成功！", CommonConstant.LOG_TYPE_1, null,loginUser);
+//        BeanUtils.copyProperties(user, loginUser);
+        log.info("用户名: {},{}成功！\n{}", username, CommonConstant.LOG_TYPE_1, user);
+        result.setSuccess(true);
         return result;
     }
 
@@ -101,36 +112,16 @@ public class LoginController {
      * 【vue3专用】获取用户信息
      */
     @GetMapping("/user/getUserInfo")
-    public Result<JSONObject> getUserInfo(HttpServletRequest request){
+    public Result<JSONObject> getUserInfo(HttpServletRequest request) {
         long start = System.currentTimeMillis();
         Result<JSONObject> result = new Result<JSONObject>();
-        String  username = JwtUtil.getUserNameByToken(request);
-        if(oConvertUtils.isNotEmpty(username)) {
+        String username = JwtUtil.getUserNameByToken(request);
+        if (oConvertUtils.isNotEmpty(username)) {
             // 根据用户名查询用户信息
             SysUser sysUser = sysUserService.getUserByName(username);
-            JSONObject obj=new JSONObject();
+            JSONObject obj = new JSONObject();
             log.info("1 获取用户信息耗时（用户基础信息）" + (System.currentTimeMillis() - start) + "毫秒");
-
-            //update-begin---author:scott ---date:2022-06-20  for：vue3前端，支持自定义首页-----------
             String vue3Version = request.getHeader(CommonConstant.VERSION);
-            //update-begin---author:liusq ---date:2022-06-29  for：接口返回值修改，同步修改这里的判断逻辑-----------
-//            SysRoleIndex roleIndex = sysUserService.getDynamicIndexByUserRole(username, vue3Version);
-//            if (oConvertUtils.isNotEmpty(vue3Version) && roleIndex != null && oConvertUtils.isNotEmpty(roleIndex.getUrl())) {
-//                String homePath = roleIndex.getUrl();
-//                if (!homePath.startsWith(SymbolConstant.SINGLE_SLASH)) {
-//                    homePath = SymbolConstant.SINGLE_SLASH + homePath;
-//                }
-//                sysUser.setHomePath(homePath);
-//            }
-            //update-begin---author:liusq ---date:2022-06-29  for：接口返回值修改，同步修改这里的判断逻辑-----------
-            //update-end---author:scott ---date::2022-06-20  for：vue3前端，支持自定义首页--------------
-//			log.info("2 获取用户信息耗时 (首页面配置)" + (System.currentTimeMillis() - start) + "毫秒");
-
-//            obj.put("userInfo",sysUser);
-//			obj.put("sysAllDictItems", sysDictService.queryAllDictItems());
-//			log.info("3 获取用户信息耗时 (字典数据)" + (System.currentTimeMillis() - start) + "毫秒");
-
-//            result.setResult(obj);
             result.success("");
         }
         log.info("end 获取用户信息耗时 " + (System.currentTimeMillis() - start) + "毫秒");
@@ -140,24 +131,25 @@ public class LoginController {
 
     /**
      * 退出登录
+     *
      * @param request
      * @param response
      * @return
      */
     @RequestMapping(value = "/logout")
-    public Result<Object> logout(HttpServletRequest request,HttpServletResponse response) {
+    public Result<Object> logout(HttpServletRequest request, HttpServletResponse response) {
         //用户退出逻辑
         String token = request.getHeader(CommonConstant.X_ACCESS_TOKEN);
-        if(oConvertUtils.isEmpty(token)) {
+        if (oConvertUtils.isEmpty(token)) {
             return Result.error("退出登录失败！");
         }
         String username = JwtUtil.getUsername(token);
         LoginUser sysUser = sysBaseApi.getUserByName(username);
-        if(sysUser!=null) {
+        if (sysUser != null) {
             //update-begin--Author:wangshuai  Date:20200714  for：登出日志没有记录人员
-            baseCommonService.addLog("用户名: "+sysUser.getRealname()+",退出成功！", CommonConstant.LOG_TYPE_1, null,sysUser);
+            baseCommonService.addLog("用户名: " + sysUser.getRealname() + ",退出成功！", CommonConstant.LOG_TYPE_1, null, sysUser);
             //update-end--Author:wangshuai  Date:20200714  for：登出日志没有记录人员
-            log.info(" 用户名:  "+sysUser.getRealname()+",退出成功！ ");
+            log.info(" 用户名:  " + sysUser.getRealname() + ",退出成功！ ");
             //清空用户登录Token缓存
             redisUtil.del(CommonConstant.PREFIX_USER_TOKEN + token);
             //清空用户登录Shiro权限缓存
@@ -167,13 +159,14 @@ public class LoginController {
             //调用shiro的logout
             SecurityUtils.getSubject().logout();
             return Result.ok("退出登录成功！");
-        }else {
+        } else {
             return Result.error("Token无效!");
         }
     }
 
     /**
      * 获取访问量
+     *
      * @return
      */
     @GetMapping("loginfo")
@@ -193,9 +186,9 @@ public class LoginController {
         // 获取系统访问记录
         Long totalVisitCount = logService.findTotalVisitCount();
         obj.put("totalVisitCount", totalVisitCount);
-        Long todayVisitCount = logService.findTodayVisitCount(dayStart,dayEnd);
+        Long todayVisitCount = logService.findTodayVisitCount(dayStart, dayEnd);
         obj.put("todayVisitCount", todayVisitCount);
-        Long todayIp = logService.findTodayIp(dayStart,dayEnd);
+        Long todayIp = logService.findTodayIp(dayStart, dayEnd);
         //update-end--Author:zhangweijian  Date:20190428 for：传入开始时间，结束时间参数
         obj.put("todayIp", todayIp);
         result.setResult(obj);
@@ -205,46 +198,39 @@ public class LoginController {
 
     /**
      * 获取访问量
+     *
      * @return
      */
     @GetMapping("/visitInfo")
-    public Result<List<Map<String,Object>>> visitInfo() {
-        Result<List<Map<String,Object>>> result = new Result<List<Map<String,Object>>>();
+    public Result<List<Map<String, Object>>> visitInfo() {
+        Result<List<Map<String, Object>>> result = new Result<List<Map<String, Object>>>();
         Calendar calendar = new GregorianCalendar();
-        calendar.set(Calendar.HOUR_OF_DAY,0);
-        calendar.set(Calendar.MINUTE,0);
-        calendar.set(Calendar.SECOND,0);
-        calendar.set(Calendar.MILLISECOND,0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         Date dayEnd = calendar.getTime();
         calendar.add(Calendar.DAY_OF_MONTH, -7);
         Date dayStart = calendar.getTime();
-        List<Map<String,Object>> list = logService.findVisitCount(dayStart, dayEnd);
+        List<Map<String, Object>> list = logService.findVisitCount(dayStart, dayEnd);
         result.setResult(oConvertUtils.toLowerCasePageList(list));
         return result;
     }
 
 
-    /**
-     * 登陆成功选择用户当前公司
-     * @param user
-     * @return
-     */
     @RequestMapping(value = "/selectDepart", method = RequestMethod.PUT)
     public Result<JSONObject> selectDepart(@RequestBody SysUser user) {
         Result<JSONObject> result = new Result<JSONObject>();
         String username = user.getUsername();
-        if(oConvertUtils.isEmpty(username)) {
-            LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
+        if (oConvertUtils.isEmpty(username)) {
+            LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
             username = sysUser.getUsername();
         }
-
-        //获取登录公司
-        String orgCode= user.getOrgCode();
-        //获取登录租户
+        String orgCode = user.getOrgCode();
         Integer tenantId = user.getLoginTenantId();
         //设置用户登录公司和登录租户
-        this.sysUserService.updateUserDepart(username, orgCode,tenantId);
+        this.sysUserService.updateUserDepart(username, orgCode, tenantId);
         SysUser sysUser = sysUserService.getUserByName(username);
         JSONObject obj = new JSONObject();
         obj.put("userInfo", sysUser);
@@ -259,22 +245,22 @@ public class LoginController {
      * @return
      */
     @PostMapping(value = "/sms")
-    public Result<String> sms(@RequestBody JSONObject jsonObject,HttpServletRequest request) {
+    public Result<String> sms(@RequestBody JSONObject jsonObject, HttpServletRequest request) {
         Result<String> result = new Result<String>();
         String clientIp = IpUtils.getIpAddr(request);
         String mobile = jsonObject.get("mobile").toString();
         //手机号模式 登录模式: "2"  注册模式: "1"
-        String smsmode=jsonObject.get("smsmode").toString();
+        String smsmode = jsonObject.get("smsmode").toString();
         log.info("-------- IP:{}, 手机号：{}，获取绑定验证码", clientIp, mobile);
 
-        if(oConvertUtils.isEmpty(mobile)){
+        if (oConvertUtils.isEmpty(mobile)) {
             result.setMessage("手机号不允许为空！");
             result.setSuccess(false);
             return result;
         }
 
         //update-begin-author:taoyan date:2022-9-13 for: VUEN-2245 【漏洞】发现新漏洞待处理20220906
-        String redisKey = CommonConstant.PHONE_REDIS_KEY_PRE+mobile;
+        String redisKey = CommonConstant.PHONE_REDIS_KEY_PRE + mobile;
         Object object = redisUtil.get(redisKey);
         //update-end-author:taoyan date:2022-9-13 for: VUEN-2245 【漏洞】发现新漏洞待处理20220906
 
@@ -286,7 +272,7 @@ public class LoginController {
 
         //-------------------------------------------------------------------------------------
         //增加 check防止恶意刷短信接口
-        if(!DySmsLimit.canSendSms(clientIp)){
+        if (!DySmsLimit.canSendSms(clientIp)) {
             log.warn("--------[警告] IP地址:{}, 短信接口请求太多-------", clientIp);
             result.setMessage("短信接口请求太多，请稍后再试！");
             result.setCode(CommonConstant.PHONE_SMS_FAIL_CODE);
@@ -304,20 +290,20 @@ public class LoginController {
             //注册模板
             if (CommonConstant.SMS_TPL_TYPE_1.equals(smsmode)) {
                 SysUser sysUser = sysUserService.getUserByPhone(mobile);
-                if(sysUser!=null) {
+                if (sysUser != null) {
                     result.error500(" 手机号已经注册，请直接登录！");
                     baseCommonService.addLog("手机号已经注册，请直接登录！", CommonConstant.LOG_TYPE_1, null);
                     return result;
                 }
                 b = DySmsHelper.sendSms(mobile, obj, DySmsEnum.REGISTER_TEMPLATE_CODE);
-            }else {
+            } else {
                 //登录模式，校验用户有效性
                 SysUser sysUser = sysUserService.getUserByPhone(mobile);
                 result = sysUserService.checkUserIsEffective(sysUser);
-                if(!result.isSuccess()) {
+                if (!result.isSuccess()) {
                     String message = result.getMessage();
-                    String userNotExist="该用户不存在，请注册";
-                    if(userNotExist.equals(message)){
+                    String userNotExist = "该用户不存在，请注册";
+                    if (userNotExist.equals(message)) {
                         result.error500("该用户不存在或未绑定手机号");
                     }
                     return result;
@@ -329,7 +315,7 @@ public class LoginController {
                 if (CommonConstant.SMS_TPL_TYPE_0.equals(smsmode)) {
                     //登录模板
                     b = DySmsHelper.sendSms(mobile, obj, DySmsEnum.LOGIN_TEMPLATE_CODE);
-                } else if(CommonConstant.SMS_TPL_TYPE_2.equals(smsmode)) {
+                } else if (CommonConstant.SMS_TPL_TYPE_2.equals(smsmode)) {
                     //忘记密码模板
                     b = DySmsHelper.sendSms(mobile, obj, DySmsEnum.FORGET_PASSWORD_TEMPLATE_CODE);
                 }
@@ -372,21 +358,21 @@ public class LoginController {
         Result<JSONObject> result = new Result<JSONObject>();
         String phone = jsonObject.getString("mobile");
         //update-begin-author:taoyan date:2022-11-7 for: issues/4109 平台用户登录失败锁定用户
-        if(isLoginFailOvertimes(phone)){
+        if (isLoginFailOvertimes(phone)) {
             return result.error500("该用户登录失败次数过多，请于10分钟后再次登录！");
         }
         //update-end-author:taoyan date:2022-11-7 for: issues/4109 平台用户登录失败锁定用户
         //校验用户有效性
         SysUser sysUser = sysUserService.getUserByPhone(phone);
         result = sysUserService.checkUserIsEffective(sysUser);
-        if(!result.isSuccess()) {
+        if (!result.isSuccess()) {
             return result;
         }
 
         String smscode = jsonObject.getString("captcha");
 
         //update-begin-author:taoyan date:2022-9-13 for: VUEN-2245 【漏洞】发现新漏洞待处理20220906
-        String redisKey = CommonConstant.PHONE_REDIS_KEY_PRE+phone;
+        String redisKey = CommonConstant.PHONE_REDIS_KEY_PRE + phone;
         Object code = redisUtil.get(redisKey);
         //update-end-author:taoyan date:2022-9-13 for: VUEN-2245 【漏洞】发现新漏洞待处理20220906
 
@@ -402,6 +388,7 @@ public class LoginController {
         baseCommonService.addLog("用户名: " + sysUser.getUsername() + ",登录成功！", CommonConstant.LOG_TYPE_1, null);
         return result;
     }
+
     /**
      * 用户信息
      *
@@ -412,49 +399,18 @@ public class LoginController {
     private Result<JSONObject> userInfo(SysUser sysUser, Result<JSONObject> result, HttpServletRequest request) {
         String username = sysUser.getUsername();
         String syspassword = sysUser.getPassword();
-        // 获取用户公司信息
         JSONObject obj = new JSONObject(new LinkedHashMap<>());
-
-        //1.生成token
         String token = JwtUtil.sign(username, syspassword);
-        // 设置token缓存有效时间
         redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, token);
         redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME * 2 / 1000);
         obj.put("token", token);
-
-        //2.设置登录租户
-        Result<JSONObject> loginTenantError = sysUserService.setLoginTenant(sysUser, obj, username,result);
+        Result<JSONObject> loginTenantError = sysUserService.setLoginTenant(sysUser, obj, username, result);
         if (loginTenantError != null) {
             return loginTenantError;
         }
         //3.设置登录用户信息
         obj.put("userInfo", sysUser);
-
-        //4.设置登录公司
-//		List<SysDepart> departs = sysDepartService.queryUserDeparts(sysUser.getId());
-//		obj.put("departs", departs);
-//		if (departs == null || departs.size() == 0) {
-//			obj.put("multi_depart", 0);
-//		} else if (departs.size() == 1) {
-//			sysUserService.updateUserDepart(username, departs.get(0).getOrgCode(),null);
-//			obj.put("multi_depart", 1);
-//		} else {
-        //查询当前是否有登录公司
-        // update-begin--Author:wangshuai Date:20200805 for：如果用戶为选择公司，数据库为存在上一次登录公司，则取一条存进去
-//			SysUser sysUserById = sysUserService.getById(sysUser.getId());
-//			if(oConvertUtils.isEmpty(sysUserById.getOrgCode())){
-//				sysUserService.updateUserDepart(username, departs.get(0).getOrgCode(),null);
-//			}
-        // update-end--Author:wangshuai Date:20200805 for：如果用戶为选择公司，数据库为存在上一次登录公司，则取一条存进去
-//			obj.put("multi_depart", 2);
-//		}
-        //update-begin---author:scott ---date:2024-01-05  for：【QQYUN-7802】前端在登录时加载了两次数据字典，建议优化下，避免数据字典太多时可能产生的性能问题 #956---
-        // login接口，在vue3前端下不加载字典数据，vue2下加载字典
         String vue3Version = request.getHeader(CommonConstant.VERSION);
-//		if(oConvertUtils.isEmpty(vue3Version)){
-//			obj.put("sysAllDictItems", sysDictService.queryAllDictItems());
-//		}
-        //end-begin---author:scott ---date:2024-01-05  for：【QQYUN-7802】前端在登录时加载了两次数据字典，建议优化下，避免数据字典太多时可能产生的性能问题 #956---
         result.setResult(obj);
         result.success("登录成功");
         return result;
@@ -462,35 +418,37 @@ public class LoginController {
 
     /**
      * 获取加密字符串
+     *
      * @return
      */
     @GetMapping(value = "/getEncryptedString")
-    public Result<Map<String,String>> getEncryptedString(){
-        Result<Map<String,String>> result = new Result<Map<String,String>>();
-        Map<String,String> map = new HashMap(5);
+    public Result<Map<String, String>> getEncryptedString() {
+        Result<Map<String, String>> result = new Result<Map<String, String>>();
+        Map<String, String> map = new HashMap(5);
         map.put("key", EncryptedString.key);
-        map.put("iv",EncryptedString.iv);
+        map.put("iv", EncryptedString.iv);
         result.setResult(map);
         return result;
     }
 
     /**
      * 后台生成图形验证码 ：有效
+     *
      * @param response
      * @param key
      */
     @ApiOperation("获取验证码")
     @GetMapping(value = "/randomImage/{key}")
-    public Result<String> randomImage(HttpServletResponse response,@PathVariable("key") String key){
+    public Result<String> randomImage(HttpServletResponse response, @PathVariable("key") String key) {
         Result<String> res = new Result<String>();
         try {
             //生成验证码
-            String code = RandomUtil.randomString(BASE_CHECK_CODES,4);
+            String code = RandomUtil.randomString(BASE_CHECK_CODES, 4);
             //存到redis中
             String lowerCaseCode = code.toLowerCase();
             //update-begin-author:taoyan date:2022-9-13 for: VUEN-2245 【漏洞】发现新漏洞待处理20220906
             // 加入密钥作为混淆，避免简单的拼接，被外部利用，用户自定义该密钥即可
-            String origin = lowerCaseCode+key+jeecgBaseConfig.getSignatureSecret();
+            String origin = lowerCaseCode + key + jeecgBaseConfig.getSignatureSecret();
             String realKey = Md5Util.md5Encode(origin, "utf-8");
             //update-end-author:taoyan date:2022-9-13 for: VUEN-2245 【漏洞】发现新漏洞待处理20220906
 
@@ -509,21 +467,18 @@ public class LoginController {
     }
 
 
-
-
-
-
     /**
      * 登录失败超出次数5 返回true
+     *
      * @param username
      * @return
      */
-    private boolean isLoginFailOvertimes(String username){
+    private boolean isLoginFailOvertimes(String username) {
         String key = CommonConstant.LOGIN_FAIL + username;
         Object failTime = redisUtil.get(key);
-        if(failTime!=null){
+        if (failTime != null) {
             Integer val = Integer.parseInt(failTime.toString());
-            if(val>5){
+            if (val > 5) {
                 return true;
             }
         }
@@ -532,13 +487,14 @@ public class LoginController {
 
     /**
      * 记录登录失败次数
+     *
      * @param username
      */
-    private void addLoginFailOvertimes(String username){
+    private void addLoginFailOvertimes(String username) {
         String key = CommonConstant.LOGIN_FAIL + username;
         Object failTime = redisUtil.get(key);
         Integer val = 0;
-        if(failTime!=null){
+        if (failTime != null) {
             val = Integer.parseInt(failTime.toString());
         }
         // 10分钟，一分钟为60s
@@ -600,20 +556,21 @@ public class LoginController {
 
     /**
      * 图形验证码
+     *
      * @param sysLoginModel
      * @return
      */
     @RequestMapping(value = "/smsCheckCaptcha", method = RequestMethod.POST)
-    public Result<?> smsCheckCaptcha(@RequestBody SysLoginModel sysLoginModel, HttpServletRequest request){
+    public Result<?> smsCheckCaptcha(@RequestBody SysLoginModel sysLoginModel, HttpServletRequest request) {
         String captcha = sysLoginModel.getCaptcha();
         String checkKey = sysLoginModel.getCheckKey();
-        if(captcha==null){
+        if (captcha == null) {
             return Result.error("验证码无效");
         }
         String lowerCaseCaptcha = captcha.toLowerCase();
-        String realKey = Md5Util.md5Encode(lowerCaseCaptcha+checkKey+jeecgBaseConfig.getSignatureSecret(), "utf-8");
+        String realKey = Md5Util.md5Encode(lowerCaseCaptcha + checkKey + jeecgBaseConfig.getSignatureSecret(), "utf-8");
         Object checkCode = redisUtil.get(realKey);
-        if(checkCode==null || !checkCode.equals(lowerCaseCaptcha)) {
+        if (checkCode == null || !checkCode.equals(lowerCaseCaptcha)) {
             return Result.error("验证码错误");
         }
         String clientIp = IpUtils.getIpAddr(request);

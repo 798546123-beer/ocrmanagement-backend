@@ -12,5 +12,5 @@ import org.jeecg.modules.system.entity.Role;
  * @Description:
  */
 public interface RoleService extends IService<Role> {
-
+    public org.jeecg.modules.system.vo.Role getRoleVO(Role role);
 }
