@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="org.jeecg.modules.system.mapper.ProjectMapper">
+    <!-- 查询单个项目（根据项目ID） -->
+    <select id="findById" parameterType="int" resultType="org.jeecg.modules.system.entity.Project">
+        SELECT * FROM project WHERE project_id = #{projectId}
+    </select>
+
+    <!-- 查询所有项目 -->
+    <select id="findAll" resultType="org.jeecg.modules.system.entity.Project">
+        SELECT * FROM project
+    </select>
+
+    <!-- 插入新项目 -->
+    <insert id="insert" parameterType="org.jeecg.modules.system.entity.Project" useGeneratedKeys="true" keyProperty="projectId">
+        INSERT INTO project (project_name, project_part, company_id, project_head_id, sub_conductor, sub_head)
+        VALUES (#{projectName}, #{projectPart}, #{companyId}, #{projectHeadId}, #{subConductor}, #{subHead})
+    </insert>
+
+    <!-- 更新项目信息 -->
+    <update id="update" parameterType="org.jeecg.modules.system.entity.Project">
+        UPDATE project
+        SET project_name = #{projectName},
+            project_part = #{projectPart},
+            company_id = #{companyId},
+            project_head_id = #{projectHeadId},
+            sub_conductor = #{subConductor},
+            sub_head = #{subHead}
+        WHERE project_id = #{projectId}
+    </update>
+
+    <!-- 删除项目（根据项目ID） -->
+    <delete id="delete" parameterType="java.lang.Integer">
+        DELETE FROM project WHERE project_id = #{projectId}
+    </delete>
+
+</mapper>
