@@ -1,21 +1,17 @@
 package org.jeecg.modules.system.service;
 
-
+import com.baomidou.mybatisplus.extension.service.IService;
 import org.jeecg.modules.system.entity.Project;
+
 import java.util.List;
 
-/**
- * Service interface for Project entity.
- */
-public interface ProjectService {
 
-    Project findById(Integer projectId);
+public interface ProjectService extends IService<Project> {
+    List<Project> getProjectsByName(String projectName);
 
-    List<Project> findAll();
+    List<Project> getAllProjects();
 
-    void save(Project project);
+    List<Project> getProjectsByCompanyId(Integer companyId);
 
-    void update(Project project);
-
-    void delete(Integer projectId);
+    public org.jeecg.modules.system.vo.Project getProjectVO(Project project);
 }
