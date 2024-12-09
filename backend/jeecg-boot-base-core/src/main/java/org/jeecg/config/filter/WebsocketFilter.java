@@ -24,7 +24,7 @@ public class WebsocketFilter implements Filter {
 
     private static CommonAPI commonApi;
 
-    private static RedisUtil redisUtil;
+    public static RedisUtil redisUtil;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
