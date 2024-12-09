@@ -7,11 +7,11 @@ import java.util.List;
 
 
 public interface ProjectService extends IService<Project> {
-    List<Project> getProjectsByName(String projectName);
+//    List<Project> getProjectsByName(String projectName);
 
-    List<Project> getAllProjects();
+//    List<Project> getAllProjects();
 
-    List<Project> getProjectsByCompanyId(Integer companyId);
+//    List<Project> getProjectsByCompanyId(Integer companyId);
 
-    public org.jeecg.modules.system.vo.Project getProjectVO(Project project);
+//    public org.jeecg.modules.system.vo.Project getProjectVO(Project project);
 }

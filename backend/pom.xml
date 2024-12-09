@@ -81,7 +81,6 @@
 
 	<modules>
         <module>jeecg-boot-base-core</module>
-        <module>jeecg-module-demo</module>
         <module>jeecg-module-system</module>
     </modules>
 
@@ -194,13 +193,6 @@
 				<artifactId>jeecg-system-local-api</artifactId>
 				<version>${jeecgboot.version}</version>
 			</dependency>
-			<!-- system 微服务 api -->
-			<dependency>
-				<groupId>org.jeecgframework.boot</groupId>
-				<artifactId>jeecg-system-cloud-api</artifactId>
-				<version>${jeecgboot.version}</version>
-			</dependency>
-
             <!--微服务启动依赖-->
             <dependency>
                 <groupId>org.jeecgframework.boot</groupId>
