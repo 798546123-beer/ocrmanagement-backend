@@ -28,8 +28,7 @@ public class MyClassLoader extends ClassLoader {
 			throw new java.lang.IllegalArgumentException("参数不能为空！");
 		}
 		// 获得类的全名，包括包名
-		String clsName = object.getClass().getName();
-		return clsName;
+        return object.getClass().getName();
 	}
 
 	public static String getAppPath(Class cls) {

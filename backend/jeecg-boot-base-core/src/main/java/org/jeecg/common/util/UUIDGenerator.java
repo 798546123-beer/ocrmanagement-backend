@@ -39,25 +39,25 @@ public class UUIDGenerator {
 
 	private static final int JVM = (int) (System.currentTimeMillis() >>> 8);
 
-	private final static String format(int intval) {
+	private static String format(int intval) {
 		String formatted = Integer.toHexString(intval);
 		StringBuilder buf = new StringBuilder("00000000");
 		buf.replace(8 - formatted.length(), 8, formatted);
 		return buf.toString();
 	}
 
-	private final static String format(short shortval) {
+	private static String format(short shortval) {
 		String formatted = Integer.toHexString(shortval);
 		StringBuilder buf = new StringBuilder("0000");
 		buf.replace(4 - formatted.length(), 4, formatted);
 		return buf.toString();
 	}
 
-	private final static int getJvm() {
+	private static int getJvm() {
 		return JVM;
 	}
 
-	private final static short getCount() {
+	private static short getCount() {
 		synchronized (UUIDGenerator.class) {
 			if (counter < 0) {
 				counter = 0;
@@ -69,22 +69,22 @@ public class UUIDGenerator {
 	/**
 	 * Unique in a local network
 	 */
-	private final static int getIp() {
+	private static int getIp() {
 		return IP;
 	}
 
 	/**
 	 * Unique down to millisecond
 	 */
-	private final static short getHiTime() {
+	private static short getHiTime() {
 		return (short) (System.currentTimeMillis() >>> 32);
 	}
 
-	private final static int getLoTime() {
+	private static int getLoTime() {
 		return (int) System.currentTimeMillis();
 	}
 
-	private final static int toInt(byte[] bytes) {
+	private static int toInt(byte[] bytes) {
 		int result = 0;
 		int length = 4;
 		for (int i = 0; i < length; i++) {

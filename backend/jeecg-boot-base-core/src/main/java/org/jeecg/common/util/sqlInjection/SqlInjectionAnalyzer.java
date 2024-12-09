@@ -44,7 +44,6 @@ public class SqlInjectionAnalyzer {
      */
     public ParserSupport.SqlParserInfo injectAnalyse(ParserSupport.SqlParserInfo sqlParserInfo) throws JeecgSqlInjectionException {
         if (null != sqlParserInfo && injectCheckEnable) {
-            /** SQL注入攻击检查 */
             sqlParserInfo.statement.accept(injectionChecker);
             sqlParserInfo.simpleNode.jjtAccept(injectionVisitor, null);
         }

@@ -257,8 +257,7 @@ public class CommonUtils {
     public static DataSourceProperty getDataSourceProperty(String sourceKey){
         DynamicDataSourceProperties prop = SpringContextUtils.getApplicationContext().getBean(DynamicDataSourceProperties.class);
         Map<String, DataSourceProperty> map = prop.getDatasource();
-        DataSourceProperty db = (DataSourceProperty)map.get(sourceKey);
-        return db;
+        return (DataSourceProperty)map.get(sourceKey);
     }
 
     /**
@@ -407,7 +406,7 @@ public class CommonUtils {
      * @return
      */
     public static String getSplitText(List<String> list, String separator) {
-        if (null != list && list.size() > 0) {
+        if (null != list && !list.isEmpty()) {
             return StringUtils.join(list, separator);
         }
         return "";
@@ -463,7 +462,7 @@ public class CommonUtils {
             return false;
         }
         
-        if(set1.size()>0){
+        if(!set1.isEmpty()){
             for (String str : arr2) {
                 if (set1.contains(str)) {
                     return true;

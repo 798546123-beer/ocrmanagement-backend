@@ -1,12 +1,9 @@
 package org.jeecg.modules.system.util;
 
-import org.jeecg.common.constant.CommonConstant;
-import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.modules.system.entity.SysDepart;
 import org.jeecg.modules.system.model.DepartIdModel;
 import org.jeecg.modules.system.model.SysDepartTreeModel;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,7 +114,7 @@ public class FindsDepartsChildrenUtil {
 
         for (int i = 0; i < treeList.size(); i++) {
             SysDepartTreeModel model = treeList.get(i);
-            if (model.getChildren().size() == 0) {
+            if (model.getChildren().isEmpty()) {
                 model.setChildren(null);
                 model.setIsLeaf(true);
             }else{

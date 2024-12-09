@@ -136,7 +136,7 @@ public class AutoLogAspect {
      */
     private String getReqestParams(HttpServletRequest request, JoinPoint joinPoint) {
         String httpMethod = request.getMethod();
-        String params = "";
+        StringBuilder params = new StringBuilder();
         if (CommonConstant.HTTP_POST.equals(httpMethod) || CommonConstant.HTTP_PUT.equals(httpMethod) || CommonConstant.HTTP_PATCH.equals(httpMethod)) {
             Object[] paramsArray = joinPoint.getArgs();
             // java.lang.IllegalStateException: It is illegal to call this method if the current request is not in asynchronous mode (i.e. isAsyncStarted() returns false)
@@ -164,7 +164,7 @@ public class AutoLogAspect {
                     return true;
                 }
             };
-            params = JSONObject.toJSONString(arguments, profilter);
+            params = new StringBuilder(JSONObject.toJSONString(arguments, profilter));
             //update-end-author:taoyan date:20200724 for:日志数据太长的直接过滤掉
         } else {
             MethodSignature signature = (MethodSignature) joinPoint.getSignature();
@@ -176,11 +176,11 @@ public class AutoLogAspect {
             String[] paramNames = u.getParameterNames(method);
             if (args != null && paramNames != null) {
                 for (int i = 0; i < args.length; i++) {
-                    params += "  " + paramNames[i] + ": " + args[i];
+                    params.append("  ").append(paramNames[i]).append(": ").append(args[i]);
                 }
             }
         }
-        return params;
+        return params.toString();
     }
 
     /**

@@ -49,7 +49,6 @@ public class InjectionSyntaxObjectAnalyzer extends TablesNamesFinder {
     public void visitBinaryExpression(BinaryExpression binaryExpression) {
         if (binaryExpression instanceof ComparisonOperator) {
             if (isConst(binaryExpression.getLeftExpression()) && isConst(binaryExpression.getRightExpression())) {
-                /** 禁用恒等式 */
                 throw new JeecgSqlInjectionException("DISABLE IDENTICAL EQUATION " + binaryExpression);
             }
         }
@@ -73,7 +72,6 @@ public class InjectionSyntaxObjectAnalyzer extends TablesNamesFinder {
     @Override
     public void visit(Function function) {
         if (function.getName().matches(DANGROUS_FUNCTIONS)) {
-            /** 禁用危险函数 */
             throw new JeecgSqlInjectionException("DANGROUS FUNCTION: " + function.getName());
         }
         super.visit(function);
@@ -82,7 +80,6 @@ public class InjectionSyntaxObjectAnalyzer extends TablesNamesFinder {
     @Override
     public void visit(WithItem withItem) {
         try {
-            /** 允许 WITH 语句中的子查询 */
             disableSubselect.set(false);
             super.visit(withItem);
         } finally {
@@ -93,7 +90,6 @@ public class InjectionSyntaxObjectAnalyzer extends TablesNamesFinder {
     @Override
     public void visit(SubSelect subSelect) {
         try {
-            /** 允许语句中的子查询 */
             disableSubselect.set(false);
             super.visit(subSelect);
         } finally {
@@ -163,7 +159,6 @@ public class InjectionSyntaxObjectAnalyzer extends TablesNamesFinder {
 
     private void checkConstExpress(Expression expression) {
         if (constAnalyzer.isConstExpression(expression)) {
-            /** 禁用常量表达式 */
             throw new JeecgSqlInjectionException("DISABLE CONST EXPRESSION " + expression);
         }
     }

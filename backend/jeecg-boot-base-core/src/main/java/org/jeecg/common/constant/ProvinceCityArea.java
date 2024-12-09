@@ -2,15 +2,11 @@ package org.jeecg.common.constant;
 
 import com.alibaba.fastjson.JSONObject;
 import org.jeecg.common.util.oConvertUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.Set;
 import java.util.List;
 
 /**
@@ -23,7 +19,7 @@ public class ProvinceCityArea {
 
     public String getText(String code){
         this.initAreaList();
-        if(this.areaList!=null || this.areaList.size()>0){
+        if(this.areaList!=null || !this.areaList.isEmpty()){
             List<String> ls = new ArrayList<String>();
             getAreaByCode(code,ls);
             return String.join("/",ls);
@@ -33,7 +29,7 @@ public class ProvinceCityArea {
 
     public String getCode(String text){
         this.initAreaList();
-        if(areaList!=null && areaList.size()>0){
+        if(areaList!=null && !areaList.isEmpty()){
             for(int i=areaList.size()-1;i>=0;i--){
                 //update-begin-author:taoyan date:2022-5-24 for:VUEN-1088 online 导入 省市区导入后 导入数据错乱 北京市/市辖区/西城区-->山西省/晋城市/城区
                 String areaText = areaList.get(i).getText();
@@ -58,7 +54,7 @@ public class ProvinceCityArea {
             return null;
         }
         this.initAreaList();
-        if (areaList == null || areaList.size() == 0) {
+        if (areaList == null || areaList.isEmpty()) {
             return null;
         }
         String[] codes = new String[texts.length];
@@ -103,7 +99,7 @@ public class ProvinceCityArea {
      */
     public Area getAreaByPidAndText(String pCode, String text) {
         this.initAreaList();
-        if (this.areaList != null && this.areaList.size() > 0) {
+        if (this.areaList != null && !this.areaList.isEmpty()) {
             for (Area area : this.areaList) {
                 if (area.getPid().equals(pCode) && area.getText().equals(text)) {
                     return area;
@@ -126,7 +122,7 @@ public class ProvinceCityArea {
 
     private void initAreaList(){
         //System.out.println("=====================");
-        if(this.areaList==null || this.areaList.size()==0){
+        if(this.areaList==null || this.areaList.isEmpty()){
             this.areaList = new ArrayList<Area>();
             try {
                 String jsonData = oConvertUtils.readStatic("classpath:static/pca.json");

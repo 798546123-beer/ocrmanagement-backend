@@ -10,7 +10,6 @@ import org.jeecg.common.api.vo.Result;
 import org.jeecg.config.shiro.IgnoreAuth;
 import org.jeecg.modules.system.entity.Role;
 import org.jeecg.modules.system.mapper.RoleMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

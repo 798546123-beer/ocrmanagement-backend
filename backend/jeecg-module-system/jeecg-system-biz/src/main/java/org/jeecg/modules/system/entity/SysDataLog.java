@@ -26,10 +26,7 @@ public class SysDataLog implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@TableId(type = IdType.ASSIGN_ID)
-    /**
-     * id
-     */
-	private String id;
+    private String id;
 
     /**
      * 创建人登录名称
@@ -55,9 +52,6 @@ public class SysDataLog implements Serializable {
 	@JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 
-    /**
-     * 更新日期
-     */
     private Date updateTime;
 
     /**

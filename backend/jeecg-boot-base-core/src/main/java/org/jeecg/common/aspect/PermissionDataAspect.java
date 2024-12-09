@@ -72,7 +72,7 @@ public class PermissionDataAspect {
         //查询数据权限信息
         //TODO 微服务情况下也得支持缓存机制
         List<SysPermissionDataRuleModel> dataRules = commonApi.queryPermissionDataRule(component, requestPath, username);
-        if(dataRules!=null && dataRules.size()>0) {
+        if(dataRules!=null && !dataRules.isEmpty()) {
             //临时存储
             JeecgDataAutorUtils.installDataSearchConditon(request, dataRules);
             //TODO 微服务情况下也得支持缓存机制

@@ -38,8 +38,6 @@ public abstract class AbstractQueryBlackListHandler {
     /**
      * 根据 sql语句 获取表和字段信息，需要到具体的实现类重写此方法-
      * 不同的场景 处理可能不太一样 需要自定义，但是返回值确定
-     * @param sql
-     * @return
      */
     protected abstract List<QueryTable> getQueryTableInfo(String sql);
 

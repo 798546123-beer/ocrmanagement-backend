@@ -1,8 +1,6 @@
 package org.jeecg.modules.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.jeecg.common.api.vo.Result;
-import org.jeecg.modules.system.entity.SysUser;
 import org.jeecg.modules.system.entity.User;
 import org.jeecg.modules.system.pojo.UserInfo;
 

@@ -10,14 +10,11 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.jeecg.common.api.CommonAPI;
-import org.jeecg.common.config.TenantContext;
-import org.jeecg.common.constant.CacheConstant;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.common.util.RedisUtil;
 import org.jeecg.common.util.SpringContextUtils;
-import org.jeecg.common.util.TokenUtils;
 import org.jeecg.common.util.oConvertUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -120,14 +117,13 @@ public class ShiroRealm extends AuthorizingRealm {
         }
         // 查询用户信息
 //        LoginUser loginUser = TokenUtils.getLoginUser(username, commonApi, redisUtil);
-        LoginUser loginUser = commonApi.getUserByName(username);
         // 判断用户状态
         // 校验token是否超时失效 & 或者账号密码是否错误
 //        if (!jwtTokenRefresh(token, username, loginUser.getPassword())) {
 //            throw new AuthenticationException(CommonConstant.TOKEN_IS_INVALID_MSG);
 //        }
 //        return null;
-        return loginUser;
+        return commonApi.getUserByName(username);
     }
 
     /**

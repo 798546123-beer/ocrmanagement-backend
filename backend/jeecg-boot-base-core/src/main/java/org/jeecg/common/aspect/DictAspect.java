@@ -190,7 +190,7 @@ public class DictAspect {
                         String value = record.getString(field.getName());
                         if (oConvertUtils.isNotEmpty(value)) {
                             List<DictModel> dictModels = translText.get(fieldDictCode);
-                            if(dictModels==null || dictModels.size()==0){
+                            if(dictModels==null || dictModels.isEmpty()){
                                 continue;
                             }
 
@@ -240,14 +240,14 @@ public class DictAspect {
         //step.1 先通过redis中获取缓存字典数据
         for (String dictCode : dataListMap.keySet()) {
             List<String> dataList = dataListMap.get(dictCode);
-            if (dataList.size() == 0) {
+            if (dataList.isEmpty()) {
                 continue;
             }
             // 表字典需要翻译的数据
             List<String> needTranslDataTable = new ArrayList<>();
             for (String s : dataList) {
                 String data = s.trim();
-                if (data.length() == 0) {
+                if (data.isEmpty()) {
                     continue; //跳过循环
                 }
                 if (dictCode.contains(",")) {
@@ -282,7 +282,7 @@ public class DictAspect {
 
             }
             //step.2 调用数据库翻译表字典
-            if (needTranslDataTable.size() > 0) {
+            if (!needTranslDataTable.isEmpty()) {
                 String[] arr = dictCode.split(",");
                 String table = arr[0], text = arr[1], code = arr[2];
                 String values = String.join(",", needTranslDataTable);
@@ -325,7 +325,7 @@ public class DictAspect {
         }
 
         //step.3 调用数据库进行翻译普通字典
-        if (needTranslData.size() > 0) {
+        if (!needTranslData.isEmpty()) {
             List<String> dictCodeList = Arrays.asList(dataListMap.keySet().toArray(new String[]{}));
             // 将不包含逗号的字典code筛选出来，因为带逗号的是表字典，而不是普通的数据字典
             List<String> filterDictCodes = dictCodeList.stream().filter(key -> !key.contains(",")).collect(Collectors.toList());
@@ -397,7 +397,7 @@ public class DictAspect {
         for (String k : keys) {
             String tmpValue = null;
             log.debug(" 字典 key : "+ k);
-            if (k.trim().length() == 0) {
+            if (k.trim().isEmpty()) {
                 continue; //跳过循环
             }
             //update-begin--Author:scott -- Date:20210531 ----for： !56 优化微服务应用下存在表字段需要字典翻译时加载缓慢问题-----
@@ -428,7 +428,7 @@ public class DictAspect {
             //update-end--Author:scott -- Date:20210531 ----for： !56 优化微服务应用下存在表字段需要字典翻译时加载缓慢问题-----
 
             if (tmpValue != null) {
-                if (!"".equals(textValue.toString())) {
+                if (!textValue.toString().isEmpty()) {
                     textValue.append(",");
                 }
                 textValue.append(tmpValue);
@@ -444,7 +444,7 @@ public class DictAspect {
      * @return
      */
     private Boolean checkHasDict(List<Object> records){
-        if(oConvertUtils.isNotEmpty(records) && records.size()>0){
+        if(oConvertUtils.isNotEmpty(records) && !records.isEmpty()){
             for (Field field : oConvertUtils.getAllFields(records.get(0))) {
                 if (oConvertUtils.isNotEmpty(field.getAnnotation(Dict.class))) {
                     return true;

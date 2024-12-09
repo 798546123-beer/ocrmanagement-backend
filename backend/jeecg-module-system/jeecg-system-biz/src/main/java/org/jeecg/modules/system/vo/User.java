@@ -5,7 +5,6 @@ import lombok.Data;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.modules.system.entity.Role;
 import org.jeecg.modules.system.pojo.UserInfo;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 

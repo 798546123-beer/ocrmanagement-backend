@@ -1,12 +1,13 @@
 package org.jeecg.common.api;
 
 import org.jeecg.common.system.vo.*;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
+@Component
 public interface CommonAPI {
 
     /**

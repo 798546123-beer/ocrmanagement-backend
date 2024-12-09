@@ -12,8 +12,7 @@ import java.util.List;
  */
 public enum RoleIndexConfigEnum {
 
-    /**首页自定义 admin*/
-//    ADMIN("admin", "dashboard/Analysis"),
+    //    ADMIN("admin", "dashboard/Analysis"),
     //TEST("test",  "dashboard/IndexChart"),
     /**首页自定义 hr*/
 //    HR("hr", "dashboard/IndexBdc");
@@ -70,7 +69,7 @@ public enum RoleIndexConfigEnum {
     }
 
     public static String getIndexByRoles(List<String> roles) {
-        String[] rolesArray = roles.toArray(new String[roles.size()]);
+        String[] rolesArray = roles.toArray(new String[0]);
         for (RoleIndexConfigEnum e : RoleIndexConfigEnum.values()) {
             if (oConvertUtils.isIn(e.roleCode,rolesArray)){
                 return e.componentUrl;

@@ -347,7 +347,7 @@ public class QueryGenerator {
             try {
                 superQueryParams = URLDecoder.decode(superQueryParams, "UTF-8");
                 List<QueryCondition> conditions = JSON.parseArray(superQueryParams, QueryCondition.class);
-                if (conditions == null || conditions.size() == 0) {
+                if (conditions == null || conditions.isEmpty()) {
                     return;
                 }
 				// update-begin-author:sunjianlei date:20220119 for: 【JTC-573】 过滤空条件查询，防止 sql 拼接多余的 and
@@ -356,7 +356,7 @@ public class QueryGenerator {
 								&& oConvertUtils.isNotEmpty(rule.getRule())
 								&& oConvertUtils.isNotEmpty(rule.getVal())
 				).collect(Collectors.toList());
-				if (filterConditions.size() == 0) {
+				if (filterConditions.isEmpty()) {
 					return;
 				}
 				// update-end-author:sunjianlei date:20220119 for: 【JTC-573】 过滤空条件查询，防止 sql 拼接多余的 and
@@ -446,7 +446,7 @@ public class QueryGenerator {
 			return QueryRuleEnum.EQ;
 		}
 		String val = (value + "").toString().trim();
-		if (val.length() == 0) {
+		if (val.isEmpty()) {
 			return QueryRuleEnum.EQ;
 		}
 		// update-end-author:taoyan date:20210629 for: 查询条件输入空格导致return null后续判断导致抛出null异常
@@ -765,7 +765,7 @@ public class QueryGenerator {
 			log.error("根据request对象获取权限数据失败，可能是定时任务中执行的。", e);
 		}
 		//update-end-author:taoyan date:2023-6-1 for:QQYUN-5441 【简流】获取多个用户/公司/角色 设置公司查询 报错
-		if(list != null&&list.size()>0){
+		if(list != null&& !list.isEmpty()){
 			if(list.get(0)==null){
 				return ruleMap;
 			}

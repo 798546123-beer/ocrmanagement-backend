@@ -142,13 +142,12 @@ public class JwtUtil {
         //${myVar}%
         //得到${} 后面的值
         String moshi = "";
-        String wellNumber = WELL_NUMBER;
 
         if (key.indexOf(SymbolConstant.RIGHT_CURLY_BRACKET) != -1) {
             moshi = key.substring(key.indexOf("}") + 1);
         }
         String returnValue = null;
-        if (key.contains(wellNumber)) {
+        if (key.contains(WELL_NUMBER)) {
             key = key.substring(2, key.indexOf("}"));
         }
         if (oConvertUtils.isNotEmpty(key)) {
@@ -188,13 +187,12 @@ public class JwtUtil {
 
         //#{sys_user_code}%
         String moshi = "";
-        String wellNumber = WELL_NUMBER;
         if (key.indexOf(SymbolConstant.RIGHT_CURLY_BRACKET) != -1) {
             moshi = key.substring(key.indexOf("}") + 1);
         }
         String returnValue = null;
         //针对特殊标示处理#{sysOrgCode}，判断替换
-        if (key.contains(wellNumber)) {
+        if (key.contains(WELL_NUMBER)) {
             key = key.substring(2, key.indexOf("}"));
         } else {
             key = key;

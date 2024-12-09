@@ -59,7 +59,7 @@ public class ResourceUtil {
      * @return
      */
     public static Map<String, List<DictModel>> getEnumDictData(){
-        if(enumDictData.keySet().size()>0){
+        if(!enumDictData.keySet().isEmpty()){
             return enumDictData;
         }
         ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
@@ -95,16 +95,16 @@ public class ResourceUtil {
      * @return
      */
     public static Map<String, List<DictModel>> queryManyDictByKeys(List<String> dictCodeList, List<String> keys){
-        if(enumDictData.keySet().size()==0){
+        if(enumDictData.keySet().isEmpty()){
             getEnumDictData();
         }
         Map<String, List<DictModel>> map = new HashMap<>();
         for (String code : enumDictData.keySet()) {
-            if(dictCodeList.indexOf(code)>=0){
+            if(dictCodeList.contains(code)){
                 List<DictModel> dictItemList = enumDictData.get(code);
                 for(DictModel dm: dictItemList){
                     String value = dm.getValue();
-                    if(keys.indexOf(value)>=0){
+                    if(keys.contains(value)){
                         List<DictModel> list = new ArrayList<>();
                         list.add(new DictModel(value, dm.getText()));
                         map.put(code,list);

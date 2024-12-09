@@ -4,13 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.constant.SymbolConstant;
-import org.jeecg.common.constant.enums.FileTypeEnum;
 import org.jeecg.common.exception.JeecgBootException;
 import org.jeecg.common.util.CommonUtils;
 import org.jeecg.common.util.filter.SsrfFileTypeFilter;
 import org.jeecg.common.util.oConvertUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
@@ -94,17 +92,6 @@ public class CommonController {
             //update-begin-author:lvdandan date:20200928 for:修改JEditor编辑器本地上传
             savePath = this.uploadLocal(file,bizPath);
             //update-begin-author:lvdandan date:20200928 for:修改JEditor编辑器本地上传
-            /**  富文本编辑器及markdown本地上传时，采用返回链接方式
-            //针对jeditor编辑器如何使 lcaol模式，采用 base64格式存储
-            String jeditor = request.getParameter("jeditor");
-            if(oConvertUtils.isNotEmpty(jeditor)){
-                result.setMessage(CommonConstant.UPLOAD_TYPE_LOCAL);
-                result.setSuccess(true);
-                return result;
-            }else{
-                savePath = this.uploadLocal(file,bizPath);
-            }
-            */
         }else{
             //update-begin-author:taoyan date:20200814 for:文件上传改造
             savePath = CommonUtils.upload(file, bizPath, uploadType);
