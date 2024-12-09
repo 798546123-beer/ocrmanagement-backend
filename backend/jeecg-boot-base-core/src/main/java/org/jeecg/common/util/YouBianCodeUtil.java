@@ -110,8 +110,7 @@ public class YouBianCodeUtil {
 	 * @return
 	 */
 	private static String getStrNum(int num) {
-		String s = String.format("%0" + NUM_LENGTH + "d", num);
-		return s;
+        return String.format("%0" + NUM_LENGTH + "d", num);
 	}
 
 	/**
@@ -128,7 +127,6 @@ public class YouBianCodeUtil {
 	/**
 	 * 递增获取下个字母
 	 * 
-	 * @param num
 	 * @return
 	 */
 	private static char getNextZiMu(char zimu) {

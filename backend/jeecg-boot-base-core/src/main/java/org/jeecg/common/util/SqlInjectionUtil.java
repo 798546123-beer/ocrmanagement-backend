@@ -88,7 +88,7 @@ public class SqlInjectionUtil {
 	 * @return
 	 */
 	public static void filterContent(String value, String customXssString) {
-		if (value == null || "".equals(value)) {
+		if (value == null || value.isEmpty()) {
 			return;
 		}
 		// 一、校验sql注释 不允许有sql注释
@@ -154,12 +154,7 @@ public class SqlInjectionUtil {
 				List<String> resultFindAll = ReUtil.findAll(regularStr, sql, 0, new ArrayList<String>());
 				for (String res : resultFindAll) {
 					log.info("isExistSqlInjectKeyword —- 匹配到的SQL注入关键词：{}", res);
-					/**
-					 * SQL注入中可以替换空格的字符(%09  %0A  %0D  +都可以替代空格)
-					 * http://blog.chinaunix.net/uid-12501104-id-2932639.html
-					 * https://www.cnblogs.com/Vinson404/p/7253255.html
-					 * */
-					if (res.contains("%") || res.contains("+") || res.contains("#") || res.contains("/") || res.contains(")")) {
+                    if (res.contains("%") || res.contains("+") || res.contains("#") || res.contains("/") || res.contains(")")) {
 						return true;
 					}
 				}
@@ -193,7 +188,7 @@ public class SqlInjectionUtil {
 	 */
 	public static void specialFilterContentForDictSql(String value) {
 		String[] xssArr = specialDictSqlXssStr.split("\\|");
-		if (value == null || "".equals(value)) {
+		if (value == null || value.isEmpty()) {
 			return;
 		}
 		// 一、校验sql注释 不允许有sql注释
@@ -229,7 +224,7 @@ public class SqlInjectionUtil {
      */
 	public static void specialFilterContentForOnlineReport(String value) {
 		String[] xssArr = specialReportXssStr.split("\\|");
-		if (value == null || "".equals(value)) {
+		if (value == null || value.isEmpty()) {
 			return;
 		}
 		// 一、校验sql注释 不允许有sql注释
@@ -301,14 +296,7 @@ public class SqlInjectionUtil {
 		//update-end---author:scott ---date::2024-05-28  for：表单设计器列表翻译存在表名带条件，导致翻译出问题----
 
 		table = table.trim();
-		/**
-		 * 检验表名是否合法
-		 *
-		 * 表名只能由字母、数字和下划线组成。
-		 * 表名必须以字母开头。
-		 * 表名长度通常有限制，例如最多为 64 个字符。
-		 */
-		boolean isValidTableName = tableNamePattern.matcher(table).matches();
+        boolean isValidTableName = tableNamePattern.matcher(table).matches();
 		if (!isValidTableName) {
 			String errorMsg = "表名不合法，存在SQL注入风险!--->" + table;
 			log.error(errorMsg);
@@ -340,12 +328,7 @@ public class SqlInjectionUtil {
 			return getSqlInjectField(field.split(SymbolConstant.COMMA));
 		}
 
-		/**
-		 * 校验表字段是否有效
-		 *
-		 * 字段定义只能是是字母 数字 下划线的组合（不允许有空格、转义字符串等）
-		 */
-		boolean isValidField = fieldPattern.matcher(field).matches();
+        boolean isValidField = fieldPattern.matcher(field).matches();
 		if (!isValidField) {
 			String errorMsg = "字段不合法，存在SQL注入风险!--->" + field;
 			log.error(errorMsg);
@@ -382,8 +365,7 @@ public class SqlInjectionUtil {
 	 * @return
 	 */
 	public static String getSqlInjectSortField(String sortField) {
-		String field = SqlInjectionUtil.getSqlInjectField(oConvertUtils.camelToUnderline(sortField));
-		return field;
+        return SqlInjectionUtil.getSqlInjectField(oConvertUtils.camelToUnderline(sortField));
 	}
 
 	/**

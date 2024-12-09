@@ -7,9 +7,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
 /**
  * Created with IntelliJ IDEA.
  *

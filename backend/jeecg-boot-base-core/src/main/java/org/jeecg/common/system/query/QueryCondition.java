@@ -72,7 +72,7 @@ public class QueryCondition implements Serializable {
 	@Override
 	public String toString(){
 		StringBuffer sb =new StringBuffer();
-		if(field == null || "".equals(field)){
+		if(field == null || field.isEmpty()){
 			return "";
 		}
 		sb.append(this.field).append(" ").append(this.rule).append(" ").append(this.type).append(" ").append(this.dbType).append(" ").append(this.val);

@@ -14,11 +14,6 @@ import javax.crypto.spec.PBEParameterSpec;
  */
 public class PasswordUtil {
 
-	/**
-	 * JAVA6支持以下任意一种算法 PBEWITHMD5ANDDES PBEWITHMD5ANDTRIPLEDES
-	 * PBEWITHSHAANDDESEDE PBEWITHSHA1ANDRC2_40 PBKDF2WITHHMACSHA1
-	 * */
-
     /**
      * 定义使用的算法为:PBEWITHMD5andDES算法
      * 加密算法
@@ -169,7 +164,7 @@ public class PasswordUtil {
 	 * @return
 	 */
 	public static byte[] hexStringToBytes(String hexString) {
-		if (hexString == null || "".equals(hexString)) {
+		if (hexString == null || hexString.isEmpty()) {
 			return null;
 		}
 		hexString = hexString.toUpperCase();

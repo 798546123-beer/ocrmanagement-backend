@@ -79,7 +79,7 @@ public class SensitiveInfoUtil {
                     //必须是字符串类型 才作处理
                     field.setAccessible(true);
                     String realValue = (String) field.get(obj);
-                    if(realValue==null || "".equals(realValue)){
+                    if(realValue==null || realValue.isEmpty()){
                         continue;
                     }
                     SensitiveField sf = field.getAnnotation(SensitiveField.class);
@@ -110,7 +110,7 @@ public class SensitiveInfoUtil {
      */
     public static void handleList(Object obj, Class entity, boolean isEncode){
         List list = (List)obj;
-        if(list.size()>0){
+        if(!list.isEmpty()){
             Object first = list.get(0);
             if(first.getClass().equals(entity)){
                 for(int i=0; i<list.size(); i++){

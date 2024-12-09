@@ -72,9 +72,9 @@ public class AutoPoiDictConfig implements AutoPoiDictServiceI {
 				//update-end---author:20211220     Date:20211220  for：[issues/I4MBB3]@Excel dicText字段的值有下划线时，导入功能不能正确解析---
 			}
 		}
-		if (dictReplaces != null && dictReplaces.size() != 0) {
+		if (dictReplaces != null && !dictReplaces.isEmpty()) {
 			log.info("---AutoPoi--Get_DB_Dict------"+ dictReplaces.toString());
-			return dictReplaces.toArray(new String[dictReplaces.size()]);
+			return dictReplaces.toArray(new String[0]);
 		}
 		return null;
 	}

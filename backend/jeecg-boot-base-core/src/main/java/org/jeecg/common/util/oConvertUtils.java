@@ -71,8 +71,7 @@ public class oConvertUtils {
 	}
 
 	public static String decode(String strIn, String sourceCode, String targetCode) {
-		String temp = code2code(strIn, sourceCode, targetCode);
-		return temp;
+        return code2code(strIn, sourceCode, targetCode);
 	}
 
 	@SuppressWarnings("AlibabaLowerCamelCaseVariableNaming")
@@ -90,7 +89,7 @@ public class oConvertUtils {
 
 	private static String code2code(String strIn, String sourceCode, String targetCode) {
 		String strOut = null;
-		if (strIn == null || "".equals(strIn.trim())) {
+		if (strIn == null || strIn.trim().isEmpty()) {
 			return strIn;
 		}
 		try {
@@ -107,7 +106,7 @@ public class oConvertUtils {
 	}
 
 	public static int getInt(String s, int defval) {
-		if (s == null || "".equals(s)) {
+		if (s == null || s.isEmpty()) {
 			return (defval);
 		}
 		try {
@@ -118,7 +117,7 @@ public class oConvertUtils {
 	}
 
 	public static int getInt(String s) {
-		if (s == null || "".equals(s)) {
+		if (s == null || s.isEmpty()) {
 			return 0;
 		}
 		try {
@@ -129,7 +128,7 @@ public class oConvertUtils {
 	}
 
 	public static int getInt(String s, Integer df) {
-		if (s == null || "".equals(s)) {
+		if (s == null || s.isEmpty()) {
 			return df;
 		}
 		try {
@@ -152,7 +151,7 @@ public class oConvertUtils {
 	}
 
 	public static double getDouble(String s, double defval) {
-		if (s == null || "".equals(s)) {
+		if (s == null || s.isEmpty()) {
 			return (defval);
 		}
 		try {
@@ -236,7 +235,6 @@ public class oConvertUtils {
 
 	/**
 	 * 转义成Unicode编码
-	 * @param s
 	 * @return
 	 */
 	/*public static String escapeJava(Object s) {
@@ -268,8 +266,7 @@ public class oConvertUtils {
 		if (oConvertUtils.isEmpty(input)) {
 			return null;
 		}
-		String result = input.replaceAll("[^0-9a-zA-Z\\u4e00-\\u9fa5]", "");
-		return result;
+        return input.replaceAll("[^0-9a-zA-Z\\u4e00-\\u9fa5]", "");
 	}
 
 	public static String getString(String s, String defval) {
@@ -332,8 +329,7 @@ public class oConvertUtils {
 		if (byteContent == null) {
 			return null;
 		}
-		String decodedString = new String(byteContent);
-		return decodedString;
+        return new String(byteContent);
 	}
 	
 	
@@ -344,13 +340,13 @@ public class oConvertUtils {
 	 */
 	public static String getIpAddrByRequest(HttpServletRequest request) {
 		String ip = request.getHeader("x-forwarded-for");
-		if (ip == null || ip.length() == 0 || CommonConstant.UNKNOWN.equalsIgnoreCase(ip)) {
+		if (ip == null || ip.isEmpty() || CommonConstant.UNKNOWN.equalsIgnoreCase(ip)) {
 			ip = request.getHeader("Proxy-Client-IP");
 		}
-		if (ip == null || ip.length() == 0 || CommonConstant.UNKNOWN.equalsIgnoreCase(ip)) {
+		if (ip == null || ip.isEmpty() || CommonConstant.UNKNOWN.equalsIgnoreCase(ip)) {
 			ip = request.getHeader("WL-Proxy-Client-IP");
 		}
-		if (ip == null || ip.length() == 0 || CommonConstant.UNKNOWN.equalsIgnoreCase(ip)) {
+		if (ip == null || ip.isEmpty() || CommonConstant.UNKNOWN.equalsIgnoreCase(ip)) {
 			ip = request.getRemoteAddr();
 		}
 		return ip;
@@ -387,7 +383,7 @@ public class oConvertUtils {
 			}
 		}
 
-		if (netip != null && !"".equals(netip)) {
+		if (netip != null && !netip.isEmpty()) {
 			return netip;
 		} else {
 			return localip;
@@ -482,7 +478,6 @@ public class oConvertUtils {
 	/**
 	 * SET转换MAP
 	 * 
-	 * @param str
 	 * @return
 	 */
 	public static Map<Object, Object> setToMap(Set<Object> setobj) {
@@ -498,10 +493,7 @@ public class oConvertUtils {
 	public static boolean isInnerIp(String ipAddress) {
 		boolean isInnerIp = false;
 		long ipNum = getIpNum(ipAddress);
-		/**
-		 * 私有IP：A类 10.0.0.0-10.255.255.255 B类 172.16.0.0-172.31.255.255 C类 192.168.0.0-192.168.255.255 当然，还有127这个网段是环回地址
-		 **/
-		long aBegin = getIpNum("10.0.0.0");
+        long aBegin = getIpNum("10.0.0.0");
 		long aEnd = getIpNum("10.255.255.255");
 		long bBegin = getIpNum("172.16.0.0");
 		long bEnd = getIpNum("172.31.255.255");
@@ -519,8 +511,7 @@ public class oConvertUtils {
 		long c = Integer.parseInt(ip[2]);
 		long d = Integer.parseInt(ip[3]);
 
-		long ipNum = a * 256 * 256 * 256 + b * 256 * 256 + c * 256 + d;
-		return ipNum;
+        return a * 256 * 256 * 256 + b * 256 * 256 + c * 256 + d;
 	}
 
 	private static boolean isInner(long userIp, long begin, long end) {
@@ -574,12 +565,10 @@ public class oConvertUtils {
 	 * 如果转换前的下划线大写方式命名的字符串为空，则返回空字符串。</br>
 	 * 例如：hello_world,test_id->helloWorld,testId
 	 * 
-	 * @param name
-	 *            转换前的下划线大写方式命名的字符串
 	 * @return 转换后的驼峰式命名的字符串
 	 */
 	public static String camelNames(String names) {
-		if(names==null||"".equals(names)){
+		if(names==null|| names.isEmpty()){
 			return null;
 		}
 		StringBuffer sf = new StringBuffer();
@@ -748,7 +737,7 @@ public class oConvertUtils {
 	 * list.size() == 0	: true
 	 */
 	public static boolean listIsEmpty(Collection list) {
-		return (list == null || list.size() == 0);
+		return (list == null || list.isEmpty());
 	}
 
 	/**
@@ -766,7 +755,7 @@ public class oConvertUtils {
 				if(newVal instanceof JSONArray){
 					return equalityOfJSONArray((JSONArray) oldVal, (JSONArray) newVal);
 				}else{
-					if (isEmpty(newVal) && (oldVal == null || ((JSONArray) oldVal).size() == 0)) {
+					if (isEmpty(newVal) && (oldVal == null || ((JSONArray) oldVal).isEmpty())) {
 						return true;
 					}
 					List<Object> arrayStr = Arrays.asList(newVal.toString().split(","));
@@ -824,7 +813,7 @@ public class oConvertUtils {
 			Object[] newValArray = newVal.toArray();
 			return equalityOfArrays(oldValArray,newValArray);
 		} else {
-			if ((oldVal == null || oldVal.size() == 0) && (newVal == null || newVal.size() == 0)) {
+			if ((oldVal == null || oldVal.isEmpty()) && (newVal == null || newVal.isEmpty())) {
 				return true;
 			} else {
 				return false;
@@ -927,13 +916,11 @@ public class oConvertUtils {
 	 * @return
 	 */
 	public static JSONArray list2JSONArray(List<String> list){
-		if(list==null || list.size()==0){
+		if(list==null || list.isEmpty()){
 			return null;
 		}
 		JSONArray array = new JSONArray();
-		for(String str: list){
-			array.add(str);
-		}
+        array.addAll(list);
 		return array;
 	}
 
@@ -1009,7 +996,7 @@ public class oConvertUtils {
 	 * @return
 	 */
 	public static String mapToString(Map<String, String[]> map) {
-		if (map == null || map.size() == 0) {
+		if (map == null || map.isEmpty()) {
 			return null;
 		}
 

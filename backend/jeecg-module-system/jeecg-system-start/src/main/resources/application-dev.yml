@@ -35,58 +35,6 @@ spring:
           starttls:
             enable: true
             required: true
-  ## quartz定时任务,采用数据库方式
-  quartz:
-    job-store-type: jdbc
-    initialize-schema: embedded
-    #定时任务启动开关，true-开  false-关
-    auto-startup: true
-    #延迟1秒启动定时任务
-    startup-delay: 1s
-    #启动时更新己存在的Job
-    overwrite-existing-jobs: true
-    properties:
-      org:
-        quartz:
-          scheduler:
-            instanceName: MyScheduler
-            instanceId: AUTO
-          jobStore:
-            class: org.springframework.scheduling.quartz.LocalDataSourceJobStore
-            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
-            tablePrefix: QRTZ_
-            isClustered: true
-            misfireThreshold: 12000
-            clusterCheckinInterval: 15000
-          threadPool:
-            class: org.quartz.simpl.SimpleThreadPool
-            threadCount: 10
-            threadPriority: 5
-            threadsInheritContextClassLoaderOfInitializingThread: true
-  #json 时间戳统一转换
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+8
-  jpa:
-    open-in-view: false
-  aop:
-    proxy-target-class: true
-  #配置freemarker
-  freemarker:
-    # 设置模板后缀名
-    suffix: .ftl
-    # 设置文档类型
-    content-type: text/html
-    # 设置页面编码格式
-    charset: UTF-8
-    # 设置页面缓存
-    cache: false
-    prefer-file-system-access: false
-    # 设置ftl文件路径
-    template-loader-path:
-      - classpath:/templates
-    template_update_delay: 0
-  # 设置静态文件路径，js,css等
   mvc:
     static-path-pattern: /**
     #Spring Boot 2.6+后映射匹配的默认策略已从AntPathMatcher更改为PathPatternParser,需要手动指定为ant-path-matcher
@@ -175,9 +123,6 @@ mybatis-plus:
 #jeecg专用配置
 jeecg:
   firewall:
-    dataSourceSafe: false
-    # 低代码模式（dev:开发模式，prod:发布模式——关闭所有在线开发配置能力）
-    lowCodeMode: dev
   # 签名密钥串(前后端要一致，正式发布请自行修改)
   signatureSecret: dd05f1c54d63749eda95f9fa6d49v442a
   #签名拦截接口
@@ -208,33 +153,12 @@ jeecg:
     check-enabled: false
   # 在线预览文件服务器地址配置
   file-view-domain: http://fileview.jeecg.com
-  # minio文件上传
-  minio:
-    minio_url: http://minio.jeecg.com
-    minio_name: ??
-    minio_pass: ??
-    bucketName: otatest
   #大屏报表参数设置
   jmreport:
     #多租户模式，默认值为空(created:按照创建人隔离、tenant:按照租户隔离) (v1.6.2+ 新增)
     saasMode: 
     # 平台上线安全配置(v1.6.2+ 新增)
     firewall:
-      # 数据源安全 (开启后，不允许使用平台数据源、SQL解析加签并且不允许查询数据库)
-      dataSourceSafe: false
-      # 低代码开发模式（dev:开发模式，prod:发布模式—关闭在线报表设计功能，分配角色admin、lowdeveloper可以放开限制）
-      lowCodeMode: dev
-  #xxl-job配置
-  xxljob:
-    enabled: false
-    adminAddresses: http://127.0.0.1:9080/xxl-job-admin
-    appname: ${spring.application.name}
-    accessToken: ''
-    address: 127.0.0.1:30007
-    ip: 127.0.0.1
-    port: 30007
-    logPath: logs/jeecg/job/jobhandler/
-    logRetentionDays: 30
   #分布式锁配置
   redisson:
     address: 127.0.0.1:6379

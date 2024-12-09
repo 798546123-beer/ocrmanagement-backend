@@ -170,7 +170,7 @@ public class ReflectHelper {
      */
     public static <T> List<T> transList2Entrys(List<Map<String, Object>> mapist, Class<T> clazz) {
         List<T> list = new ArrayList<T>();
-        if (mapist != null && mapist.size() > 0) {
+        if (mapist != null && !mapist.isEmpty()) {
             for (Map<String, Object> data : mapist) {
                 list.add(ReflectHelper.setAll(clazz, data));
             }
@@ -282,9 +282,7 @@ public class ReflectHelper {
         Field[] fields;
         do{
             fields = clazz.getDeclaredFields();
-            for(int i = 0;i<fields.length;i++){
-                list.add(fields[i]);
-            }
+            list.addAll(Arrays.asList(fields));
             clazz = clazz.getSuperclass();
         }while(clazz!= Object.class&&clazz!=null);
         return list;
@@ -310,7 +308,7 @@ public class ReflectHelper {
             if (field == null) {
                 List<Field> allFields = getClassFields(clazz);
                 List<Field> searchFields = allFields.stream().filter(a -> a.getName().equals(name)).collect(Collectors.toList());
-                if(searchFields!=null && searchFields.size()>0){
+                if(searchFields!=null && !searchFields.isEmpty()){
                     field = searchFields.get(0);
                 }
             }

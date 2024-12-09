@@ -13,7 +13,6 @@ import org.jeecg.common.util.oConvertUtils;
 import org.jeecg.config.JeecgBaseConfig;
 import org.jeecg.config.shiro.IgnoreAuth;
 import org.jeecg.modules.base.service.BaseCommonService;
-import org.jeecg.modules.system.entity.SysUser;
 import org.jeecg.modules.system.entity.User;
 import org.jeecg.modules.system.model.SysLoginModel;
 import org.jeecg.modules.system.service.RoleService;
@@ -108,12 +107,6 @@ public class LoginController {
         Date dayStart = calendar.getTime();
         return result;
     }
-
-    /**
-     * * 获取访问量
-     *
-     * @return
-     */
 
     /**
      * 登录失败超出次数5 返回true

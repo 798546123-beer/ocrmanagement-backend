@@ -1,6 +1,5 @@
 package org.jeecg.modules.system.controller;
 
-import io.lettuce.core.dynamic.annotation.Param;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -10,9 +9,6 @@ import org.jeecg.config.shiro.IgnoreAuth;
 import org.jeecg.modules.system.model.SysLoginModel;
 import org.springframework.web.bind.annotation.*;
 import com.alibaba.fastjson.JSONObject;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/test")

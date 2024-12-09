@@ -323,7 +323,6 @@ public interface CommonConstant {
     String WPS_TYPE_2="2";
 
 
-    /**===============================================================================================*/
     /**
      * ::非常重要::
      * 注意：这四个常量值如果修改，需要与 jeecg-boot-starter/jeecg-boot-common/org.jeecg.config.FeignConfig 类中的值保持一致。
@@ -410,7 +409,6 @@ public interface CommonConstant {
     /** 公司表唯一key，orgCode */
     String DEPART_KEY_ORG_CODE = "orgCode";
 
-    /**======【消息推送相关】==============================================================================*/
     /**
      * 发消息 会传递一些信息到map
      */
@@ -448,7 +446,6 @@ public interface CommonConstant {
 
     /** 消息模板：markdown */
     String MSG_TEMPLATE_TYPE_MD = "5";
-    /**========【消息推送相关】==========================================================================*/
 
     /**
      * 短信验证码redis-key的前缀

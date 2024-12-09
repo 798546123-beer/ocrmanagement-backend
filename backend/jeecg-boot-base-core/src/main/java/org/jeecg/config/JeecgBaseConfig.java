@@ -27,11 +27,7 @@ public class JeecgBaseConfig {
      */
     private String uploadType;
     
-    /**
-     * 平台安全模式配置
-     */
-    private Firewall firewall;
-    
+
     /**
      * shiro拦截排除
      */
@@ -70,14 +66,6 @@ public class JeecgBaseConfig {
 
     public void setElasticsearch(Elasticsearch elasticsearch) {
         this.elasticsearch = elasticsearch;
-    }
-
-    public Firewall getFirewall() {
-        return firewall;
-    }
-
-    public void setFirewall(Firewall firewall) {
-        this.firewall = firewall;
     }
 
     public String getSignatureSecret() {
