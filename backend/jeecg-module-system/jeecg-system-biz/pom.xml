@@ -24,21 +24,12 @@
 			<artifactId>hibernate-re</artifactId>
 		</dependency>
 
-		<!-- 企业微信/钉钉 api -->
-		<dependency>
-			<groupId>org.jeecgframework</groupId>
-			<artifactId>jeewx-api</artifactId>
-		</dependency>
+
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-core</artifactId>
             <version>3.5.6</version>
         </dependency>
-        <!-- 积木报表 mongo redis 支持包
-            <dependency>
-                <groupId>org.jeecgframework.jimureport</groupId>
-                <artifactId>jimureport-nosql-starter</artifactId>
-            </dependency>-->
 	</dependencies>
 
 </project>
