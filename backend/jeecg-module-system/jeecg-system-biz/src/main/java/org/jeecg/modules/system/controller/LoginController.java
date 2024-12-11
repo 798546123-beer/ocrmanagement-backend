@@ -19,6 +19,7 @@ import org.jeecg.modules.system.service.RoleService;
 import org.jeecg.modules.system.service.UserService;
 import org.jeecg.modules.system.util.EncodeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -31,14 +32,10 @@ import java.util.*;
 @Slf4j
 public class LoginController {
     private static final String BASE_CHECK_CODES = "qwertyuiplkjhgfdsazxcvbnmQWERTYUPLKJHGFDSAZXCVBNM1234567890";
-    @Autowired
+    @Resource
     private RoleService roleService;
     @Resource
     private RedisUtil redisUtil;
-    @Resource
-    private BaseCommonService baseCommonService;
-    @Autowired
-    private JeecgBaseConfig jeecgBaseConfig;
     @Resource
     private UserService userService;
 
@@ -124,9 +121,6 @@ public class LoginController {
         return false;
     }
 
-    /**
-     * 【vue3专用】获取用户信息
-     */
     @GetMapping("/user/getUserInfo")
     public Result<JSONObject> getUserInfo(HttpServletRequest request) {
         long start = System.currentTimeMillis();
@@ -142,7 +136,6 @@ public class LoginController {
         }
         log.info("end 获取用户信息耗时 " + (System.currentTimeMillis() - start) + "毫秒");
         return result;
-
     }
 
     /**
@@ -158,7 +151,7 @@ public class LoginController {
             val = Integer.parseInt(failTime.toString());
         }
         // 10分钟，一分钟为60s
-        redisUtil.set(key, ++val, 600);
+        redisUtil.set(key, ++val, 60*10);
     }
 
 
