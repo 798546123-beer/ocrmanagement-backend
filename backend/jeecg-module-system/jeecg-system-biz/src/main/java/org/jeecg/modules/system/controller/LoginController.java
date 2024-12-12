@@ -81,7 +81,7 @@ public class LoginController {
 //        BeanUtils.copyProperties(user, loginUser);
         log.info("用户名: {},{}成功！\n{}", username, CommonConstant.LOG_TYPE_1, user);
         result.setSuccess(true);
-        return result;
+        return Result.OK(result);
     }
 
 
