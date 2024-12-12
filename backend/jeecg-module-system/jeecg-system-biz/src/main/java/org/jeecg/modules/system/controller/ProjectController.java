@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.config.shiro.IgnoreAuth;
 import org.jeecg.modules.system.entity.Project;
 import org.jeecg.modules.system.mapper.ProjectMapper;
 import org.jeecg.modules.system.service.ProjectService;
@@ -31,6 +32,7 @@ public class ProjectController {
     private ProjectService projectService;
 
     // 查询项目详情
+    @IgnoreAuth
     @ApiOperation("获取项目详情")
     @GetMapping("/getProjectById")
     public Result<?> getProjectById(@Param("projectId") Integer projectId) {
@@ -44,6 +46,7 @@ public class ProjectController {
     // 新增项目接口
     @ApiOperation("新增项目")
     @PostMapping("/addProject")
+    @IgnoreAuth
     public Result<String> addProject(@RequestBody Project project) {
         QueryWrapper<Project> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("project_name", project.getProjectName());
@@ -62,6 +65,7 @@ public class ProjectController {
     // 更新项目接口
     @ApiOperation("更新项目")
     @PutMapping("/updateProject")
+    @IgnoreAuth
     public Result<String> updateProject(@RequestBody Project project) {
         try {
             Project existingProject = projectMapper.selectById(project.getProjectId());
@@ -79,6 +83,7 @@ public class ProjectController {
     // 删除项目接口
     @ApiOperation("删除项目")
     @DeleteMapping("/deleteProject")
+    @IgnoreAuth
     public Result<String> deleteProject(@Param("projectId") Integer projectId) {
         try {
             Project project = projectMapper.selectById(projectId);
@@ -91,13 +96,5 @@ public class ProjectController {
             log.error("删除项目失败", e);
             return Result.Error("删除项目失败: " + e.getMessage());
         }
-    }
-
-    public ProjectService getProjectService() {
-        return projectService;
-    }
-
-    public void setProjectService(ProjectService projectService) {
-        this.projectService = projectService;
     }
 }
