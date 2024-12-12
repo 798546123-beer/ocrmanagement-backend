@@ -33,12 +33,12 @@ public class ProjectController {
     // 查询项目详情
     @ApiOperation("获取项目详情")
     @GetMapping("/getProjectById")
-    public Result<JSONObject> getProjectById(@Param("projectId") Integer projectId) {
+    public Result<?> getProjectById(@Param("projectId") Integer projectId) {
         Project project = projectMapper.selectById(projectId);
         if (project == null) {
             return Result.Error("项目不存在！");
         }
-        return Result.ok(JSONObject.parseObject(JSONObject.toJSONString(project)));
+        return Result.ok(project);
     }
 
     // 新增项目接口

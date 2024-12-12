@@ -43,30 +43,27 @@ public class LoginController {
     @IgnoreAuth
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result<?> login(@RequestBody SysLoginModel sysLoginModel, HttpServletRequest request) {
-        Result<org.jeecg.modules.system.vo.User> result = new Result<>();
         String username = sysLoginModel.getUsername();
         String password = sysLoginModel.getPassword();
         if (username == null || password == null) {
             log.debug("{}" + CommonConstant.LOG_TYPE_1 + "账号或密码为空！", username);
-            return result.error500("用户账号或密码为空");
+            return new Result<JSONObject>(500, "用户账号或密码为空");
         }
         if (isLoginFailOvertimes(username)) {
             log.debug("{}" + CommonConstant.LOG_TYPE_1 + "用户登录次数过多", username);
-            return result.error500("该用户登录失败次数过多，请于10分钟后再次登录！");
+            return new Result<JSONObject>(500,"该用户登录失败次数过多，请于10分钟后再次登录！");
         }
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(User::getName, username);
         User user = userService.getOne(queryWrapper);
         if (user == null) {
             log.debug("{}" + CommonConstant.LOG_TYPE_1 + "失败，用户不存在！", username);
-            return result.error500("该用户不存在，请注册");
+            return new Result<JSONObject>(500, "该用户不存在，请注册");
         }
         if (user.getIsDelete()) {
             log.debug("{}" + CommonConstant.LOG_TYPE_1 + "失败，账号被停用！", username);
-            return result.error500("账号已停用！");
+            return new Result<JSONObject>(500, "账号已停用");
         }
-        result.setResult(userService.getUserVO(userService.getUserInfo(user)));
-        System.out.println(result + "result");
         String userpassword = user.getPwd();
         if (!userpassword.equals(EncodeUtil.encodePassword(password))) {
             addLoginFailOvertimes(username);
@@ -80,8 +77,7 @@ public class LoginController {
 //        redisUtil.del(CommonConstant.LOGIN_FAIL + username);
 //        BeanUtils.copyProperties(user, loginUser);
         log.info("用户名: {},{}成功！\n{}", username, CommonConstant.LOG_TYPE_1, user);
-        result.setSuccess(true);
-        return Result.OK(result);
+        return Result.OK(userService.getUserVO(userService.getUserInfo(user)));
     }
 
 

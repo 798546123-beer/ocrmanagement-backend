@@ -75,10 +75,7 @@ public class Result<T> implements Serializable {
 	}
 
 	public static<T> Result<T> ok() {
-		Result<T> r = new Result<T>();
-		r.setSuccess(true);
-		r.setCode(CommonConstant.SC_OK_200);
-		return r;
+        return OK();
 	}
 
 	public static<T> Result<T> ok(String msg) {
