@@ -70,14 +70,11 @@ public class LoginController {
             return new Result<JSONObject>(500, "用户名或密码错误");
         }
 
-        // step.4  登录成功获取用户信息
-//        userInfo(user, result, request);
-        // step.5  登录成功删除验证码
-//        redisUtil.del(realKey);
-//        redisUtil.del(CommonConstant.LOGIN_FAIL + username);
-//        BeanUtils.copyProperties(user, loginUser);
+        org.jeecg.modules.system.vo.User userVO =userService.getUserVO(userService.getUserInfo(user));
         log.info("用户名: {},{}成功！\n{}", username, CommonConstant.LOG_TYPE_1, user);
-        return Result.OK(userService.getUserVO(userService.getUserInfo(user)));
+        redisUtil.set(CommonConstant.LOGIN_SUCCESS + username, userVO, CommonConstant.REDIS_EXPIRE_TIME / 1000);
+        redisUtil.del(CommonConstant.LOGIN_FAIL + username);
+        return Result.OK(userVO);
     }
 
 

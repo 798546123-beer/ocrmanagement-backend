@@ -86,40 +86,6 @@ public class MybatisInterceptor implements Interceptor {
 							}
 						}
 					}
-
-					//------------------------------------------------------------------------------------------------
-					//注入租户ID（是否开启系统管理模块的多租户数据隔离【SAAS多租户模式】）
-					if(MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL) {
-						if (TenantConstant.TENANT_ID.equals(field.getName())) {
-							field.setAccessible(true);
-							Object localTenantId = field.get(parameter);
-							field.setAccessible(false);
-							if (localTenantId == null) {
-								field.setAccessible(true);
-
-								String tenantId = TenantContext.getTenant();
-								//如果通过线程获取租户ID为空，则通过当前请求的request获取租户（shiro排除拦截器的请求会获取不到租户ID）
-								if(oConvertUtils.isEmpty(tenantId) && MybatisPlusSaasConfig.OPEN_SYSTEM_TENANT_CONTROL){
-									try {
-										tenantId = TokenUtils.getTenantIdByRequest(SpringContextUtils.getHttpServletRequest());
-									} catch (Exception e) {
-										//e.printStackTrace();
-									}
-								}
-
-								if (field.getType().equals(String.class)) {
-									// 字段类型为String
-									field.set(parameter, tenantId);
-								} else {
-									// 字段类型不是String
-									field.set(parameter, oConvertUtils.getInt(tenantId, 0));
-								}
-								field.setAccessible(false);
-							}
-						}
-					}
-					//------------------------------------------------------------------------------------------------
-					
 				} catch (Exception e) {
 				}
 			}

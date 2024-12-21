@@ -7,12 +7,15 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.system.util.JwtUtil;
+import org.jeecg.common.util.RedisUtil;
 import org.jeecg.config.shiro.IgnoreAuth;
 import org.jeecg.modules.system.entity.Role;
 import org.jeecg.modules.system.mapper.RoleMapper;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/role")
@@ -21,7 +24,9 @@ import javax.annotation.Resource;
 public class RoleController {
     @Resource
     private RoleMapper roleMapper;
-    @ApiOperation("获取角色权限")
+    @Resource
+    private RedisUtil redisUtil;
+    @ApiOperation("根据id获取角色权限")
     @GetMapping("/getRolePermission")
     @IgnoreAuth
     public Result<JSONObject> getRolePermission(@Param(value = "role_id") String role_id){
@@ -31,6 +36,17 @@ public class RoleController {
             return Result.Error("角色不存在！");
         }
         return Result.ok(String.valueOf(role));
+    }
+    @ApiOperation("根据token获取角色权限")
+    @GetMapping("/getRolePermissionByToken")
+    @IgnoreAuth
+    public Result<JSONObject> getRolePermission(@Param(value = "token") String token, HttpServletRequest request){
+    token=token==null?request.getHeader("X-ACCESS-TOKEN"):token;
+    //把token解析得到username和password
+        String username= JwtUtil.getUsername(token);
+        //去redis里查询user表符合username的数据项的role字段
+        Role role=(Role) redisUtil.get("role:"+username);
+        return null;
     }
     // 新增角色接口
     @ApiOperation("新增角色")

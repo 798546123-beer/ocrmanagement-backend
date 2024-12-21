@@ -19,9 +19,9 @@ import lombok.extern.slf4j.Slf4j;
  *  举例： @Excel(name = "性别", width = 15, dicCode = "sex")
  * 1、导出的时候会根据字典配置，把值1,2翻译成：男、女;
  * 2、导入的时候，会把男、女翻译成1,2存进数据库;
- * 
- * @Author:scott 
- * @since：2019-04-09 
+ *
+ * @Author:scott
+ * @since：2019-04-09
  * @Version:1.0
  */
 @Slf4j
@@ -36,8 +36,8 @@ public class AutoPoiDictConfig implements AutoPoiDictServiceI {
 
 	/**
 	 * 通过字典查询easypoi，所需字典文本
-	 * 
-	 * @Author:scott 
+	 *
+	 * @Author:scott
 	 * @since：2019-04-09
 	 * @return
 	 */
@@ -47,11 +47,11 @@ public class AutoPoiDictConfig implements AutoPoiDictServiceI {
 		List<DictModel> dictList = null;
 		// step.1 如果没有字典表则使用系统字典表
 		if (oConvertUtils.isEmpty(dicTable)) {
-			dictList = commonApi.queryDictItemsByCode(dicCode);
+			dictList = null;
 		} else {
 			try {
 				dicText = oConvertUtils.getString(dicText, dicCode);
-				dictList = commonApi.queryTableDictItemsByCode(dicTable, dicText, dicCode);
+				dictList = null;
 			} catch (Exception e) {
 				log.error(e.getMessage(),e);
 			}

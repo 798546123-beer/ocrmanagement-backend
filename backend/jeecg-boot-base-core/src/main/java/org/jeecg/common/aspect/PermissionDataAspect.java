@@ -71,7 +71,7 @@ public class PermissionDataAspect {
         String username = JwtUtil.getUserNameByToken(request);
         //查询数据权限信息
         //TODO 微服务情况下也得支持缓存机制
-        List<SysPermissionDataRuleModel> dataRules = commonApi.queryPermissionDataRule(component, requestPath, username);
+        List<SysPermissionDataRuleModel> dataRules = null;
         if(dataRules!=null && !dataRules.isEmpty()) {
             //临时存储
             JeecgDataAutorUtils.installDataSearchConditon(request, dataRules);

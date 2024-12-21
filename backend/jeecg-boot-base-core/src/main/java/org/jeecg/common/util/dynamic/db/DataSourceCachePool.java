@@ -38,7 +38,7 @@ public class DataSourceCachePool {
             return (DynamicDataSourceModel) getRedisTemplate().opsForValue().get(redisCacheKey);
         }
         CommonAPI commonApi = SpringContextUtils.getBean(CommonAPI.class);
-        DynamicDataSourceModel dbSource = commonApi.getDynamicDbSourceByCode(dbKey);
+        DynamicDataSourceModel dbSource = null;
         if (dbSource != null) {
             getRedisTemplate().opsForValue().set(redisCacheKey, dbSource);
         }

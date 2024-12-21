@@ -127,7 +127,11 @@ public class JwtUtil {
         String accessToken = request.getHeader("X-Access-Token");
         String username = getUsername(accessToken);
         if (oConvertUtils.isEmpty(username)) {
-            throw new JeecgBootException("未获取到用户");
+            try {
+                throw new Exception("未查找到用户");
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
         return username;
     }

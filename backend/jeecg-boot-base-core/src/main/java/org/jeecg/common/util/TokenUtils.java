@@ -27,14 +27,14 @@ public class TokenUtils {
         if (request == null) {
             return null;
         }
-        
+
         String token = request.getParameter("token");
         if (token == null) {
             token = request.getHeader("X-Access-Token");
         }
         return token;
     }
-    
+
     /**
      * 获取 request 里传递的 token
      * @return
@@ -50,33 +50,7 @@ public class TokenUtils {
         return token;
     }
 
-    /**
-     * 获取 request 里传递的 tenantId (租户ID)
-     *
-     * @param request
-     * @return
-     */
-    public static String getTenantIdByRequest(HttpServletRequest request) {
-        String tenantId = request.getParameter(TenantConstant.TENANT_ID);
-        if (tenantId == null) {
-            tenantId = oConvertUtils.getString(request.getHeader(CommonConstant.TENANT_ID));
-        }
-        return tenantId;
-    }
 
-    /**
-     * 获取 request 里传递的 lowAppId (低代码应用ID)
-     *
-     * @param request
-     * @return
-     */
-    public static String getLowAppIdByRequest(HttpServletRequest request) {
-        String lowAppId = request.getParameter(TenantConstant.FIELD_LOW_APP_ID);
-        if (lowAppId == null) {
-            lowAppId = oConvertUtils.getString(request.getHeader(TenantConstant.X_LOW_APP_ID));
-        }
-        return lowAppId;
-    }
 
     /**
      * 验证Token

@@ -30,7 +30,7 @@ public interface CommonConstant {
 	 * 系统日志类型： 登录
 	 */
 	int LOG_TYPE_1 = 1;
-	
+
 	/**
 	 * 系统日志类型： 操作
 	 */
@@ -50,40 +50,40 @@ public interface CommonConstant {
 	 * 操作日志类型： 查询
 	 */
 	int OPERATE_TYPE_1 = 1;
-	
+
 	/**
 	 * 操作日志类型： 添加
 	 */
 	int OPERATE_TYPE_2 = 2;
-	
+
 	/**
 	 * 操作日志类型： 更新
 	 */
 	int OPERATE_TYPE_3 = 3;
-	
+
 	/**
 	 * 操作日志类型： 删除
 	 */
 	int OPERATE_TYPE_4 = 4;
-	
+
 	/**
 	 * 操作日志类型： 倒入
 	 */
 	int OPERATE_TYPE_5 = 5;
-	
+
 	/**
 	 * 操作日志类型： 导出
 	 */
 	int OPERATE_TYPE_6 = 6;
-	
-	
+
+
 	/** {@code 500 Server Error} (HTTP/1.0 - RFC 1945) */
     Integer SC_INTERNAL_SERVER_ERROR_500 = 500;
     /** {@code 404 Not Found} (HTTP/1.0 - RFC 1945) */
     Integer SC_INTERNAL_NOT_FOUND_404 = 404;
     /** {@code 200 OK} (HTTP/1.0 - RFC 1945) */
     Integer SC_OK_200 = 200;
-    
+
     /**访问权限认证未通过 510*/
     Integer SC_JEECG_NO_AUTHZ=510;
 
@@ -106,7 +106,7 @@ public interface CommonConstant {
      */
     Integer MENU_TYPE_0  = 0;
    /**
-    *  1：子菜单 
+    *  1：子菜单
     */
     Integer MENU_TYPE_1  = 1;
     /**
@@ -117,34 +117,34 @@ public interface CommonConstant {
     /**通告对象类型（USER:指定用户，ALL:全体用户）*/
     String MSG_TYPE_UESR  = "USER";
     String MSG_TYPE_ALL  = "ALL";
-    
+
     /**发布状态（0未发布，1已发布，2已撤销）*/
     String NO_SEND  = "0";
     String HAS_SEND  = "1";
     String HAS_CANCLE  = "2";
-    
+
     /**阅读状态（0未读，1已读）*/
     Integer HAS_READ_FLAG  = 1;
     Integer NO_READ_FLAG  = 0;
-    
+
     /**优先级（L低，M中，H高）*/
     String PRIORITY_L  = "L";
     String PRIORITY_M  = "M";
     String PRIORITY_H  = "H";
-    
+
     /**
      * 短信模板方式  0 .登录模板、1.注册模板、2.忘记密码模板
      */
     String SMS_TPL_TYPE_0  = "0";
     String SMS_TPL_TYPE_1  = "1";
     String SMS_TPL_TYPE_2  = "2";
-    
+
     /**
      * 状态(0无效1有效)
      */
     String STATUS_0 = "0";
     String STATUS_1 = "1";
-    
+
     /**
      * 同步工作流引擎1同步0不同步
      */
@@ -156,7 +156,7 @@ public interface CommonConstant {
      */
     String MSG_CATEGORY_1 = "1";
     String MSG_CATEGORY_2 = "2";
-    
+
     /**
      * 是否配置菜单的数据权限 1是0否
      */
@@ -169,7 +169,7 @@ public interface CommonConstant {
     Integer USER_UNFREEZE = 1;
     Integer USER_FREEZE = 2;
     Integer USER_QUIT = 3;
-    
+
     /**字典翻译文本后缀*/
     String DICT_TEXT_SUFFIX = "_dictText";
     /**字典翻译颜色后缀*/
@@ -403,7 +403,7 @@ public interface CommonConstant {
      * https:// https协议
      */
     String HTTPS_PROTOCOL = "https://";
-    
+
     /** 公司表唯一key，id */
     String DEPART_KEY_ID = "id";
     /** 公司表唯一key，orgCode */
@@ -476,7 +476,7 @@ public interface CommonConstant {
      * 登录失败，用于记录失败次数的key
      */
     String LOGIN_FAIL = "LOGIN_FAIL_";
-
+    String LOGIN_SUCCESS = "LOGIN_SUCCESS_";
     /**
      * 入职事件
      */
@@ -501,7 +501,7 @@ public interface CommonConstant {
     * 用户租户状态(审核中)
     */
    String USER_TENANT_UNDER_REVIEW = "3";
-   
+
    /**
     * 用户租户状态(拒绝)
     */
@@ -511,7 +511,7 @@ public interface CommonConstant {
     * 用户租户状态(邀请)
     */
    String USER_TENANT_INVITE = "5";
-   
+
    /**
     * 不是叶子节点
     */
@@ -561,57 +561,19 @@ public interface CommonConstant {
  /** 【QQYUN-6034】关联字段变更历史值，缓存半个小时 */
  String CACHE_REL_FIELD_OLD_VAL = "sys:cache:desform:relFieldOldVal:";
 
-    /**
-     * 排序类型：升序
-     */
-    String ORDER_TYPE_ASC = "ASC";
-    /**
-     * 排序类型：降序
-     */
-    String ORDER_TYPE_DESC = "DESC";
 
 
-   //update-begin---author:scott ---date:2023-09-10  for：积木报表常量----
-   /**
-    * 报表允许设计开发的角色
-    */
-   public static String[] allowDevRoles = new String[]{"lowdeveloper", "admin"};
-   /**
-    * 【对应积木报表的常量】
-    * 数据隔离模式： 按照创建人隔离
-    */
-   public static final String SAAS_MODE_CREATED = "created";
-   /**
-    * 【对应积木报表的常量】
-    * 数据隔离模式： 按照租户隔离
-    */
-   public static final String SAAS_MODE_TENANT = "tenant";
-   //update-end---author:scott ---date::2023-09-10  for：积木报表常量----
- 
-   //update-begin---author:wangshuai---date:2024-04-07---for:修改手机号常量---
-   /**
-    * 修改手机号短信验证码redis-key的前缀
-    */
-   String CHANGE_PHONE_REDIS_KEY_PRE = "sys:cache:phone:change_phone_msg:";
 
-    /**
-     * 缓存用户最后一次收到消息通知的时间 KEY
-     */
-   String CACHE_KEY_USER_LAST_ANNOUNT_TIME_1HOUR = "sys:cache:userinfo:user_last_annount_time::%s";
-   
-   /**
-    * 验证原手机号
-    */
-   String VERIFY_ORIGINAL_PHONE = "verifyOriginalPhone";
 
    /**
     * 修改手机号
     */
    String UPDATE_PHONE = "updatePhone";
    //update-end---author:wangshuai---date:2024-04-07---for:修改手机号常量---
-    
+
    /**
     * 修改手机号验证码请求次数超出
     */
    Integer PHONE_SMS_FAIL_CODE = 40002;
+   Integer REDIS_EXPIRE_TIME = 15*60*1000;
 }

@@ -12,11 +12,11 @@ import java.util.regex.Pattern;
 
 /**
  * sql注入处理工具类
- * 
+ *
  * @author zhoujf
  */
 @Slf4j
-public class SqlInjectionUtil {	
+public class SqlInjectionUtil {
 	/**
 	 * 默认—sql注入关键词
 	 */
@@ -38,8 +38,8 @@ public class SqlInjectionUtil {
 		FULL_MATCHING_KEYWRODS.add("+");
 		FULL_MATCHING_KEYWRODS.add("--");
 	}
-	
-	
+
+
 	/**
 	 * sql注入风险的 正则关键字
 	 *
@@ -62,14 +62,14 @@ public class SqlInjectionUtil {
 	 */
 	private final static Pattern SQL_ANNOTATION = Pattern.compile("/\\*[\\s\\S]*\\*/");
 	private final static  String SQL_ANNOTATION2 = "--";
-	
+
 	/**
 	 * sql注入提示语
 	 */
 	private final static String SQL_INJECTION_KEYWORD_TIP = "请注意，存在SQL注入关键词---> {}";
 	private final static String SQL_INJECTION_TIP = "请注意，值可能存在SQL注入风险!--->";
 	private final static String SQL_INJECTION_TIP_VARIABLE = "请注意，值可能存在SQL注入风险!---> {}";
-	
+
 
 	/**
 	 * sql注入过滤处理，遇到注入关键字抛异常
@@ -81,7 +81,7 @@ public class SqlInjectionUtil {
 
 	/**
 	 * 校验比较严格
-	 * 
+	 *
 	 * sql注入过滤处理，遇到注入关键字抛异常
 	 *
 	 * @param value
@@ -95,7 +95,7 @@ public class SqlInjectionUtil {
 		checkSqlAnnotation(value);
 		// 转为小写进行后续比较
 		value = value.toLowerCase().trim();
-		
+
 		// 二、SQL注入检测存在绕过风险 (普通文本校验)
 		//https://gitee.com/jeecg/jeecg-boot/issues/I4NZGE
 		String[] xssArr = XSS_STR.split("\\|");
@@ -146,7 +146,7 @@ public class SqlInjectionUtil {
 			if(FULL_MATCHING_KEYWRODS.contains(keyword)){
 				matchingText = keyword;
 			}
-			
+
 			if (sql.contains(matchingText)) {
 				return true;
 			} else {
@@ -162,10 +162,10 @@ public class SqlInjectionUtil {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * sql注入过滤处理，遇到注入关键字抛异常
-	 * 
+	 *
 	 * @param values
 	 * @return
 	 */
@@ -194,7 +194,7 @@ public class SqlInjectionUtil {
 		// 一、校验sql注释 不允许有sql注释
 		checkSqlAnnotation(value);
 		value = value.toLowerCase().trim();
-		
+
 		// 二、SQL注入检测存在绕过风险 (普通文本校验)
 		for (int i = 0; i < xssArr.length; i++) {
 			if (isExistSqlInjectKeyword(value, xssArr[i])) {
@@ -230,7 +230,7 @@ public class SqlInjectionUtil {
 		// 一、校验sql注释 不允许有sql注释
 		checkSqlAnnotation(value);
 		value = value.toLowerCase().trim();
-		
+
 		// 二、SQL注入检测存在绕过风险 (普通文本校验)
 		for (int i = 0; i < xssArr.length; i++) {
 			if (isExistSqlInjectKeyword(value, xssArr[i])) {
@@ -254,7 +254,7 @@ public class SqlInjectionUtil {
 
 
 	/**
-	 * 校验是否有sql注释 
+	 * 校验是否有sql注释
 	 * @return
 	 */
 	public static void checkSqlAnnotation(String str){
@@ -264,7 +264,7 @@ public class SqlInjectionUtil {
 			throw new RuntimeException(error);
 		}
 
-		
+
 		Matcher matcher = SQL_ANNOTATION.matcher(str);
 		if(matcher.find()){
 			String error = "请注意，值可能存在SQL注入风险---> \\*.*\\";
@@ -321,7 +321,7 @@ public class SqlInjectionUtil {
 		if(oConvertUtils.isEmpty(field)){
 			return field;
 		}
-		
+
 		field = field.trim();
 
 		if (field.contains(SymbolConstant.COMMA)) {
@@ -359,7 +359,7 @@ public class SqlInjectionUtil {
 	 * 获取排序字段
 	 * 返回：字符串
 	 *
-	 * 1.将驼峰命名转化成下划线 
+	 * 1.将驼峰命名转化成下划线
 	 * 2.限制sql注入
 	 * @param sortField  排序字段
 	 * @return
@@ -372,7 +372,7 @@ public class SqlInjectionUtil {
 	 * 获取多个排序字段
 	 * 返回：数组
 	 *
-	 * 1.将驼峰命名转化成下划线 
+	 * 1.将驼峰命名转化成下划线
 	 * 2.限制sql注入
 	 * @param sortFields 多个排序字段
 	 * @return
@@ -399,12 +399,6 @@ public class SqlInjectionUtil {
 		if (orderType == null) {
 			return null;
 		}
-		orderType = orderType.trim();
-		if (CommonConstant.ORDER_TYPE_ASC.equalsIgnoreCase(orderType)) {
-			return CommonConstant.ORDER_TYPE_ASC;
-		} else {
-			return CommonConstant.ORDER_TYPE_DESC;
-		}
+		return orderType.trim();
 	}
-
 }

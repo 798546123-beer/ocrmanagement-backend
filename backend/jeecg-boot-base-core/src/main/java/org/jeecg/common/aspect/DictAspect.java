@@ -60,7 +60,7 @@ public class DictAspect {
 
     @Around("excudeService()")
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
-    	long time1=System.currentTimeMillis();	
+    	long time1=System.currentTimeMillis();
         Object result = pjp.proceed();
         long time2=System.currentTimeMillis();
         log.debug("获取JSON数据 耗时："+(time2-time1)+"ms");
@@ -296,14 +296,14 @@ public class DictAspect {
                 log.debug("translateDictFromTableByKeys.dictCode:" + dictCode);
                 log.debug("translateDictFromTableByKeys.values:" + values);
                 //update-begin---author:chenrui ---date:20231221  for：[issues/#5643]解决分布式下表字典跨库无法查询问题------------
-                
+
                 //update-begin---author:wangshuai---date:2024-01-09---for:微服务下为空报错没有参数需要传递空字符串---
                 if(null == dataSource){
                     dataSource = "";
                 }
                 //update-end---author:wangshuai---date:2024-01-09---for:微服务下为空报错没有参数需要传递空字符串---
-                
-                List<DictModel> texts = commonApi.translateDictFromTableByKeys(table, text, code, values, dataSource);
+
+                List<DictModel> texts = null;
                 //update-end---author:chenrui ---date:20231221  for：[issues/#5643]解决分布式下表字典跨库无法查询问题------------
                 log.debug("translateDictFromTableByKeys.result:" + texts);
                 List<DictModel> list = translText.computeIfAbsent(dictCode, k -> new ArrayList<>());
@@ -411,7 +411,7 @@ public class DictAspect {
                         log.warn(e.getMessage());
                     }
                 }else {
-                    tmpValue= commonApi.translateDictFromTable(table,text,code,k.trim());
+                    tmpValue= null;
                 }
             }else {
                 String keyString = String.format("sys:cache:dict::%s:%s",code,k.trim());
@@ -422,7 +422,7 @@ public class DictAspect {
                        log.warn(e.getMessage());
                     }
                 }else {
-                    tmpValue = commonApi.translateDict(code, k.trim());
+                    tmpValue = null;
                 }
             }
             //update-end--Author:scott -- Date:20210531 ----for： !56 优化微服务应用下存在表字段需要字典翻译时加载缓慢问题-----
