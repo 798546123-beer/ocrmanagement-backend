@@ -6,13 +6,12 @@ import org.jeecg.modules.system.entity.Role;
 import org.jeecg.modules.system.mapper.PermissionMapper;
 import org.jeecg.modules.system.mapper.RoleMapper;
 import org.jeecg.modules.system.service.RoleService;
+import org.jeecg.modules.system.util.TestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -39,6 +38,17 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         System.out.println(permissionList);
             //写一个for循环查询role_page表中id对应的权限的名字
         //pageEntity举例子如下：[PageEntity(pageName=数据采集, page=data_collection, id=1), PageEntity(pageName=项目管理, page=project_management, id=2), PageEntity(pageName=检验批管理, page=inspect_lot_management, id=3), PageEntity(pageName=数据报表, page=data_report, id=4)]
+        List<Map<String, Object>> transformedList = new ArrayList<>();
+
+        for (PageEntity pageEntity : permissionList) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("pageName", pageEntity.getPageName());
+            map.put("page", pageEntity.getPage());
+            map.put("id", pageEntity.getId());
+            transformedList.add(map);
+        }
+
+
         List<String> temp_list=new ArrayList<>();
         for (int i = 0; i < permissionList.size(); i++) {
                 PageEntity permission = permissionList.get(i);
@@ -48,6 +58,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                 }
         }
         roleVO.setPermissionList(temp_list);
+        TestUtil.out(transformedList);
         return roleVO;
     }
 }

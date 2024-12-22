@@ -1,5 +1,7 @@
 package org.jeecg.modules.system.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
@@ -7,15 +9,22 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.jeecg.common.api.vo.Result;
+import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.common.util.RedisUtil;
 import org.jeecg.config.shiro.IgnoreAuth;
 import org.jeecg.modules.system.entity.Role;
 import org.jeecg.modules.system.mapper.RoleMapper;
+import org.jeecg.modules.system.vo.User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.jeecg.common.api.vo.Result.ok;
 
 @RestController
 @RequestMapping("/role")
@@ -35,18 +44,34 @@ public class RoleController {
         if(role==null){
             return Result.Error("角色不存在！");
         }
-        return Result.ok(String.valueOf(role));
+        return ok(String.valueOf(role));
     }
     @ApiOperation("根据token获取角色权限")
     @GetMapping("/getRolePermissionByToken")
     @IgnoreAuth
-    public Result<JSONObject> getRolePermission(@Param(value = "token") String token, HttpServletRequest request){
+    public Result<?> getRolePermission(@Param(value = "token") String token, HttpServletRequest request){
     token=token==null?request.getHeader("X-ACCESS-TOKEN"):token;
     //把token解析得到username和password
         String username= JwtUtil.getUsername(token);
         //去redis里查询user表符合username的数据项的role字段
-        Role role=(Role) redisUtil.get("role:"+username);
-        return null;
+        User userVO= (User) redisUtil.get(CommonConstant.LOGIN_SUCCESS+username);
+//        String userVOjson = (String)redisUtil.get(CommonConstant.LOGIN_SUCCESS+username); // 您的JSON字符串
+//        User user = JSON.parseObject(json, User.class);
+        JSONObject information = userVO.getInformation();
+        JSONArray permissionList = information.getJSONArray("permissionList");
+        if (permissionList == null || permissionList.isEmpty()) {
+            return Result.error("没有权限！");
+        }
+
+        List<String> permissions = new ArrayList<>();
+        try {
+            for (int i = 0; i < permissionList.size(); i++) {
+                permissions.add(permissionList.getString(i));
+            }
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
+        return Result.ok(permissions);
     }
     // 新增角色接口
     @ApiOperation("新增角色")

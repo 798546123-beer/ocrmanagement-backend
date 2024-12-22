@@ -16,8 +16,8 @@ public class UserInfo {
     private Integer age;
     private String phone;
     private String number;
-    private String type_name;
-    private Integer user_type_id;
+    private String typeName;
+    private Integer userTypeId;
     private Role role;
 
 

@@ -6,6 +6,9 @@ import lombok.Data;
 
 import javax.persistence.Table;
 import java.io.Serializable;
+/**
+ * @author 25612
+ */
 @Data
 @Table(name = "role_page")
 public class PageEntity implements Serializable {

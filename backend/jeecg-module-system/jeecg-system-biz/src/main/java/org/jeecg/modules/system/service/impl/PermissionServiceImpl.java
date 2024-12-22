@@ -7,12 +7,13 @@ import org.jeecg.modules.system.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Service
 public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, PageEntity> implements PermissionService {
 
-    @Autowired
+    @Resource
     private PermissionMapper permissionMapper;
 
     @Override
