@@ -1,7 +1,9 @@
 package org.jeecg.modules.system.vo;
 
 import com.alibaba.fastjson.JSONObject;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.jeecg.common.system.util.JwtUtil;
 import org.jeecg.modules.system.entity.Role;
 import org.jeecg.modules.system.pojo.UserInfo;
@@ -17,6 +19,8 @@ import java.util.List;
  * @Description:
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     //权限
     private String username;

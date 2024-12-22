@@ -50,7 +50,7 @@ spring:
     druid:
       stat-view-servlet:
         enabled: true
-        loginUsername: xm
+        loginUsername: admin
         loginPassword: 123456
         allow:
       web-stat-filter:

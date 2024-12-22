@@ -20,6 +20,7 @@ import org.jeecg.modules.system.service.UserService;
 import org.jeecg.modules.system.util.EncodeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -74,6 +75,9 @@ public class LoginController {
         log.info("用户名: {},{}成功！\n{}", username, CommonConstant.LOG_TYPE_1, user);
         redisUtil.set(CommonConstant.LOGIN_SUCCESS + username, userVO, CommonConstant.REDIS_EXPIRE_TIME / 1000);
         redisUtil.del(CommonConstant.LOGIN_FAIL + username);
+        //写个增强for循环把redisutil里面的东西全部打印出来
+//        System.out.println(redisUtil.sGetSetSize(CommonConstant.LOGIN_SUCCESS + username));
+        redisUtil.printAllRedisData();
         return Result.OK(userVO);
     }
 
@@ -145,6 +149,9 @@ public class LoginController {
         }
         // 10分钟，一分钟为60s
         redisUtil.set(key, ++val, 60*10);
+       redisUtil.printAllRedisData();
+
+
     }
 
 
