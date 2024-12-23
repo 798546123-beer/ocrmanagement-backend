@@ -69,11 +69,14 @@ public class PermissionController {
             return Result.error("没有权限！");
         }
 
-        List<Object> permissions;
+        List<JSONObject> permissions = new ArrayList<>();
         try {
-            permissions = new ArrayList<>(permissionList);
+            //这个try 中可以写一个增强for循环
+            for (int i = 0; i < permissionList.size(); i++) {
+                permissions.add(permissionList.getJSONObject(i));
+            }
         } catch (Exception e) {
-            return Result.error(e.getMessage());
+            return Result.error( e.getMessage());
         }
         return Result.ok(permissions);
     }
