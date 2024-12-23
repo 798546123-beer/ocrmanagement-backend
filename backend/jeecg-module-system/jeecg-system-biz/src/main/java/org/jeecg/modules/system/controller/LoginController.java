@@ -75,8 +75,6 @@ public class LoginController {
         log.info("用户名: {},{}成功！\n{}", username, CommonConstant.LOG_TYPE_1, user);
         redisUtil.set(CommonConstant.LOGIN_SUCCESS + username, userVO, CommonConstant.REDIS_EXPIRE_TIME / 1000);
         redisUtil.del(CommonConstant.LOGIN_FAIL + username);
-        //写个增强for循环把redisutil里面的东西全部打印出来
-//        System.out.println(redisUtil.sGetSetSize(CommonConstant.LOGIN_SUCCESS + username));
         redisUtil.printAllRedisData();
         return Result.OK(userVO);
     }

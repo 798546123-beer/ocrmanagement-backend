@@ -1,6 +1,5 @@
 package org.jeecg.modules.system.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -63,10 +62,10 @@ public class RoleController {
             return Result.error("没有权限！");
         }
 
-        List<String> permissions = new ArrayList<>();
+        List<Object> permissions = new ArrayList<>();
         try {
             for (int i = 0; i < permissionList.size(); i++) {
-                permissions.add(permissionList.getString(i));
+                permissions.add(permissionList.get(i));
             }
         } catch (Exception e) {
             return Result.error(e.getMessage());
@@ -125,7 +124,8 @@ public class RoleController {
             if (role == null) {
                 return Result.Error("角色不存在！");
             }
-            role.setPermission(permission); // 假设Role实体有permissions字段
+            role.setPermission(permission);
+            // 假设Role实体有permissions字段
             roleMapper.updateById(role);
             return Result.OK("角色权限更新成功！");
         } catch (Exception e) {

@@ -14,7 +14,7 @@ public class Role {
     private Integer roleId;
     private String roleName;
     private String permission;
-    private List<String> permissionList;
+    private List<?> permissionList;
     public Role(org.jeecg.modules.system.entity.Role role){
         this.roleId=role.getRoleId();
         this.roleName=role.getRoleName();

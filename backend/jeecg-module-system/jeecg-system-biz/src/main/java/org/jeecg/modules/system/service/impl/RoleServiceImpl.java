@@ -57,8 +57,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                     temp_list.add(permission.toString());
                 }
         }
-        roleVO.setPermissionList(temp_list);
-        TestUtil.out(transformedList);
+        roleVO.setPermissionList(transformedList);
+//        TestUtil.out(transformedList);
         return roleVO;
     }
 }
