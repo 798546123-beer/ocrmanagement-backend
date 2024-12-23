@@ -34,44 +34,7 @@ public class RoleController {
     private RoleMapper roleMapper;
     @Resource
     private RedisUtil redisUtil;
-    @ApiOperation("根据id获取角色权限")
-    @GetMapping("/getRolePermission")
-    @IgnoreAuth
-    public Result<JSONObject> getRolePermission(@Param(value = "role_id") String role_id){
-        Role role = roleMapper.selectById(role_id);
-        //如果是空的就报错
-        if(role==null){
-            return Result.Error("角色不存在！");
-        }
-        return ok(String.valueOf(role));
-    }
-    @ApiOperation("根据token获取角色权限")
-    @GetMapping("/getRolePermissionByToken")
-    @IgnoreAuth
-    public Result<?> getRolePermission(@Param(value = "token") String token, HttpServletRequest request){
-    token=token==null?request.getHeader("X-ACCESS-TOKEN"):token;
-    //把token解析得到username和password
-        String username= JwtUtil.getUsername(token);
-        //去redis里查询user表符合username的数据项的role字段
-        User userVO= (User) redisUtil.get(CommonConstant.LOGIN_SUCCESS+username);
-//        String userVOjson = (String)redisUtil.get(CommonConstant.LOGIN_SUCCESS+username); // 您的JSON字符串
-//        User user = JSON.parseObject(json, User.class);
-        JSONObject information = userVO.getInformation();
-        JSONArray permissionList = information.getJSONArray("permissionList");
-        if (permissionList == null || permissionList.isEmpty()) {
-            return Result.error("没有权限！");
-        }
 
-        List<Object> permissions = new ArrayList<>();
-        try {
-            for (int i = 0; i < permissionList.size(); i++) {
-                permissions.add(permissionList.get(i));
-            }
-        } catch (Exception e) {
-            return Result.error(e.getMessage());
-        }
-        return Result.ok(permissions);
-    }
     // 新增角色接口
     @ApiOperation("新增角色")
     @PostMapping("/addRole")
