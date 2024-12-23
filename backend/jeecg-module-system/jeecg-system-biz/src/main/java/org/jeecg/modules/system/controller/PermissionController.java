@@ -29,7 +29,7 @@ import static org.jeecg.common.api.vo.Result.ok;
  * @author 25612
  */
 @RestController
-@RequestMapping("/system/permission")
+@RequestMapping("permission")
 public class PermissionController {
     @Resource
     private RoleMapper roleMapper;
