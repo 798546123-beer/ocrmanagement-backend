@@ -125,7 +125,6 @@ mybatis-plus:
     call-setters-on-nulls: true
 #jeecg专用配置
 jeecg:
-  firewall:
   # 签名密钥串(前后端要一致，正式发布请自行修改)
   signatureSecret: dd05f1c54d63749eda95f9fa6d49v442a
   #签名拦截接口
@@ -143,12 +142,6 @@ jeecg:
     webapp: /opt/webapp
   shiro:
     excludeUrls: /test/jeecgDemo/demo3,/test/jeecgDemo/redisDemo/**,/bigscreen/category/**,/bigscreen/visual/**,/bigscreen/map/**,/jmreport/bigscreen2/**
-  #阿里云oss存储和大鱼短信秘钥配置
-  oss:
-    accessKey: ??
-    secretKey: ??
-    endpoint: oss-cn-beijing.aliyuncs.com
-    bucketName: jeecgdev
   # ElasticSearch 6设置
   elasticsearch:
     cluster-name: jeecg-ES
@@ -157,27 +150,12 @@ jeecg:
   # 在线预览文件服务器地址配置
   file-view-domain: http://fileview.jeecg.com
   #大屏报表参数设置
-  jmreport:
-    #多租户模式，默认值为空(created:按照创建人隔离、tenant:按照租户隔离) (v1.6.2+ 新增)
-    saasMode:
-    # 平台上线安全配置(v1.6.2+ 新增)
-    firewall:
   #分布式锁配置
   redisson:
     address: 127.0.0.1:6379
     password:
     type: STANDALONE
     enabled: true
-  # ai-chat
-  ai-chat:
-    # 是否开启；必须。
-    enabled: false
-    # openAi接口秘钥，填写自己的apiKey；必须。
-    apiKey: "？？？？"
-    # openAi域名，有代理就填代理的域名。默认：openAI官方apiHost
-    apiHost: "https://api.openai.com"
-    # 超时时间单位:s。默认 60s
-    timeout: 60
     # 本地代理地址
 #    proxy:
 #      host: "http://127.0.0.1"
@@ -189,7 +167,6 @@ cas:
 logging:
   level:
     root: error
-    org.jeecg.modules.system.mapper: error
 #swagger
 knife4j:
   #开启增强配置
