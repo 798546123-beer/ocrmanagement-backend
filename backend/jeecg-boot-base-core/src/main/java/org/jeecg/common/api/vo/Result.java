@@ -61,7 +61,8 @@ public class Result<T> implements Serializable {
 	// 静态方法: 用于返回错误
 	public static <T> Result<T> Error(String message) {
 		Result<T> result = new Result<>();
-		result.setCode(500); // 自定义错误状态码，例如 500 表示服务器错误
+		result.setCode(500);
+		// 自定义错误状态码，例如 500 表示服务器错误
 		result.setMessage(message);
 
 		return result;
