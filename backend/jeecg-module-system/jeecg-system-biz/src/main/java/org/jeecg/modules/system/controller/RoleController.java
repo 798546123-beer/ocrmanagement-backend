@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
-import org.jeecg.common.util.RedisUtil;
+import org.jeecg.modules.system.util.RedisCacheUtil;
 import org.jeecg.config.shiro.IgnoreAuth;
 import org.jeecg.modules.system.entity.Role;
 import org.jeecg.modules.system.mapper.RoleMapper;
@@ -33,7 +33,7 @@ public class RoleController {
     @Resource
     private RoleMapper roleMapper;
     @Resource
-    private RedisUtil redisUtil;
+    private RedisCacheUtil redisCacheUtil;
 
     // 新增角色接口
     @ApiOperation("新增角色")

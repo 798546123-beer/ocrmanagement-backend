@@ -8,19 +8,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
-import org.jeecg.common.util.RedisUtil;
+
+
 import org.jeecg.common.util.oConvertUtils;
-import org.jeecg.config.JeecgBaseConfig;
 import org.jeecg.config.shiro.IgnoreAuth;
-import org.jeecg.modules.base.service.BaseCommonService;
 import org.jeecg.modules.system.entity.User;
 import org.jeecg.modules.system.model.SysLoginModel;
 import org.jeecg.modules.system.service.RoleService;
 import org.jeecg.modules.system.service.UserService;
 import org.jeecg.modules.system.util.EncodeUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.core.ValueOperations;
+import org.jeecg.modules.system.util.RedisCacheUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -36,7 +33,7 @@ public class LoginController {
     @Resource
     private RoleService roleService;
     @Resource
-    private RedisUtil redisUtil;
+    private RedisCacheUtil redisCacheUtil;
     @Resource
     private UserService userService;
 
@@ -73,9 +70,9 @@ public class LoginController {
 
         org.jeecg.modules.system.vo.User userVO =userService.getUserVO(userService.getUserInfo(user));
         log.info("用户名: {},{}成功！\n{}", username, CommonConstant.LOG_TYPE_1, user);
-        redisUtil.set(CommonConstant.LOGIN_SUCCESS + username, userVO, CommonConstant.REDIS_EXPIRE_TIME / 1000);
-        redisUtil.del(CommonConstant.LOGIN_FAIL + username);
-        redisUtil.printAllRedisData();
+        redisCacheUtil.set(CommonConstant.LOGIN_SUCCESS + username, userVO, CommonConstant.REDIS_EXPIRE_TIME / 1000);
+        redisCacheUtil.del(CommonConstant.LOGIN_FAIL + username);
+        redisCacheUtil.printAllRedisData();
         return Result.OK(userVO);
     }
 
@@ -108,7 +105,7 @@ public class LoginController {
      */
     private boolean isLoginFailOvertimes(String username) {
         String key = CommonConstant.LOGIN_FAIL + username;
-        Object failTime = redisUtil.get(key);
+        Object failTime = redisCacheUtil.get(key);
         if (failTime != null) {
             Integer val = Integer.parseInt(failTime.toString());
             return val > 5;
@@ -140,14 +137,14 @@ public class LoginController {
      */
     private void addLoginFailOvertimes(String username) {
         String key = CommonConstant.LOGIN_FAIL + username;
-        Object failTime = redisUtil.get(key);
+        Object failTime = redisCacheUtil.get(key);
         Integer val = 0;
         if (failTime != null) {
             val = Integer.parseInt(failTime.toString());
         }
         // 10分钟，一分钟为60s
-        redisUtil.set(key, ++val, 60*10);
-       redisUtil.printAllRedisData();
+        redisCacheUtil.set(key, ++val, 60*10);
+       redisCacheUtil.printAllRedisData();
 
 
     }

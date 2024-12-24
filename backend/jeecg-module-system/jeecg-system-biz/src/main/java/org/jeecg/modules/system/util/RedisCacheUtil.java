@@ -27,11 +27,11 @@ import javax.annotation.Resource;
 
 @Data
 @Component
-public class RedisUtil {
+public class RedisCacheUtil {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
-    public RedisUtil() {
+    public RedisCacheUtil() {
     }
 
     public boolean expire(String key, long time) {

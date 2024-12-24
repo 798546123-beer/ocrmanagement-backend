@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 
 class LoginControllerTest {
 //@Resource
-//private RedisUtil redisUtil;
+//private RedisCacheUtil redisCacheUtil;
     @Test
     void login() {
         LoginController loginController=new LoginController();

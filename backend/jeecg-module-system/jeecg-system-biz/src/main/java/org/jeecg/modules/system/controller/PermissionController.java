@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.constant.CommonConstant;
 import org.jeecg.common.system.util.JwtUtil;
-import org.jeecg.common.util.RedisUtil;
+import org.jeecg.modules.system.util.RedisCacheUtil;
 import org.jeecg.config.shiro.IgnoreAuth;
 import org.jeecg.modules.system.entity.PageEntity;
 import org.jeecg.modules.system.entity.Role;
@@ -34,7 +34,7 @@ public class PermissionController {
     @Resource
     private RoleMapper roleMapper;
     @Resource
-    private RedisUtil redisUtil;
+    private RedisCacheUtil redisCacheUtil;
     @Resource
     private PermissionService permissionService;
     @IgnoreAuth
@@ -62,7 +62,7 @@ public class PermissionController {
         //把token解析得到username和password
         String username= JwtUtil.getUsername(token);
         //去redis里查询user表符合username的数据项的role字段
-        User userVO= (User) redisUtil.get(CommonConstant.LOGIN_SUCCESS+username);
+        User userVO= (User) redisCacheUtil.get(CommonConstant.LOGIN_SUCCESS+username);
         JSONObject information = userVO.getInformation();
         JSONArray permissionList = information.getJSONArray("permissionList");
         if (permissionList == null || permissionList.isEmpty()) {
