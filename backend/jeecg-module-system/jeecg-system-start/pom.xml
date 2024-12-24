@@ -15,6 +15,10 @@
         <!-- SYSTEM 系统管理模块 -->
         <dependency>
             <groupId>org.jeecgframework.boot</groupId>
+            <artifactId>jeecg-boot-base-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jeecgframework.boot</groupId>
             <artifactId>jeecg-system-biz</artifactId>
             <version>${jeecgboot.version}</version>
         </dependency>
