@@ -1,5 +1,6 @@
 server:
   port: 8080
+#  address: 172.31.0.191
   tomcat:
     max-swallow-size: -1
   error:
@@ -12,6 +13,7 @@ server:
     enabled: true
     min-response-size: 1024
     mime-types: application/javascript,application/json,application/xml,text/html,text/xml,text/plain,text/css,image/*
+  address: 0.0.0.0
 
 management:
   endpoints:
