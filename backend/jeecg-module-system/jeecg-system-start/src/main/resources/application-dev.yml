@@ -24,17 +24,17 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
-  mail:
-    host: smtp.163.com
-    username: jeecgos@163.com
-    password: ??
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-            required: true
+#  mail:
+#    host: smtp.163.com
+#    username: jeecgos@163.com
+#    password: ??
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+#            required: true
   mvc:
     static-path-pattern: /**
     #Spring Boot 2.6+后映射匹配的默认策略已从AntPathMatcher更改为PathPatternParser,需要手动指定为ant-path-matcher
@@ -48,11 +48,6 @@ spring:
       - org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration
   datasource:
     druid:
-      stat-view-servlet:
-        enabled: true
-        loginUsername: admin
-        loginPassword: 123456
-        allow:
       web-stat-filter:
         enabled: true
     dynamic:
@@ -131,31 +126,24 @@ jeecg:
   signUrls: /sys/dict/getDictItems/*,/sys/dict/loadDict/*,/sys/dict/loadDictOrderByValue/*,/sys/dict/loadDictItem/*,/sys/dict/loadTreeData,/sys/api/queryTableDictItemsByCode,/sys/api/queryFilterTableDictInfo,/sys/api/queryTableDictByKeys,/sys/api/translateDictFromTable,/sys/api/translateDictFromTableByKeys,/sys/sendChangePwdSms,/sys/user/sendChangePhoneSms,/sys/sms,/desform/api/sendVerifyCode
   # 本地：local、Minio：minio、阿里云：alioss
   uploadType: local
-  # 前端访问地址
-  domainUrl:
-    pc: http://localhost:3100
-    app: http://localhost:8051
   path:
     #文件上传根目录 设置
     upload: /opt/upFiles
-    #webapp文件路径
-    webapp: /opt/webapp
   shiro:
     excludeUrls: /test/jeecgDemo/demo3,/test/jeecgDemo/redisDemo/**,/bigscreen/category/**,/bigscreen/visual/**,/bigscreen/map/**,/jmreport/bigscreen2/**
   # ElasticSearch 6设置
   elasticsearch:
-    cluster-name: jeecg-ES
     cluster-nodes: 127.0.0.1:9200
     check-enabled: false
   # 在线预览文件服务器地址配置
   file-view-domain: http://fileview.jeecg.com
   #大屏报表参数设置
   #分布式锁配置
-  redisson:
-    address: 127.0.0.1:6379
-    password:
-    type: STANDALONE
-    enabled: true
+#  redisson:
+#    address: 127.0.0.1:6379
+#    password:
+#    type: STANDALONE
+#    enabled: true
     # 本地代理地址
 #    proxy:
 #      host: "http://127.0.0.1"
@@ -166,7 +154,7 @@ cas:
 #Mybatis输出sql日志
 logging:
   level:
-    root: error
+    root: info
 #swagger
 knife4j:
   #开启增强配置
