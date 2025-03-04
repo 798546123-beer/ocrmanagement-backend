@@ -1,0 +1,36 @@
+server:
+  port: 8080  # 指定端口
+
+spring:
+  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/your_database?useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 217158
+
+  # 错误信息调试配置
+  mvc:
+    throw-exception-if-no-handler-found: true  # 启用404详细错误
+  resources:
+    add-mappings: false  # 配合上方配置显示404详情
+
+logging:
+  level:
+    root: debug  # 全局日志级别
+    com.henu.ocr: trace  # 项目包日志细节
+    org.springframework.jdbc: debug  # 显示SQL日志
+
+# MyBatis-Plus 配置
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml  # XML映射文件路径
+  type-aliases-package: com.henu.ocr.entity  # 实体类包路径
+  configuration:
+    map-underscore-to-camel-case: true  # 下划线转驼峰
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # 控制台打印SQL
+  global-config:
+    db-config:
+      id-type: auto  # 主键自增策略
+      logic-delete-field: deleted  # 逻辑删除字段（按需启用）
+      logic-delete-value: 1
+      logic-not-delete-value: 0
