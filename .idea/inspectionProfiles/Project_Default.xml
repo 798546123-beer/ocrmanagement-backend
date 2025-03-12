@@ -41,7 +41,7 @@
     <inspection_tool class="AlibabaExceptionClassShouldEndWithException" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AlibabaIbatisMethodQueryForList" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AlibabaLockShouldWithTryFinally" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="AlibabaLowerCamelCaseVariableNaming" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="AlibabaLowerCamelCaseVariableNaming" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="AlibabaMethodReturnWrapperType" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AlibabaMethodTooLong" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AlibabaPackageNaming" enabled="true" level="WARNING" enabled_by_default="true" />

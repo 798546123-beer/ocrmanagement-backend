@@ -6,6 +6,7 @@ import com.henu.ocr.entity.User;
 import com.henu.ocr.mapper.UserMapper;
 import com.henu.ocr.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -16,6 +17,8 @@ import java.util.List;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
     @Override
     public List<User> getUserByNameFuzzy(String keyword) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();

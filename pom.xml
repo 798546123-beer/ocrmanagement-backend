@@ -7,6 +7,43 @@
     <groupId>com.henu</groupId>
     <artifactId>ocr</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <repositories>
+        <!-- JEECG 官方仓库 -->
+<!--        <repository>-->
+<!--            <id>jeecg-repo</id>-->
+<!--            <url>https://maven.aliyun.com/repository/public</url>-->
+<!--            <releases>-->
+<!--                <enabled>true</enabled>-->
+<!--            </releases>-->
+<!--            <snapshots>-->
+<!--                <enabled>false</enabled>-->
+<!--            </snapshots>-->
+<!--        </repository>-->
+        <!-- 阿里云仓库加速 -->
+        <repository>
+            <id>aliyun-maven</id>
+            <url>https://maven.aliyun.com/nexus/content/groups/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>aliyun-plugin</id>
+            <url>https://maven.aliyun.com/repository/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -20,6 +57,11 @@
             <version>2.7.18</version>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <version>2.7.18</version>
+        </dependency>
+        <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>3.5.3.1</version> <!-- 使用最新稳定版 -->
@@ -29,8 +71,17 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.47</version> <!-- 专为 MySQL 5.7 优化的稳定版本 -->
         </dependency>
-
-
+<!--        <dependency>-->
+<!--            <groupId>org.jeecgframework.boot</groupId>-->
+<!--            <artifactId>jeecg-boot-starter</artifactId>-->
+<!--            <version>3.7.0</version>-->
+<!--        </dependency>-->
+        <!-- Activiti 工作流依赖 -->
+<!--        <dependency>-->
+<!--            <groupId>org.activiti</groupId>-->
+<!--            <artifactId>activiti-spring-boot-starter</artifactId>-->
+<!--            <version>7.</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -66,6 +117,11 @@
             <groupId>io.swagger</groupId>
             <artifactId>swagger-annotations</artifactId>
             <version>1.6.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>3.11.0</version>
         </dependency>
     </dependencies>
 
