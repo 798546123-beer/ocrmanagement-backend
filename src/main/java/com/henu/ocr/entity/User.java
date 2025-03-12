@@ -10,18 +10,24 @@ import lombok.Data;
 public class User {
     @TableId
     private String userId;
-    @TableField
+    @TableField("username")
     private String username;
-    @TableField
+    @TableField("password")
     private String password;
-    @TableField
+    @TableField("realname")
     private String realname;
-    @TableField
+    @TableField("user_type_id")
     private String userTypeId;
-    @TableField
+    @TableField("phone")
     private String userPhone;
-    @TableField
+    @TableField("user_number")
     private int userNumber;
-    @TableField
+    @TableField("user_gender")
+    private String userGender;
+    @TableField("user_company_id")
     private String userCompanyId;
+    @TableField("user_age")
+    private int Age;
+    @TableField("is_delete")
+    private Boolean IsDelete;
 }
