@@ -26,8 +26,8 @@ public class RedisUtil {
         redisTemplate.opsForValue().set(key, value);
     }
 
-    public void setWithExpire(String key, Object value, long timeout, TimeUnit unit) {
-        redisTemplate.opsForValue().set(key, value, timeout, unit);
+    public void setWithExpire(String key, Object value, long timeout) {
+        redisTemplate.opsForValue().set(key, value, timeout);
     }
     public Object get(String key) {
         return redisTemplate.opsForValue().get(key);
