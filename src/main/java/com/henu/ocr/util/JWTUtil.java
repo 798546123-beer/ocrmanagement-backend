@@ -99,7 +99,7 @@ public class JWTUtil {
 
 
     public static String getUserNameByToken(HttpServletRequest request) throws Exception {
-        String accessToken = request.getHeader("X-Access-Token");
+        String accessToken = request.getHeader("Token");
         String username = getUsername(accessToken);
 //        if (oConvertUtils.isEmpty(username)) {
 //            try {

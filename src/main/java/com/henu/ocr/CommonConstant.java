@@ -320,18 +320,6 @@ public interface CommonConstant {
     String WPS_TYPE_2="2";
 
 
-    /**
-     * ::非常重要::
-     * 注意：这四个常量值如果修改，需要与 jeecg-boot-starter/jeecg-boot-common/org.jeecg.config.FeignConfig 类中的值保持一致。
-     */
-    String X_ACCESS_TOKEN = "X-Access-Token";
-    String X_SIGN = "X-Sign";
-    String X_TIMESTAMP = "X-TIMESTAMP";
-    /** 租户请求头 更名为：X-Tenant-Id */
-    String TENANT_ID = "X-Tenant-Id";
-    /** 简流接口请求头，用于排除不支持的控件字段  */
-    String X_MiniFlowExclusionFieldMode = "X-Miniflowexclusionfieldmode";
-    /**===============================================================================================*/
 
     String TOKEN_IS_INVALID_MSG = "Token失效，请重新登录!";
     String X_FORWARDED_SCHEME = "X-Forwarded-Scheme";
@@ -568,9 +556,6 @@ public interface CommonConstant {
     String UPDATE_PHONE = "updatePhone";
     //update-end---author:wangshuai---date:2024-04-07---for:修改手机号常量---
 
-    /**
-     * 修改手机号验证码请求次数超出
-     */
-    Integer PHONE_SMS_FAIL_CODE = 40002;
+
     Integer REDIS_EXPIRE_TIME = 15*60*1000;
 }
