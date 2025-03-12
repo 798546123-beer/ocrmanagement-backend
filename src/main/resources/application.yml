@@ -33,6 +33,11 @@ logging:
 #    check-process-definitions: true # 检查流程定义
 #    process-definition-location: classpath:/processes/*.bpmn20.xml # 流程文件路径
 
+crawler:
+  moji:
+    url: https://tianqi.moji.com
+  timeout: 5000
+  user-agent: Mozilla/5.0
 
 # MyBatis-Plus 配置
 mybatis-plus:
