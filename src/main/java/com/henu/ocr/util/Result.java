@@ -58,6 +58,11 @@ public class Result<T> implements Serializable {
         this.code = code;
         this.message = message;
     }
+    public Result(Integer code, String message, T data){
+        this.code = code;
+        this.message = message;
+        this.result = data;
+    }
     public static <T> Result<T> Exception(){
         Result<T> result = new Result<>();
         result.setCode(500);
