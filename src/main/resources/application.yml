@@ -9,12 +9,12 @@ spring:
     port: 6379
     password: ''
   datasource:
+    url: jdbc:mysql://172.31.0.191:32768/data?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
 #    driver-class-name: com.mysql.cj.jdbc.Driver
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/your_database?useSSL=false&serverTimezone=Asia/Shanghai
-    username: root
-    password: 217158
-  # 错误信息调试配置
+
   mvc:
     throw-exception-if-no-handler-found: true  # 启用404详细错误
   web:
