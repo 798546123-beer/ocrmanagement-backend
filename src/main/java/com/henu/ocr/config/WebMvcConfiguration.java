@@ -42,8 +42,6 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Value("${spring.resource.static-locations:}")
     private String staticLocations;
-
-
     /**
      * 静态资源的配置 - 使得可以从磁盘中读取 Html、图片、视频、音频等
      */
@@ -67,11 +65,11 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         corsConfiguration.setAllowCredentials(true);
         // 允许访问的客户端域名
         ArrayList<String> allowOrigins = new ArrayList<>();
-        allowOrigins.add("http://localhost:9528");
+//        allowOrigins.add("http://localhost:9528");
         allowOrigins.add("*");
         // 需要什么允许的源就在这里添加
         corsConfiguration.setAllowedOrigins(allowOrigins); // 注意这里的方法是 setAllowedOrigins
-        corsConfiguration.addAllowedOrigin("http://localhost:9528");
+//        corsConfiguration.addAllowedOrigin("http://localhost:9528");
         corsConfiguration.addAllowedOrigin("*");
         corsConfiguration.addAllowedHeader("");
         corsConfiguration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin")); // 允许的HTTP头部
