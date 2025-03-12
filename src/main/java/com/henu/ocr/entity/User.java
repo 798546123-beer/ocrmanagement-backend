@@ -11,7 +11,17 @@ public class User {
     @TableId
     private String userId;
     @TableField
-    private String userName;
+    private String username;
     @TableField
-    private String Password;
+    private String password;
+    @TableField
+    private String realname;
+    @TableField
+    private String userTypeId;
+    @TableField
+    private String userPhone;
+    @TableField
+    private int userNumber;
+    @TableField
+    private String userCompanyId;
 }

@@ -23,4 +23,7 @@ public class Company {
     @ApiModelProperty(value = "父公司ID")
     @TableField("father_company")
     private Integer fatherCompanyId;
+    @ApiModelProperty(value = "级别，局，公司，分公司，enum，不可为NULL")
+    @TableField("type")
+    private String type;
 }
