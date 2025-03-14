@@ -11,4 +11,6 @@ public interface UserService extends IService<User> {
     List<User> getUserById(String id);
 
     boolean addUser(User user);
+
+    List<User> getAllUserByOrder();
 }

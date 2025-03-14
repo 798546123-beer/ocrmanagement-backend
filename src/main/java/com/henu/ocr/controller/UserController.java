@@ -48,6 +48,19 @@ public class UserController {
             return Result.Exception();
         }
     }
+    //按照用户number排序全部用户信息
+    @GetMapping("/getAllUserByOrder")
+    public Result getAllUserByOrder(){
+        try {
+            List<User> userList = userService.getAllUserByOrder();
+            if (userList.size() == 0) {
+                return Result.error( "查询失败，列表为空");
+            }
+            return Result.OK("查询成功", userList);
+        } catch (Exception e) {
+            return Result.Exception();
+        }
+    }
     @GetMapping("test")
     public String test(){
         return "test";

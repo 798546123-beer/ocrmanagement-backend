@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 @TableName("user")
 public class User {
+    @TableField(exist = false)
     private String token;
     @TableId("id")
     private String userId;
