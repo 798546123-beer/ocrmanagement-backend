@@ -1,5 +1,6 @@
 package com.henu.ocr.controller;
 
+import com.henu.ocr.IgnoreToken;
 import com.henu.ocr.entity.User;
 import com.henu.ocr.service.UserService;
 import com.henu.ocr.util.Result;
@@ -61,6 +62,7 @@ public class UserController {
             return Result.Exception();
         }
     }
+    @IgnoreToken
     @GetMapping("test")
     public String test(){
         return "test";

@@ -1,6 +1,7 @@
 package com.henu.ocr.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.henu.ocr.IgnoreToken;
 import com.henu.ocr.entity.User;
 import com.henu.ocr.pojo.LoginModel;
 import com.henu.ocr.service.UserService;
@@ -27,7 +28,7 @@ public class LoginController {
     private UserService userService;
     @Resource
     private LoginServiceImpl loginService;
-//    @IgnoreToken
+    @IgnoreToken
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result<?> login(@RequestBody LoginModel LoginModel, HttpServletRequest request) throws Exception {
         String username = LoginModel.getUsername();

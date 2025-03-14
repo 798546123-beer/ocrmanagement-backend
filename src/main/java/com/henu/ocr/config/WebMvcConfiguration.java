@@ -11,6 +11,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 //import io.micrometer.prometheus.PrometheusMeterRegistry;
+import com.henu.ocr.interceptor.AuthInterceptor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -90,6 +91,27 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
                 .allowCredentials(true)
                 .allowedMethods("GET", "POST", "DELETE", "PUT")
                 .maxAge(3600);
+    }
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new AuthInterceptor())
+                .addPathPatterns("/**")
+                .excludePathPatterns("/login/**")
+                .excludePathPatterns("/error/**")
+                .excludePathPatterns("/static/**")
+                .excludePathPatterns("/swagger-ui.html")
+                .excludePathPatterns("/swagger-resources/**")
+                .excludePathPatterns("/webjars/**")
+                .excludePathPatterns("/v2/**")
+                .excludePathPatterns("/doc.html")
+                .excludePathPatterns("/favicon.ico")
+                .excludePathPatterns("/")
+                .excludePathPatterns("/index.html")
+                .excludePathPatterns("/index")
+                .excludePathPatterns("/index.html#/login")
+                .excludePathPatterns("/index.html#/register")
+                .excludePathPatterns("/index.html#/404")
+                .excludePathPatterns("/index.html#/500");
     }
     @Bean
     @Primary
