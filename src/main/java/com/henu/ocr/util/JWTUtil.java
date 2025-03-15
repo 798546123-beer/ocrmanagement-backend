@@ -7,15 +7,13 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.sun.org.apache.xml.internal.security.algorithms.Algorithm;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 
@@ -23,10 +21,9 @@ import java.util.Date;
 public class JWTUtil {
 
     /**
-     * Token有效期为5分钟（Token在reids中缓存时间为两倍）
+     * Token有效期为8min
      */
-    public static long EXPIRE_TIME ;
-//    static final String WELL_NUMBER = SymbolConstant.WELL_NUMBER + SymbolConstant.LEFT_CURLY_BRACKET;
+    public static long EXPIRE_TIME;
 
     /**
      * @param response
@@ -44,7 +41,7 @@ public class JWTUtil {
             os = httpServletResponse.getOutputStream();
             httpServletResponse.setCharacterEncoding("UTF-8");
             httpServletResponse.setStatus(code);
-            os.write(new ObjectMapper().writeValueAsString(jsonResult).getBytes("UTF-8"));
+            os.write(new ObjectMapper().writeValueAsString(jsonResult).getBytes(StandardCharsets.UTF_8));
             os.flush();
             os.close();
         } catch (IOException e) {
@@ -73,7 +70,7 @@ public class JWTUtil {
     }
 
 
-    public static String getUsername(String token) {
+    public static String getUsernameByToken(String token) {
         try {
             DecodedJWT jwt = JWT.decode(token);
             return jwt.getClaim("username").asString();
@@ -83,7 +80,7 @@ public class JWTUtil {
     }
 
     /**
-     * 生成签名,5min后过期
+     * 生成签名,8min后过期
      *
      * @param username 用户名
      * @param secret   用户的密码
@@ -94,24 +91,6 @@ public class JWTUtil {
         Algorithm algorithm = Algorithm.HMAC256(secret);
         // 附带username信息
         return JWT.create().withClaim("username", username).withExpiresAt(date).sign(algorithm);
-
     }
-
-
-    public static String getUserNameByToken(HttpServletRequest request) throws Exception {
-        String accessToken = request.getHeader("Token");
-        String username = getUsername(accessToken);
-//        if (oConvertUtils.isEmpty(username)) {
-//            try {
-//                throw new Exception("未查找到用户");
-//            } catch (Exception e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-        return username;
-    }
-
-
-
 }
 
