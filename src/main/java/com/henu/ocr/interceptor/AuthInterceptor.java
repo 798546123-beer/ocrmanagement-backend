@@ -20,7 +20,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         // 获取token（根据实际需求调整获取方式）
-        String token = request.getHeader("Authorization");
+        String token = request.getHeader("token");
         if (StringUtils.isBlank(token)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing authentication token");
             return false;

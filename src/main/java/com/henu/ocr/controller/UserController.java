@@ -50,6 +50,7 @@ public class UserController {
         }
     }
     //按照用户number排序全部用户信息
+    @IgnoreToken
     @GetMapping("/getAllUserByOrder")
     public Result getAllUserByOrder(){
         try {
