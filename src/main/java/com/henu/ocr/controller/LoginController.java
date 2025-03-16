@@ -71,4 +71,5 @@ public class LoginController {
     public Result<?> getToken(@RequestParam String username,@RequestParam String password) {
         return Result.ok(JWTUtil.sign(username, password));
     }
+    
 }

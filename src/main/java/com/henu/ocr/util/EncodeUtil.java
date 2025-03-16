@@ -1,7 +1,8 @@
 package com.henu.ocr.util;
 
 import org.apache.shiro.codec.Hex;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
