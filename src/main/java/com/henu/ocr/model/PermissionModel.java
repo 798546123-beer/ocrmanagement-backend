@@ -1,4 +1,4 @@
-package com.henu.ocr.pojo;
+package com.henu.ocr.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PermissionModel {
-    private Integer page_id;
-    private String page_name;
+    private Integer permissionId;
+    private String page;
+    private String pageName;
 }

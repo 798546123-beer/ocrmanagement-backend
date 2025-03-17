@@ -1,4 +1,4 @@
-package com.henu.ocr.pojo;
+package com.henu.ocr.model;
 
 import lombok.Data;
 
