@@ -32,7 +32,7 @@ public class User implements Serializable {
     @TableField("user_company_id")
     private String userCompanyId;
     @TableField("user_age")
-    private int Age;
+    private int age;
     @TableField("is_delete")
-    private Boolean IsDelete;
+    private Boolean isDelete;
 }
