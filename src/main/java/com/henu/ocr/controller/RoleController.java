@@ -66,7 +66,7 @@ public class RoleController {
     @GetMapping("/getAllRoles")
     public Result getAllRoles() {
         try {
-            List<Role> roles = roleService.list();
+            List<Role> roles = roleService.getAllRolesWithPermissions();
             return !roles.isEmpty() ? Result.OK("查询成功", roles) : Result.error("暂无数据");
         } catch (Exception e) {
             return Result.Exception();
@@ -75,9 +75,9 @@ public class RoleController {
 
     @Operation(summary = "根据角色名称模糊查询")
     @GetMapping("/getRoleByNameFuzzy")
-    public Result fuzzyQuery(@RequestParam String roleName) {
+    public Result fuzzyQuery(@RequestParam String keyword) {
         try {
-            List<Role> roles = roleService.getRolesByNameFuzzy(roleName);
+            List<Role> roles = roleService.getRolesByNameFuzzy(keyword);
             return !roles.isEmpty() ? Result.OK("查询成功", roles) : Result.error("未找到相关角色");
         } catch (Exception e) {
             return Result.Exception();

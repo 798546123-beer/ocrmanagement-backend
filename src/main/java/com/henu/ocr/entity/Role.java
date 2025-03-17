@@ -5,8 +5,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.henu.ocr.pojo.PermissionModel;
-import io.swagger.v3.core.util.Json;
+import com.henu.ocr.model.PermissionModel;
 import lombok.*;
 import org.springframework.stereotype.Component;
 
