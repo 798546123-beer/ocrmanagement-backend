@@ -55,7 +55,7 @@ public class RedisTest {
         String key = "testKey";
         String value = "testValue";
         redisService.set(key, value);
-        Object retrievedValue = redisService.get(key);
+        Object retrievedValue = redisService.get(key, String.class);
 
         assertEquals(value, retrievedValue);
         // 验证 Redis 存储的值是否一致

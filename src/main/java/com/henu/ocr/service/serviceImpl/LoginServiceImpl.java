@@ -12,7 +12,7 @@ public class LoginServiceImpl {
 
     public boolean isLoginFailOvertimes(String username) {
         String key = com.henu.ocrbackend.constant.CommonConstant.LOGIN_FAIL + username;
-        Object failTime = redisUtil.get(key);
+        Integer failTime = redisUtil.get(key,Integer.class);
         if (failTime != null) {
             Integer val = Integer.parseInt(failTime.toString());
             return val > 5;
@@ -22,7 +22,7 @@ public class LoginServiceImpl {
     public boolean addLoginFailTimes(String username) throws Exception {
         try {
             String key = com.henu.ocrbackend.constant.CommonConstant.LOGIN_FAIL + username;
-            Object failTime = redisUtil.get(key);
+            Integer failTime = redisUtil.get(key, Integer.class);
             if (failTime != null) {
                 Integer val = Integer.parseInt(failTime.toString());
                 redisUtil.set(key, val + 1);

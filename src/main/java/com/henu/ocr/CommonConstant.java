@@ -34,7 +34,7 @@ public interface CommonConstant {
     int LOG_TYPE_2 = 2;
 
     /**
-     * 系统日志类型： 租户操作日志
+     * 系统日志类型： 登出
      */
     int LOG_TYPE_3 = 3;
 
@@ -557,5 +557,5 @@ public interface CommonConstant {
     //update-end---author:wangshuai---date:2024-04-07---for:修改手机号常量---
 
 
-    Integer REDIS_EXPIRE_TIME = 15*60*1000;
+    Integer REDIS_EXPIRE_TIME = 15*60;
 }
