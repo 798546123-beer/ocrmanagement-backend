@@ -11,6 +11,10 @@ import com.henu.ocr.util.JWTUtil;
 import com.henu.ocr.util.RedisUtil;
 import com.henu.ocr.util.Result;
 import com.sun.istack.internal.NotNull;
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +26,7 @@ import static com.henu.ocrbackend.constant.CommonConstant.*;
 @RestController
 @RequestMapping("/login")
 @Slf4j
+@Tag(name="登录相关接口")
 public class LoginController {
     @Resource
     private RedisUtil redisUtil;
@@ -31,6 +36,7 @@ public class LoginController {
     private LoginServiceImpl loginService;
 
     @IgnoreToken
+    @Operation(summary = "用户登录",description = "返回结果拿到token作为令牌")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result<?> login(@RequestBody LoginModel LoginModel, HttpServletRequest request) throws Exception {
         String username = LoginModel.getUsername();
@@ -67,13 +73,14 @@ public class LoginController {
 //        redisCacheUtil.printAllRedisData();
         return new Result<User>(200, "登陆成功", user);
     }
-
+    @Hidden
     @IgnoreToken
     @GetMapping("getToken")
     public Result<?> getToken(@RequestParam String username, @RequestParam String password) {
         return Result.ok(JWTUtil.sign(username, password));
     }
-
+    @Parameter(name = "userId", description = "用户id" ,required = true)
+    @Operation(summary = "登出操作",description = "用户登出后会清除Redis中残留数据并记录日志")
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public Result<?> logout(@NotNull @RequestParam String userId) {
         User user = userService.getById(userId);
