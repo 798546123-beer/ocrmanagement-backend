@@ -61,7 +61,7 @@ public class LoginController {
         log.info("用户名: {},{}成功！\n{}", username, com.henu.ocrbackend.constant.CommonConstant.LOG_TYPE_1, user);
         //在下面存放已登录用户的信息
         //在这里对用户账号密码进行加密返回给前端
-//        redisUtil.setWithExpire(com.henu.ocrbackend.constant.CommonConstant.LOGIN_SUCCESS + username, user,  com.henu.ocrbackend.constant.CommonConstant.REDIS_EXPIRE_TIME / 1000);
+        redisUtil.setWithExpire(com.henu.ocrbackend.constant.CommonConstant.LOGIN_SUCCESS + username, user,  com.henu.ocrbackend.constant.CommonConstant.REDIS_EXPIRE_TIME / 1000);
         redisUtil.delete(com.henu.ocrbackend.constant.CommonConstant.LOGIN_FAIL + username);
 //        redisCacheUtil.printAllRedisData();
         return new Result<User>(200,"登陆成功",user);
