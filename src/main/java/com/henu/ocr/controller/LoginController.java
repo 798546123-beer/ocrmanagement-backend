@@ -10,7 +10,6 @@ import com.henu.ocr.util.EncodeUtil;
 import com.henu.ocr.util.JWTUtil;
 import com.henu.ocr.util.RedisUtil;
 import com.henu.ocr.util.Result;
-import com.sun.istack.internal.NotNull;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 
 import static com.henu.ocrbackend.constant.CommonConstant.*;
 

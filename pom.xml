@@ -121,11 +121,7 @@
             <artifactId>mybatis-plus-extension</artifactId>
             <version>3.5.3.1</version>
         </dependency>
-        <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-annotations</artifactId>
-            <version>1.6.6</version>
-        </dependency>
+
 
         <dependency>
             <groupId>com.auth0</groupId>

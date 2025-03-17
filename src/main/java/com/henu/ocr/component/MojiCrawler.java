@@ -2,7 +2,6 @@ package com.henu.ocr.component;
 
 import com.henu.ocr.model.WeatherResponse;
 import com.henu.ocr.model.ZoneRequest;
-import io.swagger.annotations.SwaggerDefinition;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

@@ -4,7 +4,7 @@ import com.henu.ocr.IgnoreToken;
 import com.henu.ocr.entity.User;
 import com.henu.ocr.service.UserService;
 import com.henu.ocr.util.Result;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -12,7 +12,7 @@ import java.util.List;
 
 //在这个类里写user的增删查改
 @RestController
-@Api(tags = "用户接口")
+@Tag(name="用户接口")
 @RequestMapping("/user")
 public class UserController {
     @Resource
