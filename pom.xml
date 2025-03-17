@@ -61,7 +61,6 @@
             <artifactId>embedded-redis</artifactId>
             <version>1.4.3</version>
             <exclusions>
-                <!-- 排除冲突的 slf4j-simple -->
                 <exclusion>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-simple</artifactId>
@@ -127,11 +126,7 @@
             <artifactId>swagger-annotations</artifactId>
             <version>1.6.6</version>
         </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.9.2</version>
-        </dependency>
+
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
@@ -148,9 +143,9 @@
             <version>1.17.1</version>
         </dependency>
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>2.10.5</version>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.7.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
