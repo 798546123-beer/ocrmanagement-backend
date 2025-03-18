@@ -18,7 +18,7 @@ public class RoleController {
     @Resource
     private RoleService roleService;
 
-   @Operation(summary = "根据ID查询角色")
+    @Operation(summary = "根据ID查询角色")
     @GetMapping("/getRoleById")
     public Result getRoleById(@RequestParam Integer roleId) {
         try {

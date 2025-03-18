@@ -1,6 +1,6 @@
 //package com.henu.ocr.controller;
 //
-//import com.henu.ocr.entity.Permission; // 假设你有一个名为Permission的实体类
+//import com.henu.ocr.entity.Permission;
 //import com.henu.ocr.service.PermissionService;
 //import com.henu.ocr.util.Result;
 //import io.swagger.v3.oas.annotations.Operation;

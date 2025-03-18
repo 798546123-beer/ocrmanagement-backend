@@ -4,6 +4,7 @@ import com.henu.ocr.IgnoreToken;
 import com.henu.ocr.entity.User;
 import com.henu.ocr.service.UserService;
 import com.henu.ocr.util.Result;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +20,13 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/getUserById")
+    @Operation(summary = "根据id查询用户信息")
     public List<User> getUserById(@RequestParam String id) {
         return userService.getUserById(id);
     }
 
     @GetMapping("/getUserByNameFuzzy")
+    @Operation(summary = "模糊查询用户信息")
     public Result fuzzyQuery(@RequestParam String keyword) {
         try {
             List<User> userList = userService.getUserByNameFuzzy(keyword);
@@ -35,7 +38,7 @@ public class UserController {
             return Result.Exception();
         }
     }
-
+    @Operation(summary = "添加用户")
     @PostMapping("/addUser")
     public Result addUser(@RequestBody User user) {
         try {
@@ -50,7 +53,8 @@ public class UserController {
         }
     }
     //按照用户number排序全部用户信息
-    @IgnoreToken
+//    @IgnoreToken
+    @Operation(summary = "获取全部用户信息按照从小到大序号排序")
     @GetMapping("/getAllUserByOrder")
     public Result getAllUserByOrder(){
         try {
