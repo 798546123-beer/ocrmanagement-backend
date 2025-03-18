@@ -66,15 +66,18 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         corsConfiguration.setAllowCredentials(true);
         // 允许访问的客户端域名
         ArrayList<String> allowOrigins = new ArrayList<>();
-//        allowOrigins.add("http://localhost:9528");
-        allowOrigins.add("*");
+        allowOrigins.add("http://localhost:9528");
+        allowOrigins.add("http://172.*.*.*");
+//        allowOrigins.add("*");
         // 需要什么允许的源就在这里添加
-        corsConfiguration.setAllowedOrigins(allowOrigins); // 注意这里的方法是 setAllowedOrigins
-//        corsConfiguration.addAllowedOrigin("http://localhost:9528");
-        corsConfiguration.addAllowedOrigin("*");
+        corsConfiguration.setAllowedOrigins(allowOrigins);
+        // 注意这里的方法是 setAllowedOrigins
+        corsConfiguration.addAllowedOrigin("http://localhost:9528");
+        corsConfiguration.addAllowedOrigin("https://localhost:9528");
+//        corsConfiguration.addAllowedOrigin("*");
         corsConfiguration.addAllowedHeader("");
-        corsConfiguration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin")); // 允许的HTTP头部
-        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        corsConfiguration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin"));
+        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"));
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
         System.out.println("cors被配置");
         return new CorsFilter(urlBasedCorsConfigurationSource);
@@ -88,8 +91,10 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:9528")
+                .allowedOrigins("https://localhost:9528")
+//                .allowedOriginPatterns("*")
                 .allowCredentials(true)
-                .allowedMethods("GET", "POST", "DELETE", "PUT")
+                .allowedMethods("GET", "POST", "DELETE", "PUT","PATCH", "OPTIONS", "HEAD")
                 .maxAge(3600);
     }
     @Override
