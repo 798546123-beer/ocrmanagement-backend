@@ -8,6 +8,7 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +16,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Slf4j
@@ -24,7 +27,7 @@ public class JWTUtil {
      * Token有效期为8min
      */
     public static long EXPIRE_TIME;
-
+    public static String SECRET;
     /**
      * @param response
      * @param code
@@ -53,14 +56,13 @@ public class JWTUtil {
      * 校验token是否正确
      *
      * @param token  密钥
-     * @param secret 用户的密码
      * @return 是否正确
      */
-    public static boolean verify(String token, String username, String secret) {
+    public static boolean verify(String token, String username, Integer userId) {
         try {
             // 根据密码生成JWT效验器
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-            JWTVerifier verifier = JWT.require(algorithm).withClaim("username", username).build();
+            Algorithm algorithm = Algorithm.HMAC256(SECRET);
+            JWTVerifier verifier = JWT.require(algorithm).withClaim("username", username).withClaim("userId", userId).build();
             // 效验TOKEN
             DecodedJWT jwt = verifier.verify(token);
             return true;
@@ -70,10 +72,13 @@ public class JWTUtil {
     }
 
 
-    public static String getUsernameByToken(String token) {
+    public static Map<String,String> getUserInfoByToken(String token) {
         try {
             DecodedJWT jwt = JWT.decode(token);
-            return jwt.getClaim("username").asString();
+            Map<String,String> map = new HashMap<>();
+            map.put("username",jwt.getClaim("username").asString());
+            map.put("userId",jwt.getClaim("userId").asString());
+            return map;
         } catch (JWTDecodeException e) {
             return null;
         }
@@ -83,14 +88,13 @@ public class JWTUtil {
      * 生成签名,8min后过期
      *
      * @param username 用户名
-     * @param secret   用户的密码
      * @return 加密的token
      */
-    public static String sign(String username, String secret) {
+    public static String sign(String username,Integer userId) {
         Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
-        Algorithm algorithm = Algorithm.HMAC256(secret);
-        // 附带username信息
-        return JWT.create().withClaim("username", username).withExpiresAt(date).sign(algorithm);
+        Algorithm algorithm = Algorithm.HMAC256(SECRET);
+        // 附带user信息
+        return JWT.create().withClaim("username", username).withClaim("userId", userId).withExpiresAt(date).sign(algorithm);
     }
 }
 

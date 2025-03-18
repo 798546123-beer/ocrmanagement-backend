@@ -66,7 +66,7 @@ public class LoginController {
             return Result.error("用户名或密码错误");
         }
         //赋值一个token给前端
-        user.setToken(JWTUtil.sign(username, password));
+        user.setToken(JWTUtil.sign(username, Integer.valueOf(user.getUserId())));
         log.info("用户名: {},{}成功！\n{}", username, LOG_TYPE_1, user);
         redisUtil.setWithExpire(LOGIN_SUCCESS + username, user, REDIS_EXPIRE_TIME);
         redisUtil.delete(LOGIN_FAIL + username);
@@ -76,8 +76,8 @@ public class LoginController {
     @Hidden
     @IgnoreToken
     @GetMapping("getToken")
-    public Result<?> getToken(@RequestParam String username, @RequestParam String password) {
-        return Result.ok(JWTUtil.sign(username, password));
+    public Result<?> getToken(@RequestParam String username) {
+        return Result.ok(JWTUtil.sign(username, Integer.valueOf(userService.getUserByNameFuzzy(username).get(0).getUserId())));
     }
     @Parameter(name = "userId", description = "用户id" ,required = true)
     @Operation(summary = "登出操作",description = "用户登出后会清除Redis中残留数据并记录日志")
