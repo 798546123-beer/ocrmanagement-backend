@@ -18,6 +18,10 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        //查到方法不是get put post delete就放行
+        if (!(handler instanceof HandlerMethod)) {
+            return true;
+        }
         // 检查是否需要忽略认证
         if (isIgnoreAuth(handler)) {
             return true;

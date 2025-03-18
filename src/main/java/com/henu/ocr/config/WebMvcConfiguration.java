@@ -101,7 +101,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AuthInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns(PathItem.HttpMethod.OPTIONS.toString())
+//                .excludePathPatterns(PathItem.HttpMethod.OPTIONS.toString())
                 .excludePathPatterns("/login/**")
                 .excludePathPatterns("/error/**")
                 .excludePathPatterns("/static/**")
