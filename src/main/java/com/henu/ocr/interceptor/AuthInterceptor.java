@@ -2,12 +2,16 @@ package com.henu.ocr.interceptor;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.henu.ocr.IgnoreToken;
+import com.henu.ocr.util.JWTUtil;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.Map;
+
+import static com.henu.ocr.util.JWTUtil.getUserInfoByToken;
 
 // 2. 实现认证拦截器
 public class AuthInterceptor implements HandlerInterceptor {
@@ -25,13 +29,12 @@ public class AuthInterceptor implements HandlerInterceptor {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing authentication token");
             return false;
         }
-
-        // 这里可以添加token验证逻辑
-        return verifyToken(token); // 需要实现token验证方法
+        return verifyToken(token);
     }
 
     private boolean verifyToken(String token) {
-        return true;
+        Map<String,String> map=getUserInfoByToken(token);
+        return JWTUtil.verify(token, map.get("username"), Integer.valueOf(map.get("userId")));
     }
 
     private boolean isIgnoreAuth(Object handler) {

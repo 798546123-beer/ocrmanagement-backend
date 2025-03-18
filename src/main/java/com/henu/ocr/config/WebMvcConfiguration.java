@@ -12,6 +12,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 //import io.micrometer.prometheus.PrometheusMeterRegistry;
 import com.henu.ocr.interceptor.AuthInterceptor;
+import io.swagger.v3.oas.models.PathItem;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -57,31 +58,31 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         registry.addViewController("/").setViewName("doc.html");
     }
 
-    @Bean
-//    @Conditional(CorsFilterCondition.class)
-    public CorsFilter corsFilter() {
-        final UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        final CorsConfiguration corsConfiguration = new CorsConfiguration();
-        // 是否允许请求带有验证信息
-        corsConfiguration.setAllowCredentials(true);
-        // 允许访问的客户端域名
-        ArrayList<String> allowOrigins = new ArrayList<>();
-        allowOrigins.add("http://localhost:9528");
-        allowOrigins.add("http://172.*.*.*");
-//        allowOrigins.add("*");
-        // 需要什么允许的源就在这里添加
-        corsConfiguration.setAllowedOrigins(allowOrigins);
-        // 注意这里的方法是 setAllowedOrigins
-        corsConfiguration.addAllowedOrigin("http://localhost:9528");
-        corsConfiguration.addAllowedOrigin("https://localhost:9528");
-//        corsConfiguration.addAllowedOrigin("*");
-        corsConfiguration.addAllowedHeader("");
-        corsConfiguration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin"));
-        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"));
-        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
-        System.out.println("cors被配置");
-        return new CorsFilter(urlBasedCorsConfigurationSource);
-    }
+//    @Bean
+////    @Conditional(CorsFilterCondition.class)
+//    public CorsFilter corsFilter() {
+//        final UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+//        final CorsConfiguration corsConfiguration = new CorsConfiguration();
+//        // 是否允许请求带有验证信息
+//        corsConfiguration.setAllowCredentials(true);
+//        // 允许访问的客户端域名
+//        ArrayList<String> allowOrigins = new ArrayList<>();
+//        allowOrigins.add("http://localhost:9528");
+//        allowOrigins.add("http://172.*.*.*");
+////        allowOrigins.add("*");
+//        // 需要什么允许的源就在这里添加
+//        corsConfiguration.setAllowedOrigins(allowOrigins);
+//        // 注意这里的方法是 setAllowedOrigins
+//        corsConfiguration.addAllowedOrigin("http://localhost:9528");
+//        corsConfiguration.addAllowedOrigin("https://localhost:9528");
+////        corsConfiguration.addAllowedOrigin("*");
+//        corsConfiguration.addAllowedHeader("");
+//        corsConfiguration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin"));
+//        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"));
+//        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+//        System.out.println("cors被配置");
+//        return new CorsFilter(urlBasedCorsConfigurationSource);
+//    }
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter(objectMapper());
@@ -91,16 +92,16 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:9528")
-                .allowedOrigins("https://localhost:9528")
-//                .allowedOriginPatterns("*")
                 .allowCredentials(true)
-                .allowedMethods("GET", "POST", "DELETE", "PUT","PATCH", "OPTIONS", "HEAD")
+                .allowedMethods("*")
+                .allowedHeaders("*")
                 .maxAge(3600);
     }
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AuthInterceptor())
                 .addPathPatterns("/**")
+                .excludePathPatterns(PathItem.HttpMethod.OPTIONS.toString())
                 .excludePathPatterns("/login/**")
                 .excludePathPatterns("/error/**")
                 .excludePathPatterns("/static/**")
