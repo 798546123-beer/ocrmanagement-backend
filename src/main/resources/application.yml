@@ -54,5 +54,5 @@ mybatis-plus:
       logic-not-delete-value: 0
 security:
   jwt:
-#    secret:
+    secret: oMGMiE0@},'fl@+IY?RKr\-Fxv4.(}\F1XMV[Lk]F#Z6b8FRrrjQ?z{,q#:V2024
     expiration: 480

@@ -1,0 +1,31 @@
+概述
+Token验证是现代Web应用中常见的安全措施，用于确保用户身份的合法性和请求的安全性。它基于令牌（Token）的概念，通过在客户端和服务端之间传递一个安全的、有时限的字符串来验证用户身份，替代传统的基于会话的认证机制。
+
+技术实现
+header = {"alg": "HS256"}
+payload = {
+ 	"sub1": user.id,
+    “sub2”：user.username,
+ 	"exp": 8min
+}
+sign = HMAC_SHA256(base64(header)+"."+base64(payload), SECRET )
+
+生成Token
+服务端在用户成功登录后，会生成一个JWT。这个过程包括：
+1.	定义头部：通常包含签名算法等元数据。
+2.	准备载荷：包含用户标识符USER_ID
+3.	签名：结合头部和载荷，使用密钥进行签名，确保Token未被篡改。
+验证Token
+客户端在每次向服务器发起请求时，需在HTTP Header中携带此Token。服务端接收到请求后，将进行如下验证步骤：
+1.	解析Token：从请求头中提取Token。
+2.	验证签名：确保Token未被篡改。
+3.	检查Token有效性：包括是否过期、是否有效等。
+刷新Token
+客户端每隔一段时间会主动向服务器发送一次携带 Token 的请求，服务器每次接收该的请求时，如果该请求的 Token 是有效的，则会触发Token刷新机制。
+服务端接收到请求后，将进行如下刷新步骤：
+1.	判定请求：解析Token并分析Token是否有效
+2.	生成Token：根据旧Token解析出用户信息，再根据密钥进行签名
+3.	请求响应：将新Token 作为负载传给前端，前端拿到后更新本地 Cookie 中的Token
+密钥SECRET：
+secret: oMGMiE0@},'fl@+IY?RKr\-Fxv4.(}\F1XMV[Lk]F#Z6b8FRrrjQ?z{,q#:V2024
+secret 总共64位长度，由大小写+字符数字组成的随机字符串

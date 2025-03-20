@@ -10,31 +10,20 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
-//import io.micrometer.prometheus.PrometheusMeterRegistry;
 import com.henu.ocr.interceptor.AuthInterceptor;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.*;
 
-import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -54,31 +43,35 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("doc.html");
+        registry.addViewController("/").setViewName("swagger-ui/index.html");
+//        registry.addViewController("/").setViewName("doc.html");
     }
 
-    @Bean
-//    @Conditional(CorsFilterCondition.class)
-    public CorsFilter corsFilter() {
-        final UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        final CorsConfiguration corsConfiguration = new CorsConfiguration();
-        // 是否允许请求带有验证信息
-        corsConfiguration.setAllowCredentials(true);
-        // 允许访问的客户端域名
-        ArrayList<String> allowOrigins = new ArrayList<>();
+//    @Bean
+////    @Conditional(CorsFilterCondition.class)
+//    public CorsFilter corsFilter() {
+//        final UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+//        final CorsConfiguration corsConfiguration = new CorsConfiguration();
+//        // 是否允许请求带有验证信息
+//        corsConfiguration.setAllowCredentials(true);
+//        // 允许访问的客户端域名
+//        ArrayList<String> allowOrigins = new ArrayList<>();
 //        allowOrigins.add("http://localhost:9528");
-        allowOrigins.add("*");
-        // 需要什么允许的源就在这里添加
-        corsConfiguration.setAllowedOrigins(allowOrigins); // 注意这里的方法是 setAllowedOrigins
+//        allowOrigins.add("http://172.*.*.*");
+////        allowOrigins.add("*");
+//        // 需要什么允许的源就在这里添加
+//        corsConfiguration.setAllowedOrigins(allowOrigins);
+//        // 注意这里的方法是 setAllowedOrigins
 //        corsConfiguration.addAllowedOrigin("http://localhost:9528");
-        corsConfiguration.addAllowedOrigin("*");
-        corsConfiguration.addAllowedHeader("");
-        corsConfiguration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin")); // 允许的HTTP头部
-        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
-        System.out.println("cors被配置");
-        return new CorsFilter(urlBasedCorsConfigurationSource);
-    }
+//        corsConfiguration.addAllowedOrigin("https://localhost:9528");
+////        corsConfiguration.addAllowedOrigin("*");
+//        corsConfiguration.addAllowedHeader("");
+//        corsConfiguration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization", "X-Requested-With", "Accept", "Origin"));
+//        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"));
+//        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+//        System.out.println("cors被配置");
+//        return new CorsFilter(urlBasedCorsConfigurationSource);
+//    }
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter(objectMapper());
@@ -89,13 +82,15 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:9528")
                 .allowCredentials(true)
-                .allowedMethods("GET", "POST", "DELETE", "PUT")
+                .allowedMethods("*")
+                .allowedHeaders("*")
                 .maxAge(3600);
     }
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AuthInterceptor())
                 .addPathPatterns("/**")
+//                .excludePathPatterns(PathItem.HttpMethod.OPTIONS.toString())
                 .excludePathPatterns("/login/**")
                 .excludePathPatterns("/error/**")
                 .excludePathPatterns("/static/**")

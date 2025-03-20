@@ -2,37 +2,56 @@ package com.henu.ocr.interceptor;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.henu.ocr.IgnoreToken;
+import com.henu.ocr.util.JWTUtil;
+import com.henu.ocr.util.Result;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.Map;
 
-// 2. 实现认证拦截器
+import static com.henu.ocr.util.JWTUtil.getUserInfoByToken;
+
+@Slf4j
 public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        //查到方法不是get put post delete就放行
+        if (!(handler instanceof HandlerMethod)) {
+            return true;
+        }
         // 检查是否需要忽略认证
         if (isIgnoreAuth(handler)) {
             return true;
         }
-
         // 获取token（根据实际需求调整获取方式）
         String token = request.getHeader("token");
         if (StringUtils.isBlank(token)) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing authentication token");
+            Result.error(HttpServletResponse.SC_UNAUTHORIZED, "blank authentication token");
             return false;
         }
-
-        // 这里可以添加token验证逻辑
-        return verifyToken(token); // 需要实现token验证方法
-    }
-
-    private boolean verifyToken(String token) {
+        if (!verifyToken(token)) {
+            Result.error(HttpServletResponse.SC_UNAUTHORIZED, "wrong authentication token");
+        }
         return true;
     }
+
+    private boolean verifyToken(String token) throws Exception { // 添加throws
+        Map<String, String> map = getUserInfoByToken(token);
+        if (map == null || !map.containsKey("username") || !map.containsKey("userId")) {
+            throw new IllegalArgumentException("Invalid token payload");
+        }
+        try {
+            return JWTUtil.verify(token, map.get("username"), Integer.parseInt(map.get("userId")));
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("Token validation failed", e);
+        }
+    }
+
 
     private boolean isIgnoreAuth(Object handler) {
         if (handler instanceof HandlerMethod) {

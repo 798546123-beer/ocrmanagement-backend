@@ -10,9 +10,12 @@ import javax.annotation.PostConstruct;
 public class JWTConfig {
     @Value("${security.jwt.expiration}")
     private long expiration;
+    @Value("${security.jwt.secret}")
+    private String secret;
 
     @PostConstruct // 容器初始化时触发
     public void init() {
         JWTUtil.EXPIRE_TIME = expiration;
+        JWTUtil.SECRET = secret;
     }
 }
