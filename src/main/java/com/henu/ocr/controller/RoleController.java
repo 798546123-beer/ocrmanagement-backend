@@ -68,9 +68,7 @@ public class RoleController {
     @GetMapping("/getAllRoles")
     public Result<?> getAllRoles() {
         try {
-            log.info("获取所有角色列表");
             List<Role> roles = roleService.getAllRolesWithPermissions();
-            log.info("111111"+roles.toString());
             return Result.OK("查询成功", roles);
 //            return Result.OK(roles.isEmpty() ? "暂无数据" : "查询成功", roles);
         } catch (Exception e) {
