@@ -96,5 +96,16 @@ public class JWTUtil {
         // 附带user信息
         return JWT.create().withClaim("username", username).withClaim("userId", String.valueOf(userId)).withExpiresAt(date).sign(algorithm);
     }
+
+    public static String refreshToken(String token) {
+        try {
+            DecodedJWT jwt = JWT.decode(token);
+            String username = jwt.getClaim("username").asString();
+            String userId = jwt.getClaim("userId").asString();
+            return sign(username,Integer.parseInt(userId));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
 
