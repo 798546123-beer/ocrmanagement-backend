@@ -10,6 +10,7 @@ import com.henu.ocr.util.EncodeUtil;
 import com.henu.ocr.util.JWTUtil;
 import com.henu.ocr.util.RedisUtil;
 import com.henu.ocr.util.Result;
+import com.henu.ocr.vo.UserVO;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -65,13 +66,14 @@ public class LoginController {
             loginService.addLoginFailTimes(username);
             return Result.error("用户名或密码错误");
         }
+        UserVO userVO = new UserVO(user);
         //赋值一个token给前端
-        user.setToken(JWTUtil.sign(username, Integer.valueOf(user.getUserId())));
+        userVO.setToken(JWTUtil.sign(username, Integer.valueOf(user.getUserId())));
         log.info("用户名: {},{}成功！\n{}", username, "登录", user);
         redisUtil.setWithExpire(LOGIN_SUCCESS + username, user, REDIS_EXPIRE_TIME);
         redisUtil.delete(LOGIN_FAIL + username);
 //        redisCacheUtil.printAllRedisData();
-        return new Result<User>(200, "登陆成功", user);
+        return new Result<>(200, "登陆成功", userVO);
     }
     @Hidden
     @IgnoreToken

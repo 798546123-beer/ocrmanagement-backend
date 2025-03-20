@@ -4,15 +4,16 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 
 @Data
 @TableName("user")
+@Component
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
-    @TableField(exist = false)
-    private String token;
     @TableId("id")
     private String userId;
     @TableField("username")
