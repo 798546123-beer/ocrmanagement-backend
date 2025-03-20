@@ -9,6 +9,7 @@ import com.henu.ocr.model.PermissionModel;
 import lombok.*;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -24,7 +25,8 @@ import java.util.List;
 @TableName("role")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Role {
+public class Role implements Serializable {
+    private static final long serialVersionUID = 1L;
     @TableId(value = "role_id", type = IdType.ASSIGN_ID)
     private Integer roleId;
     @TableField(exist = false)

@@ -1,5 +1,6 @@
 package com.henu.ocr.util;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.henu.ocrbackend.constant.CommonConstant;
 import lombok.Data;
@@ -8,6 +9,7 @@ import java.io.Serializable;
 
 
 @Data
+@JsonAutoDetect
 public class Result<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,8 +38,6 @@ public class Result<T> implements Serializable {
      * 时间戳
      */
     private long timestamp = System.currentTimeMillis();
-    @JsonIgnore
-    private String onlTable;
 
     public Result() {
     }
@@ -61,6 +61,12 @@ public class Result<T> implements Serializable {
         Result<T> result = new Result<>();
         result.setCode(500);
         result.setMessage("异常中断");
+        return result;
+    }
+    public static <T> Result<T> Exception(String message) {
+        Result<T> result = new Result<>();
+        result.setCode(500);
+        result.setMessage(message);
         return result;
     }
 
@@ -155,28 +161,6 @@ public class Result<T> implements Serializable {
         r.setMessage(msg);
         r.setSuccess(false);
         return r;
-    }
-
-    /**
-     * 无权限访问返回结果
-     */
-    public static <T> Result<T> noauth(String msg) {
-        return error(CommonConstant.SC_JEECG_NO_AUTHZ, msg);
-    }
-
-    public Result<T> success(String message) {
-        this.message = message;
-        this.code = CommonConstant.SC_OK_200;
-        this.success = true;
-        return this;
-    }
-
-    //服务器错误
-    public Result<T> error500(String message) {
-        this.message = message;
-        this.code = CommonConstant.SC_INTERNAL_SERVER_ERROR_500;
-        this.success = false;
-        return this;
     }
 
 }

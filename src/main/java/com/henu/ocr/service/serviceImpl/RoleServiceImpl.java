@@ -123,7 +123,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     public List<Role> getAllRolesWithPermissions() {
-        return this.list();
+        List<Role> roles = this.list();
+        roles.forEach(role ->
+                getRoleWithPermissions(role.getRoleId())
+        );
+        return roles;
     }
 }
 

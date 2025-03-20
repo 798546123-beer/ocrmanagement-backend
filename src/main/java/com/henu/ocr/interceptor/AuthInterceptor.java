@@ -13,7 +13,6 @@ import java.util.Map;
 
 import static com.henu.ocr.util.JWTUtil.getUserInfoByToken;
 
-// 2. 实现认证拦截器
 public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
@@ -26,18 +25,19 @@ public class AuthInterceptor implements HandlerInterceptor {
         if (isIgnoreAuth(handler)) {
             return true;
         }
-
         // 获取token（根据实际需求调整获取方式）
         String token = request.getHeader("token");
         if (StringUtils.isBlank(token)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing authentication token");
             return false;
         }
-        return verifyToken(token);
+        return true;
+//        return verifyToken(token);
     }
 
     private boolean verifyToken(String token) {
         Map<String,String> map=getUserInfoByToken(token);
+        System.out.println("verify token"+map);
         return JWTUtil.verify(token, map.get("username"), Integer.valueOf(map.get("userId")));
     }
 

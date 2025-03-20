@@ -60,7 +60,7 @@ public class JWTUtil {
      */
     public static boolean verify(String token, String username, Integer userId) {
         try {
-            // 根据密码生成JWT效验器
+            // 根据密钥生成JWT效验器
             Algorithm algorithm = Algorithm.HMAC256(SECRET);
             JWTVerifier verifier = JWT.require(algorithm).withClaim("username", username).withClaim("userId", userId).build();
             // 效验TOKEN
@@ -94,7 +94,7 @@ public class JWTUtil {
         Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
         Algorithm algorithm = Algorithm.HMAC256(SECRET);
         // 附带user信息
-        return JWT.create().withClaim("username", username).withClaim("userId", userId).withExpiresAt(date).sign(algorithm);
+        return JWT.create().withClaim("username", username).withClaim("userId", String.valueOf(userId)).withExpiresAt(date).sign(algorithm);
     }
 }
 

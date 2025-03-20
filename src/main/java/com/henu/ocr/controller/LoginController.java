@@ -67,7 +67,7 @@ public class LoginController {
         }
         //赋值一个token给前端
         user.setToken(JWTUtil.sign(username, Integer.valueOf(user.getUserId())));
-        log.info("用户名: {},{}成功！\n{}", username, LOG_TYPE_1, user);
+        log.info("用户名: {},{}成功！\n{}", username, "登录", user);
         redisUtil.setWithExpire(LOGIN_SUCCESS + username, user, REDIS_EXPIRE_TIME);
         redisUtil.delete(LOGIN_FAIL + username);
 //        redisCacheUtil.printAllRedisData();

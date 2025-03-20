@@ -5,12 +5,14 @@ import com.henu.ocr.service.RoleService;
 import com.henu.ocr.util.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
+@Slf4j
 @Tag(name = "角色管理接口", description = "角色管理接口")
 @RequestMapping("/role")
 public class RoleController {
@@ -64,12 +66,15 @@ public class RoleController {
 
     @Operation(summary = "获取所有角色列表")
     @GetMapping("/getAllRoles")
-    public Result getAllRoles() {
+    public Result<?> getAllRoles() {
         try {
+            log.info("获取所有角色列表");
             List<Role> roles = roleService.getAllRolesWithPermissions();
-            return !roles.isEmpty() ? Result.OK("查询成功", roles) : Result.error("暂无数据");
+            log.info("111111"+roles.toString());
+            return Result.OK("查询成功", roles);
+//            return Result.OK(roles.isEmpty() ? "暂无数据" : "查询成功", roles);
         } catch (Exception e) {
-            return Result.Exception();
+            return Result.Exception(e.getMessage());
         }
     }
 
