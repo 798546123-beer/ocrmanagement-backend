@@ -1,15 +1,18 @@
 package com.henu.ocr.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.henu.ocr.entity.Role;
 import com.henu.ocr.service.RoleService;
 import com.henu.ocr.util.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -19,6 +22,9 @@ public class RoleController {
 
     @Resource
     private RoleService roleService;
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Operation(summary = "根据ID查询角色")
     @GetMapping("/getRoleById")
@@ -31,11 +37,15 @@ public class RoleController {
         }
     }
 
-    @Operation(summary = "新增角色")
-    @PostMapping("/addRole")
-    public Result addRole(@RequestBody Role role) {
+    @Operation(summary = "添加角色")
+    @PostMapping("/addRoleWithPermissions")
+    public Result addRoleWithPermissions(@RequestParam String roleName, @RequestParam String permissions) {
         try {
-            boolean success = roleService.save(role);
+            List<Integer> permissionList = java.util.Arrays.stream(permissions.split(","))
+                    .map(String::trim)
+                    .map(Integer::parseInt)
+                    .collect(Collectors.toList());
+            boolean success = roleService.addRoleWithPermissions(roleName, permissionList);
             return success ? Result.OK("添加成功") : Result.error("添加失败");
         } catch (Exception e) {
             return Result.Exception();
@@ -64,13 +74,13 @@ public class RoleController {
         }
     }
 
-    @Operation(summary = "获取所有角色列表")
+    @Operation(summary = "获取所有角色列表（分页）")
     @GetMapping("/getAllRoles")
-    public Result<?> getAllRoles() {
+    public Result<?> getAllRoles(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "15") Integer size) {
         try {
-            List<Role> roles = roleService.getAllRolesWithPermissions();
-            return Result.OK("查询成功", roles);
-//            return Result.OK(roles.isEmpty() ? "暂无数据" : "查询成功", roles);
+            // 调用 MyBatis-Plus 的分页方法
+            IPage<Role> rolesPage = roleService.getAllRolesWithPermissions(current, size);
+            return Result.OK("查询成功", rolesPage);
         } catch (Exception e) {
             return Result.Exception(e.getMessage());
         }

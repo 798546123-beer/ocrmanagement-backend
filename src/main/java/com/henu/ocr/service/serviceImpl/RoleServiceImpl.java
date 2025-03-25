@@ -1,6 +1,9 @@
 package com.henu.ocr.service.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.henu.ocr.entity.PageEntity;
 import com.henu.ocr.entity.Permission;
@@ -8,27 +11,36 @@ import com.henu.ocr.entity.Role;
 import com.henu.ocr.mapper.PageMapper;
 import com.henu.ocr.mapper.PermissionMapper;
 import com.henu.ocr.mapper.RoleMapper;
+import com.henu.ocr.model.PageTreeModel;
 import com.henu.ocr.model.PermissionModel;
+import com.henu.ocr.service.PageService;
 import com.henu.ocr.service.RoleService;
+import com.henu.ocr.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
+
     @Resource
     private final RoleMapper roleMapper;
+
     @Resource
     private final PermissionMapper permissionMapper;
+
     @Resource
     private final PageMapper pageMapper;
+
+    @Resource
+    private RedisUtil redisUtil;
+    @Resource
+    private PageService pageService;
 
     public RoleServiceImpl(RoleMapper roleMapper, PermissionMapper permissionMapper, PageMapper pageMapper) {
         this.roleMapper = roleMapper;
@@ -122,12 +134,74 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public List<Role> getAllRolesWithPermissions() {
-        List<Role> roles = this.list();
-        roles.forEach(role ->
-                getRoleWithPermissions(role.getRoleId())
-        );
-        return roles;
+    public IPage<Role> getAllRolesWithPermissions(Integer pageNum, Integer pageSize) {
+        Page<Role> page =new Page<>(pageNum, pageSize);
+        return roleMapper.selectPage(page, null);
+    }
+
+    @Override
+    @Transactional
+    public boolean addRoleWithPermissions(String roleName, List<Integer> permissions) {
+        try {
+            boolean roleSaved = save(new Role(roleName));
+            if (!roleSaved) {
+                log.error("Failed to save role with name: {}", roleName);
+                return false;
+            }
+            log.info("Role saved successfully with name: {}", roleName);
+
+            List<PageTreeModel> permissionTree =  pageService.getPermissionTree();
+            if (permissionTree == null) {
+                log.error("PermissionTree not found in Redis");
+                return false;
+            }
+            log.info("PermissionTree retrieved from Redis");
+
+            List<Integer> allPermissionIds = new ArrayList<>(permissions);
+            for (Integer childId : permissions) {
+                allPermissionIds.addAll(findParentIds(permissionTree, childId));
+            }
+            allPermissionIds = allPermissionIds.stream().distinct().collect(Collectors.toList());
+            log.info("All permission IDs: {}", allPermissionIds);
+
+            Role role = getOne((new QueryWrapper<Role>()).eq("role_name", roleName));
+            log.info("Role retrieved from database: {}", role);
+
+            for (Integer permissionId : allPermissionIds) {
+                Permission permission = new Permission();
+                permission.setPermissionId(permissionId.toString());
+                permission.setRoleId(role.getRoleId());
+                permissionMapper.insert(permission);
+            }
+            log.info("Permissions added successfully for role: {}", roleName);
+            return true;
+        } catch (Exception e) {
+            log.error("Exception occurred while adding role with permissions: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to add role with permissions", e);
+        }
+    }
+
+    private List<Integer> findParentIds(List<PageTreeModel> permissionTree, Integer childId) {
+        List<Integer> parentIds = new ArrayList<>();
+        for (PageTreeModel node : permissionTree) {
+            if (findParentIdsRecursive(node, childId, parentIds)) {
+                break;
+            }
+        }
+        return parentIds;
+    }
+
+    private boolean findParentIdsRecursive(PageTreeModel node, Integer childId, List<Integer> parentIds) {
+        if (node.getId().equals(childId)) {
+            return true;
+        }
+        for (PageTreeModel child : node.getChildren()) {
+            if (findParentIdsRecursive(child, childId, parentIds)) {
+                parentIds.add(node.getId());
+                return true;
+            }
+        }
+        return false;
     }
 }
 

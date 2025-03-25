@@ -33,4 +33,8 @@ public class Role implements Serializable {
     private List<PermissionModel> permissions;
     @TableField(value = "role_name")
     private String roleName;
+
+    public Role(String roleName) {
+        this.roleName = roleName;
+    }
 }

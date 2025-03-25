@@ -9,6 +9,7 @@ import java.io.Serializable;
 /**
  * @author 25612
  */
+
 @Data
 @TableName("role_page")
 public class PageEntity implements Serializable {
@@ -19,4 +20,6 @@ public class PageEntity implements Serializable {
     private String page;
     @TableId
     private Integer id;
+    @TableField(value = "father_page")
+    private Integer fatherPage;
 }

@@ -27,11 +27,11 @@ public class UserController {
 
     @GetMapping("/getUserByNameFuzzy")
     @Operation(summary = "模糊查询用户信息")
-    public Result fuzzyQuery(@RequestParam String keyword) {
+    public Result<?> fuzzyQuery(@RequestParam String keyword) {
         try {
             List<User> userList = userService.getUserByNameFuzzy(keyword);
-            if (userList.size() == 0) {
-                return new Result(400, "查询失败");
+            if (userList.isEmpty()) {
+                return Result.error("没有符合要求的人员");
             }
             return Result.OK("查询成功", userList);
         } catch (Exception e) {
@@ -40,7 +40,7 @@ public class UserController {
     }
     @Operation(summary = "添加用户")
     @PostMapping("/addUser")
-    public Result addUser(@RequestBody User user) {
+    public Result<?> addUser(@RequestBody User user) {
         try {
             boolean flag = userService.addUser(user);
             if (flag) {
@@ -56,7 +56,7 @@ public class UserController {
 //    @IgnoreToken
     @Operation(summary = "获取全部用户信息按照从小到大序号排序")
     @GetMapping("/getAllUserByOrder")
-    public Result getAllUserByOrder(){
+    public Result<?> getAllUserByOrder(){
         try {
             List<User> userList = userService.getAllUserByOrder();
             if (userList.size() == 0) {
