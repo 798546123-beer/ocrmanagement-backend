@@ -63,23 +63,23 @@ public class RoleController {
         }
     }
 
-//    @Operation(summary = "修改角色信息")
-//    @PutMapping("/updateRole")
-//    public Result updateRole(@RequestBody Role role) {
-//        try {
-//            boolean success = roleService.updateById(role);
-//            return success ? Result.OK("修改成功") : Result.error("修改失败");
-//        } catch (Exception e) {
-//            return Result.Exception();
-//        }
-//    }
+    @Operation(summary = "修改角色信息")
+    @PutMapping("/updateRole")
+    public Result updateRole(@RequestParam Integer roleId,@RequestParam String permissions) {
+        try {
+            boolean success = roleService.updateById(roleId, permissions);
+            return success ? Result.OK("修改成功") : Result.error("修改失败");
+        } catch (Exception e) {
+            return Result.Exception();
+        }
+    }
 
-    @Operation(summary = "获取所有角色列表（分页）")
+    @Operation(summary = "获取所有角色列表（分页）",description = "pageNum是页码，size是页面数据行数")
     @GetMapping("/getAllRoles")
-    public Result<?> getAllRoles(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "15") Integer size) {
+    public Result<?> getAllRoles(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "15") Integer size) {
         try {
             // 调用 MyBatis-Plus 的分页方法
-            IPage<Role> rolesPage = roleService.getAllRolesWithPermissions(current, size);
+            IPage<Role> rolesPage = roleService.getAllRolesWithPermissions(pageNum, size);
             return Result.OK("查询成功", rolesPage);
         } catch (Exception e) {
             return Result.Exception(e.getMessage());

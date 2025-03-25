@@ -16,4 +16,6 @@ public interface RoleService {
     boolean addRoleWithPermissions(String roleName,List<Integer> permissionIds);
 
     boolean removeById(Integer roleId);
+
+    boolean updateById(Integer roleId, String permissions);
 }

@@ -221,5 +221,30 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
         return true;
     }
+    @Override
+    @Transactional
+    public boolean updateById(Integer roleId, String permissions) {
+        List<Integer> permissionList = java.util.Arrays.stream(permissions.split(","))
+                .map(String::trim)
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
+        boolean success = permissionMapper.delete(
+                new LambdaQueryWrapper<Permission>()
+                        .eq(Permission::getRoleId, roleId)
+        ) >= 0;
+        if (!success) {
+            return false;
+        }
+        for (Integer permissionId : permissionList) {
+            Permission permission = new Permission();
+            permission.setPermissionId(permissionId.toString());
+            permission.setRoleId(roleId);
+            success = permissionMapper.insert(permission) >= 0;
+            if (!success) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
 
