@@ -14,4 +14,6 @@ public interface RoleService {
     IPage<Role> getAllRolesWithPermissions(Integer pageNum, Integer pageSize);
 
     boolean addRoleWithPermissions(String roleName,List<Integer> permissionIds);
+
+    boolean removeById(Integer roleId);
 }

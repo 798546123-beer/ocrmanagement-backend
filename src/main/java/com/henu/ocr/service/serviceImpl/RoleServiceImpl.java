@@ -203,5 +203,23 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
         return false;
     }
+    @Override
+    @Transactional
+    public boolean removeById(Integer roleId) {
+        // 先删除permission表中所有role_id等于roleId的记录
+        boolean permissionsDeleted = permissionMapper.delete(
+                new LambdaQueryWrapper<Permission>()
+                        .eq(Permission::getRoleId, roleId)
+        ) >= 0;
+        if (!permissionsDeleted) {
+            return false;
+        }
+        // 再删除role表中role_id等于roleId的记录
+        boolean roleDeleted = super.removeById(roleId);
+        if (!roleDeleted) {
+            return false;
+        }
+        return true;
+    }
 }
 

@@ -63,16 +63,16 @@ public class RoleController {
         }
     }
 
-    @Operation(summary = "修改角色信息")
-    @PutMapping("/updateRole")
-    public Result updateRole(@RequestBody Role role) {
-        try {
-            boolean success = roleService.updateById(role);
-            return success ? Result.OK("修改成功") : Result.error("修改失败");
-        } catch (Exception e) {
-            return Result.Exception();
-        }
-    }
+//    @Operation(summary = "修改角色信息")
+//    @PutMapping("/updateRole")
+//    public Result updateRole(@RequestBody Role role) {
+//        try {
+//            boolean success = roleService.updateById(role);
+//            return success ? Result.OK("修改成功") : Result.error("修改失败");
+//        } catch (Exception e) {
+//            return Result.Exception();
+//        }
+//    }
 
     @Operation(summary = "获取所有角色列表（分页）")
     @GetMapping("/getAllRoles")
