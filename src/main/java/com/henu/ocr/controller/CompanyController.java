@@ -3,6 +3,7 @@ package com.henu.ocr.controller;
 import com.henu.ocr.entity.Company;
 import com.henu.ocr.service.CompanyService;
 import com.henu.ocr.util.Result;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("/company")
+@Tag(name = "公司管理接口")
 public class CompanyController {
     @Resource
     private CompanyService companyService;
