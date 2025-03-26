@@ -1,8 +1,6 @@
 package com.henu.ocr.util;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.henu.ocrbackend.constant.CommonConstant;
 import lombok.Data;
 
 import java.io.Serializable;

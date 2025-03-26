@@ -138,7 +138,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         Page<Role> page = new Page<>(pageNum, pageSize);
         return roleMapper.selectPage(page, null);
     }
-
     @Override
     @Transactional
     public boolean addRoleWithPermissions(String roleName, List<Integer> permissions) {
