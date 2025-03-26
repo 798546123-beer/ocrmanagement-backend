@@ -1,10 +1,13 @@
 package com.henu.ocr.interceptor;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.henu.ocr.IgnoreToken;
 import com.henu.ocr.util.JWTUtil;
 import com.henu.ocr.util.Result;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -20,7 +23,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        //查到方法不是get put post delete就放行
+        // 查到方法不是get put post delete就放行
         if (!(handler instanceof HandlerMethod)) {
             return true;
         }
@@ -31,24 +34,30 @@ public class AuthInterceptor implements HandlerInterceptor {
         // 获取token（根据实际需求调整获取方式）
         String token = request.getHeader("token");
         if (StringUtils.isBlank(token)) {
-            Result.error(HttpServletResponse.SC_UNAUTHORIZED, "blank authentication token");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.getWriter().write(new ObjectMapper().writeValueAsString(Result.error(401,"token is blank")));
             return false;
         }
         if (!verifyToken(token)) {
-            Result.error(HttpServletResponse.SC_UNAUTHORIZED, "wrong authentication token");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.getWriter().write(new ObjectMapper().writeValueAsString(Result.error(401,"token is invalid")));
+            return false;
         }
         return true;
     }
 
-    private boolean verifyToken(String token) throws Exception { // 添加throws
+    private boolean verifyToken(String token) {
         Map<String, String> map = getUserInfoByToken(token);
         if (map == null || !map.containsKey("username") || !map.containsKey("userId")) {
-            throw new IllegalArgumentException("Invalid token payload");
+            return false;
         }
         try {
             return JWTUtil.verify(token, map.get("username"), Integer.parseInt(map.get("userId")));
         } catch (NumberFormatException e) {
-            throw new RuntimeException("Token validation failed", e);
+            log.error("token验证", e);
+            return false;
         }
     }
 

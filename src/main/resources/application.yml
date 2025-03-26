@@ -55,4 +55,4 @@ mybatis-plus:
 security:
   jwt:
     secret: oMGMiE0@},'fl@+IY?RKr\-Fxv4.(}\F1XMV[Lk]F#Z6b8FRrrjQ?z{,q#:V2024
-    expiration: 480
+    expiration: 480 # 24*8*60
