@@ -3,11 +3,11 @@ package com.henu.ocr.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.henu.ocr.entity.Role;
 import com.henu.ocr.service.RoleService;
+import com.henu.ocr.util.RedisUtil;
 import com.henu.ocr.util.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -24,7 +24,7 @@ public class RoleController {
     private RoleService roleService;
 
     @Resource
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisUtil redisUtil;
 
     @Operation(summary = "根据ID查询角色")
     @GetMapping("/getRoleById")

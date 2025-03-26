@@ -135,7 +135,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     public IPage<Role> getAllRolesWithPermissions(Integer pageNum, Integer pageSize) {
-        Page<Role> page =new Page<>(pageNum, pageSize);
+        Page<Role> page = new Page<>(pageNum, pageSize);
         return roleMapper.selectPage(page, null);
     }
 
@@ -145,38 +145,26 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         try {
             boolean roleSaved = save(new Role(roleName));
             if (!roleSaved) {
-                log.error("Failed to save role with name: {}", roleName);
                 return false;
             }
-            log.info("Role saved successfully with name: {}", roleName);
-
-            List<PageTreeModel> permissionTree =  pageService.getPermissionTree();
+            List<PageTreeModel> permissionTree = pageService.getPermissionTree();
             if (permissionTree == null) {
-                log.error("PermissionTree not found in Redis");
                 return false;
             }
-            log.info("PermissionTree retrieved from Redis");
-
             List<Integer> allPermissionIds = new ArrayList<>(permissions);
             for (Integer childId : permissions) {
                 allPermissionIds.addAll(findParentIds(permissionTree, childId));
             }
             allPermissionIds = allPermissionIds.stream().distinct().collect(Collectors.toList());
-            log.info("All permission IDs: {}", allPermissionIds);
-
             Role role = getOne((new QueryWrapper<Role>()).eq("role_name", roleName));
-            log.info("Role retrieved from database: {}", role);
-
             for (Integer permissionId : allPermissionIds) {
                 Permission permission = new Permission();
                 permission.setPermissionId(permissionId.toString());
                 permission.setRoleId(role.getRoleId());
                 permissionMapper.insert(permission);
             }
-            log.info("Permissions added successfully for role: {}", roleName);
             return true;
         } catch (Exception e) {
-            log.error("Exception occurred while adding role with permissions: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to add role with permissions", e);
         }
     }
@@ -203,6 +191,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
         return false;
     }
+
     @Override
     @Transactional
     public boolean removeById(Integer roleId) {
@@ -221,6 +210,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
         return true;
     }
+
     @Override
     @Transactional
     public boolean updateById(Integer roleId, String permissions) {

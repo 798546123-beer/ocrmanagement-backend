@@ -18,7 +18,6 @@ import java.util.Map;
 @Slf4j
 @Service
 public class PageServiceImpl extends ServiceImpl<PageMapper, PageEntity> implements PageService {
-    //可以加一个缓存机制，让页面列表查询先缓存起来，减少数据库的访问
     @Resource
     private PageMapper pageMapper;
 
