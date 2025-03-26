@@ -27,7 +27,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Role implements Serializable {
     private static final long serialVersionUID = 1L;
-    @TableId(value = "role_id", type = IdType.ASSIGN_ID)
+    @TableId(value = "role_id", type = IdType.AUTO)
     private Integer roleId;
     @TableField(exist = false)
     private List<PermissionModel> permissions;

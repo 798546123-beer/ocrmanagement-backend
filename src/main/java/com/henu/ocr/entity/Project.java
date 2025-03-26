@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Project {
-    @TableId(value = "project_id", type = IdType.ASSIGN_ID)
+    @TableId(value = "project_id", type = IdType.AUTO)
     private Integer projectId;
 
     @TableField(value = "project_name")
