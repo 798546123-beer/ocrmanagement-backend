@@ -57,6 +57,7 @@ public class Result<T> implements Serializable {
 
     public static <T> Result<T> Exception() {
         Result<T> result = new Result<>();
+        result.setSuccess(false);
         result.setCode(500);
         result.setMessage("异常中断");
         return result;
