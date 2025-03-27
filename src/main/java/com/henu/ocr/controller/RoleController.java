@@ -63,18 +63,18 @@ public class RoleController {
         }
     }
 
-    @Operation(summary = "修改角色信息")
+    @Operation(summary = "修改角色信息", description = "roleId是角色ID；roleName是角色名称,非必须，带上roleName会修改角色名称;permissions是权限列表，以逗号分隔")
     @PutMapping("/updateRole")
-    public Result updateRole(@RequestParam Integer roleId,@RequestParam String permissions) {
+    public Result updateRole(@RequestParam Integer roleId, @RequestParam(defaultValue = "null") String roleName, @RequestParam String permissions) {
         try {
-            boolean success = roleService.updateById(roleId, permissions);
+            boolean success = roleService.updateById(roleId, roleName, permissions);
             return success ? Result.OK("修改成功") : Result.error("修改失败");
         } catch (Exception e) {
             return Result.Exception();
         }
     }
 
-    @Operation(summary = "获取所有角色列表（分页）",description = "pageNum是页码，size是页面数据行数")
+    @Operation(summary = "获取所有角色列表（分页）", description = "pageNum是页码，size是页面数据行数")
     @GetMapping("/getAllRoles")
     public Result<?> getAllRoles(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "15") Integer size) {
         try {

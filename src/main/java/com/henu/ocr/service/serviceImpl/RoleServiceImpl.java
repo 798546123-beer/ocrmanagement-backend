@@ -138,6 +138,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         Page<Role> page = new Page<>(pageNum, pageSize);
         return roleMapper.selectPage(page, null);
     }
+
     @Override
     @Transactional
     public boolean addRoleWithPermissions(String roleName, List<Integer> permissions) {
@@ -212,12 +213,17 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     @Transactional
-    public boolean updateById(Integer roleId, String permissions) {
+    public boolean updateById(Integer roleId, String roleName, String permissions) {
+        boolean success = true;
+        if (roleName != null) {
+            Role role = new Role(roleId, null, roleName);
+            success = roleMapper.updateById(role)>=0;
+        }
         List<Integer> permissionList = java.util.Arrays.stream(permissions.split(","))
                 .map(String::trim)
                 .map(Integer::parseInt)
                 .collect(Collectors.toList());
-        boolean success = permissionMapper.delete(
+        success = permissionMapper.delete(
                 new LambdaQueryWrapper<Permission>()
                         .eq(Permission::getRoleId, roleId)
         ) >= 0;
