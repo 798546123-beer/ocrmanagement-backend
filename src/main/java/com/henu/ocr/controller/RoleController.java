@@ -33,7 +33,7 @@ public class RoleController {
             Role role = roleService.getRoleWithPermissions(roleId);
             return role != null ? Result.OK("查询成功", role) : Result.error("角色不存在");
         } catch (Exception e) {
-            return Result.Exception();
+            return Result.Exception(e.getMessage());
         }
     }
 
@@ -48,7 +48,7 @@ public class RoleController {
             boolean success = roleService.addRoleWithPermissions(roleName, permissionList);
             return success ? Result.OK("添加成功") : Result.error("添加失败");
         } catch (Exception e) {
-            return Result.Exception();
+            return Result.Exception(e.getMessage());
         }
     }
 
@@ -59,7 +59,7 @@ public class RoleController {
             boolean success = roleService.removeById(roleId);
             return success ? Result.OK("删除成功") : Result.error("删除失败");
         } catch (Exception e) {
-            return Result.Exception();
+            return Result.Exception(e.getMessage());
         }
     }
 
@@ -70,7 +70,7 @@ public class RoleController {
             boolean success = roleService.updateById(roleId, roleName, permissions);
             return success ? Result.OK("修改成功") : Result.error("修改失败");
         } catch (Exception e) {
-            return Result.Exception();
+            return Result.Exception(e.getMessage());
         }
     }
 
@@ -78,7 +78,6 @@ public class RoleController {
     @GetMapping("/getAllRoles")
     public Result<?> getAllRoles(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "15") Integer pageSize) {
         try {
-            // 调用 MyBatis-Plus 的分页方法
             IPage<Role> rolesPage = roleService.getAllRolesWithPermissions(pageNum, pageSize);
             return Result.OK("查询成功", rolesPage);
         } catch (Exception e) {
@@ -93,7 +92,7 @@ public class RoleController {
             List<Role> roles = roleService.getRolesByNameFuzzy(keyword);
             return !roles.isEmpty() ? Result.OK("查询成功", roles) : Result.error("未找到相关角色");
         } catch (Exception e) {
-            return Result.Exception();
+            return Result.Exception(e.getMessage());
         }
     }
 }
