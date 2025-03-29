@@ -66,7 +66,7 @@ public class LoginController {
             loginService.addLoginFailTimes(username);
             return Result.error("用户名或密码错误");
         }
-        UserVO userVO = new UserVO(user);
+        UserVO userVO = userService.getUserVOById(user.getUserId());
         //赋值一个token给前端
         userVO.setToken(JWTUtil.sign(username, Integer.valueOf(user.getUserId())));
         log.info("用户名: {},{}成功！\n{}", username, "登录", user);

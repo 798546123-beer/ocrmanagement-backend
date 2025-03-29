@@ -1,13 +1,16 @@
-package com.henu.ocr.vo;
+package com.henu.ocr.model;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.io.Serializable;
+
 @Data
-public class UserVO implements Serializable {
+public class UserDTO implements Serializable {
     private static final long serialVersionUID = 1L;
-    private String token;
     private String userId;
+    private String password;
     private String username;
     private String realname;
     private String userTypeId;

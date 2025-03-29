@@ -1,9 +1,11 @@
 package com.henu.ocr.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.henu.ocr.IgnoreToken;
 import com.henu.ocr.entity.User;
 import com.henu.ocr.service.UserService;
 import com.henu.ocr.util.Result;
+import com.henu.ocr.vo.UserVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +15,7 @@ import java.util.List;
 
 //在这个类里写user的增删查改
 @RestController
-@Tag(name="用户接口")
+@Tag(name = "用户接口")
 @RequestMapping("/user")
 public class UserController {
     @Resource
@@ -38,6 +40,7 @@ public class UserController {
             return Result.Exception();
         }
     }
+
     @Operation(summary = "添加用户")
     @PostMapping("/addUser")
     public Result<?> addUser(@RequestBody User user) {
@@ -52,24 +55,26 @@ public class UserController {
             return Result.Exception();
         }
     }
+
     //按照用户number排序全部用户信息
-//    @IgnoreToken
-    @Operation(summary = "获取全部用户信息按照从小到大序号排序")
+    //@IgnoreToken
+    @Operation(summary = "获取全部用户信息按照从小到大序号排序", description = "pageNum是页码；pageSize是页面数据行数,默认15")
     @GetMapping("/getAllUserByOrder")
-    public Result<?> getAllUserByOrder(){
+    public Result<?> getAllUserByOrder(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "15") Integer pageSize) {
         try {
-            List<User> userList = userService.getAllUserByOrder();
-            if (userList.size() == 0) {
-                return Result.error( "查询失败，列表为空");
+            IPage<UserVO> userPage = userService.getAllUserVOByOrder(userService.getAllUserDTOByOrder(pageNum, pageSize));
+            if (userPage.getRecords().isEmpty()) {
+                return Result.error("查询失败，列表为空");
             }
-            return Result.OK("查询成功", userList);
+            return Result.OK("查询成功", userPage);
         } catch (Exception e) {
             return Result.Exception();
         }
     }
+
     @IgnoreToken
     @GetMapping("test")
-    public String test(){
+    public String test() {
         return "test";
     }
 }
