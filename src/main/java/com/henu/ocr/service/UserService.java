@@ -22,4 +22,8 @@ public interface UserService extends IService<User> {
     IPage<UserVO> getAllUserVOByOrder(IPage<UserDTO> userDTOlist);
 
     UserVO getUserVOById(String id);
+
+    boolean updateUser(User user);
+
+    boolean deleteUserById(String id);
 }

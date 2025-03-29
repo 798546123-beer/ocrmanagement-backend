@@ -37,11 +37,11 @@ public class UserController {
             }
             return Result.OK("查询成功", userList);
         } catch (Exception e) {
-            return Result.Exception();
+            return Result.Exception(e.getMessage());
         }
     }
 
-    @Operation(summary = "添加用户")
+    @Operation(summary = "添加用户", description = "必需字段username,password,userTypeId，realname，非必需字段age，phone，userCompanyId，userGender")
     @PostMapping("/addUser")
     public Result<?> addUser(@RequestBody User user) {
         try {
@@ -52,12 +52,40 @@ public class UserController {
                 return Result.error("添加失败");
             }
         } catch (Exception e) {
-            return Result.Exception();
+            return Result.Exception(e.getMessage());
+        }
+    }
+
+    @Operation(summary = "更新用户信息", description = "根据用户ID更新用户信息，支持增量更新")
+    @PutMapping("/updateById")
+    public Result<?> updateUser(@RequestBody User user) {
+        try {
+            if (userService.updateUser(user)) {
+                return Result.OK("更新成功");
+            } else {
+                return Result.error("更新失败");
+            }
+        } catch (Exception e) {
+            return Result.Exception(e.getMessage());
+        }
+    }
+
+    @Operation(summary = "根据ID删除用户", description = "根据用户ID删除用户信息")
+    @DeleteMapping("/deleteUserById")
+    public Result<?> deleteUserById(@RequestParam String id) {
+        try {
+            boolean flag = userService.deleteUserById(id);
+            if (flag) {
+                return Result.OK("删除成功");
+            } else {
+                return Result.error("删除失败");
+            }
+        } catch (Exception e) {
+            return Result.Exception(e.getMessage());
         }
     }
 
     //按照用户number排序全部用户信息
-    //@IgnoreToken
     @Operation(summary = "获取全部用户信息按照从小到大序号排序", description = "pageNum是页码；pageSize是页面数据行数,默认15")
     @GetMapping("/getAllUserByOrder")
     public Result<?> getAllUserByOrder(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "15") Integer pageSize) {
@@ -68,7 +96,7 @@ public class UserController {
             }
             return Result.OK("查询成功", userPage);
         } catch (Exception e) {
-            return Result.Exception();
+            return Result.Exception(e.getMessage());
         }
     }
 

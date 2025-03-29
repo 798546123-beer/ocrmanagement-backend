@@ -8,8 +8,10 @@ import com.henu.ocr.entity.User;
 import com.henu.ocr.mapper.UserMapper;
 import com.henu.ocr.model.UserDTO;
 import com.henu.ocr.service.UserService;
+import com.henu.ocr.util.EncodeUtil;
 import com.henu.ocr.util.RedisUtil;
 import com.henu.ocr.vo.UserVO;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +42,52 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public boolean addUser(User user) {
+        user.setPassword(EncodeUtil.encodePassword(user.getPassword()));
         return save(user);
+    }
+
+    @Override
+    public boolean updateUser(User user) {
+        User existingUser = getById(user.getUserId());
+        if (existingUser == null) {
+            return false;
+        }
+        if (user.getUsername() != null) {
+            existingUser.setUsername(user.getUsername());
+        }
+        if (user.getPassword() != null) {
+            existingUser.setPassword(EncodeUtil.encodePassword(user.getPassword()));
+        }
+        if (user.getRealname() != null) {
+            existingUser.setRealname(user.getRealname());
+        }
+        if (user.getUserTypeId() != null) {
+            existingUser.setUserTypeId(user.getUserTypeId());
+        }
+        if (user.getUserPhone() != null) {
+            existingUser.setUserPhone(user.getUserPhone());
+        }
+        if (user.getUserNumber() != 0) {
+            existingUser.setUserNumber(user.getUserNumber());
+        }
+        if (user.getUserGender() != null) {
+            existingUser.setUserGender(user.getUserGender());
+        }
+        if (user.getUserCompanyId() != null) {
+            existingUser.setUserCompanyId(user.getUserCompanyId());
+        }
+        if (!ObjectUtils.isEmpty(user.getAge())) {
+            existingUser.setAge(user.getAge());
+        }
+        if (user.getIsDelete() != null) {
+            existingUser.setIsDelete(user.getIsDelete());
+        }
+        return updateById(existingUser);
+    }
+
+    @Override
+    public boolean deleteUserById(String id) {
+        return removeById(id);
     }
 
     @Override
