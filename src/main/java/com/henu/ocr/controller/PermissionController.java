@@ -14,15 +14,15 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
-@RequestMapping("/permission")
+@RequestMapping("permission")
 @Slf4j
 @Tag(name = "权限相关接口")
 public class PermissionController {
     @Resource
     private PageMapper pageMapper;
     @Operation(summary = "查询全部权限", description = "返回所有权限信息")
-    @GetMapping("/getPermissionList")
-    public Result<List<PageEntity>> getPermissionList() {
+    @GetMapping("getPermissionList")
+    public Result<?> getPermissionList() {
         try {
             List<PageEntity> permissions = pageMapper.selectList(null);
             return Result.ok(permissions);

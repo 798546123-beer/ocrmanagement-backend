@@ -14,13 +14,13 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@RequestMapping("/company")
+@RequestMapping("company")
 @Tag(name = "公司管理接口")
 public class CompanyController {
     @Resource
     private CompanyService companyService;
 
-    @GetMapping("/findAllCompany")
+    @GetMapping("findAllCompany")
     public Result<?> findAllCompany() {
         try {
             List<Company> companyList = companyService.findAllCompany();

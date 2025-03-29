@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/weathers")
+@RequestMapping("weathers")
 @Tag(name = "天气接口", description = "天气查询")
 public class WeatherController {
 
@@ -21,13 +21,13 @@ public class WeatherController {
     }
 
     @Operation(summary = "根据城市名查询天气")
-    @GetMapping("/{city}")
+    @GetMapping("{city}")
     public WeatherResponse getMojiWeatherByCity(@PathVariable String city) {
         return weatherService.getWeatherDataByCity(city);
     }
 
     @Operation(summary = "根据省+市 查询天气")
-    @GetMapping("/zone")
+    @GetMapping("zone")
     public WeatherResponse getMojiWeatherByZone(@RequestParam String province, @RequestParam String city) {
         ZoneRequest zone = new ZoneRequest(province, city);
         return weatherService.getWeatherDataByZone(zone);

@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/token")
+@RequestMapping("token")
 @Tag(name = "token管理接口")
 public class TokenController {
-    @GetMapping("/getToken")
+    @GetMapping("getToken")
     public Result getToken(HttpServletRequest request) {
         String token = request.getHeader("token");
         return Result.ok(JWTUtil.refreshToken(token));

@@ -9,7 +9,7 @@ public interface RoleService {
 
     Role getRoleWithPermissions(Integer roleId);
 
-    List<Role> getRolesByNameFuzzy(String keyword);
+    IPage<Role> getRolesByNameFuzzy(String keyword);
 
     IPage<Role> getAllRolesWithPermissions(Integer pageNum, Integer pageSize);
 

@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @RestController
 @Slf4j
 @Tag(name = "角色管理接口", description = "角色管理接口")
-@RequestMapping("/role")
+@RequestMapping("role")
 public class RoleController {
 
     @Resource
@@ -27,8 +27,8 @@ public class RoleController {
     private RedisUtil redisUtil;
 
     @Operation(summary = "根据ID查询角色")
-    @GetMapping("/getRoleById")
-    public Result getRoleById(@RequestParam Integer roleId) {
+    @GetMapping("getRoleById")
+    public Result<?> getRoleById(@RequestParam Integer roleId) {
         try {
             Role role = roleService.getRoleWithPermissions(roleId);
             return role != null ? Result.OK("查询成功", role) : Result.error("角色不存在");
@@ -38,8 +38,8 @@ public class RoleController {
     }
 
     @Operation(summary = "添加角色")
-    @PostMapping("/addRoleWithPermissions")
-    public Result addRoleWithPermissions(@RequestParam String roleName, @RequestParam String permissions) {
+    @PostMapping("addRoleWithPermissions")
+    public Result<?> addRoleWithPermissions(@RequestParam String roleName, @RequestParam String permissions) {
         try {
             List<Integer> permissionList = java.util.Arrays.stream(permissions.split(","))
                     .map(String::trim)
@@ -64,7 +64,7 @@ public class RoleController {
     }
 
     @Operation(summary = "修改角色信息", description = "roleId是角色ID；roleName是角色名称,非必须，带上roleName会修改角色名称;permissions是权限列表，以逗号分隔")
-    @PutMapping("/updateRole")
+    @PutMapping("updateRole")
     public Result updateRole(@RequestParam Integer roleId, @RequestParam(defaultValue = "null") String roleName, @RequestParam String permissions) {
         try {
             boolean success = roleService.updateById(roleId, roleName, permissions);
@@ -75,7 +75,7 @@ public class RoleController {
     }
 
     @Operation(summary = "获取所有角色列表（分页）", description = "pageNum是页码，size是页面数据行数")
-    @GetMapping("/getAllRoles")
+    @GetMapping("getAllRoles")
     public Result<?> getAllRoles(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "15") Integer pageSize) {
         try {
             IPage<Role> rolesPage = roleService.getAllRolesWithPermissions(pageNum, pageSize);
@@ -86,8 +86,8 @@ public class RoleController {
     }
 
     @Operation(summary = "根据角色名称模糊查询")
-    @GetMapping("/getRoleByNameFuzzy")
-    public Result fuzzyQuery(@RequestParam String keyword) {
+    @GetMapping("getRoleByNameFuzzy")
+    public Result<?> fuzzyQuery(@RequestParam String keyword) {
         try {
             List<Role> roles = roleService.getRolesByNameFuzzy(keyword);
             return !roles.isEmpty() ? Result.OK("查询成功", roles) : Result.error("未找到相关角色");

@@ -25,7 +25,7 @@ import javax.validation.constraints.NotNull;
 import static com.henu.ocrbackend.constant.CommonConstant.*;
 
 @RestController
-@RequestMapping("/login")
+@RequestMapping("login")
 @Slf4j
 @Tag(name="登录相关接口")
 public class LoginController {

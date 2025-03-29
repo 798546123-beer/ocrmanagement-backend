@@ -16,18 +16,18 @@ import java.util.List;
 //在这个类里写user的增删查改
 @RestController
 @Tag(name = "用户接口")
-@RequestMapping("/user")
+@RequestMapping("user")
 public class UserController {
     @Resource
     UserService userService;
 
-    @GetMapping("/getUserById")
+    @GetMapping("getUserById")
     @Operation(summary = "根据id查询用户信息")
     public List<User> getUserById(@RequestParam String id) {
         return userService.getUserById(id);
     }
 
-    @GetMapping("/getUserByNameFuzzy")
+    @GetMapping("getUserByNameFuzzy")
     @Operation(summary = "模糊查询用户信息")
     public Result<?> fuzzyQuery(@RequestParam String keyword) {
         try {
@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @Operation(summary = "添加用户", description = "必需字段username,password,userTypeId，realname，非必需字段age，phone，userCompanyId，userGender")
-    @PostMapping("/addUser")
+    @PostMapping("addUser")
     public Result<?> addUser(@RequestBody User user) {
         try {
             boolean flag = userService.addUser(user);
@@ -57,7 +57,7 @@ public class UserController {
     }
 
     @Operation(summary = "更新用户信息", description = "根据用户ID更新用户信息，支持增量更新")
-    @PutMapping("/updateById")
+    @PutMapping("updateById")
     public Result<?> updateUser(@RequestBody User user) {
         try {
             if (userService.updateUser(user)) {
@@ -87,7 +87,7 @@ public class UserController {
 
     //按照用户number排序全部用户信息
     @Operation(summary = "获取全部用户信息按照从小到大序号排序", description = "pageNum是页码；pageSize是页面数据行数,默认15")
-    @GetMapping("/getAllUserByOrder")
+    @GetMapping("getAllUserByOrder")
     public Result<?> getAllUserByOrder(@RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "15") Integer pageSize) {
         try {
             IPage<UserVO> userPage = userService.getAllUserVOByOrder(userService.getAllUserDTOByOrder(pageNum, pageSize));

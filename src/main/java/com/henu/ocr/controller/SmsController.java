@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @Tag(name = "消息管理接口")
-@RequestMapping("/sms")
+@RequestMapping("sms")
 public class SmsController {
 
     @Autowired
@@ -53,7 +53,7 @@ public class SmsController {
     }
 
     @Operation(summary = "更新消息")
-    @PutMapping("/{id}")
+    @PutMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public Result<?> updateSms(@PathVariable Integer id, @RequestBody Sms sms) {
         try {
@@ -79,7 +79,7 @@ public class SmsController {
     }
 
     @Operation(summary = "获取消息详情")
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public Result<SmsDTO> getSmsById(@PathVariable Integer id) {
         try {
             SmsDTO data = smsService.getSmsById(id);
@@ -92,7 +92,7 @@ public class SmsController {
     }
 
     @Operation(summary = "标记消息已读")
-    @PostMapping("/{id}/read-status")
+    @PostMapping("{id}/read-status")
     @ResponseStatus(HttpStatus.OK)
     public Result<?> markAsRead(@PathVariable Integer id) {
         try {
