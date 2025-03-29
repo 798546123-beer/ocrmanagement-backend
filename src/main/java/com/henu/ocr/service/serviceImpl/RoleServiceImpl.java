@@ -81,7 +81,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
 
     @Override
-    public IPage<Role> getRolesByNameFuzzy(String keyword) {
+    public List<Role> getRolesByNameFuzzy(String keyword) {
         List<Role> roles = this.list(new LambdaQueryWrapper<Role>()
                 .like(Role::getRoleName, keyword));
         if (!roles.isEmpty()) {

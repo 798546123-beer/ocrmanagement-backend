@@ -87,10 +87,10 @@ public class RoleController {
 
     @Operation(summary = "根据角色名称模糊查询")
     @GetMapping("getRoleByNameFuzzy")
-    public Result<?> fuzzyQuery(@RequestParam String keyword) {
+    public Result<?> fuzzyQuery(@RequestParam String keyword, @RequestParam(defaultValue = "1") Integer pageNum, @RequestParam(defaultValue = "15") Integer pageSize) {
         try {
-            List<Role> roles = roleService.getRolesByNameFuzzy(keyword);
-            return !roles.isEmpty() ? Result.OK("查询成功", roles) : Result.error("未找到相关角色");
+            IPage<Role> roles = roleService.getRolesByNameFuzzy(keyword, pageNum, pageSize);
+            return roles.getSize() != 0 ? Result.OK("查询成功", roles) : Result.error("未找到相关角色");
         } catch (Exception e) {
             return Result.Exception(e.getMessage());
         }
