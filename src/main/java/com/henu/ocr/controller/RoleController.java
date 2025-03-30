@@ -1,9 +1,10 @@
 package com.henu.ocr.controller;
 
+
+
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.henu.ocr.entity.Role;
 import com.henu.ocr.service.RoleService;
-import com.henu.ocr.util.RedisUtil;
 import com.henu.ocr.util.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,8 +24,6 @@ public class RoleController {
     @Resource
     private RoleService roleService;
 
-    @Resource
-    private RedisUtil redisUtil;
 
     @Operation(summary = "根据ID查询角色")
     @GetMapping("getRoleById")
@@ -54,7 +53,7 @@ public class RoleController {
 
     @Operation(summary = "根据ID删除角色")
     @DeleteMapping("/deleteRoleById")
-    public Result deleteRoleById(@RequestParam Integer roleId) {
+    public Result<?> deleteRoleById(@RequestParam Integer roleId) {
         try {
             boolean success = roleService.removeById(roleId);
             return success ? Result.OK("删除成功") : Result.error("删除失败");
@@ -65,7 +64,7 @@ public class RoleController {
 
     @Operation(summary = "修改角色信息", description = "roleId是角色ID；roleName是角色名称,非必须，带上roleName会修改角色名称;permissions是权限列表，以逗号分隔")
     @PutMapping("updateRole")
-    public Result updateRole(@RequestParam Integer roleId, @RequestParam(defaultValue = "null") String roleName, @RequestParam String permissions) {
+    public Result<?> updateRole(@RequestParam Integer roleId, @RequestParam(defaultValue = "null") String roleName, @RequestParam String permissions) {
         try {
             boolean success = roleService.updateById(roleId, roleName, permissions);
             return success ? Result.OK("修改成功") : Result.error("修改失败");
