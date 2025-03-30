@@ -167,12 +167,6 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             }
             allPermissionIds = allPermissionIds.stream().distinct().collect(Collectors.toList());
             Role role = getOne((new QueryWrapper<Role>()).eq("role_name", roleName));
-//            for (Integer permissionId : allPermissionIds) {
-//                Permission permission = new Permission();
-//                permission.setPermissionId(permissionId.toString());
-//                permission.setRoleId(role.getRoleId());
-//                permissionMapper.insert(permission);
-//            }
             return batchSqlUtil.batchUpdateOrInsert(
                     (allPermissionIds.stream().map(
                                     permissionId -> new Permission(role.getRoleId(), permissionId.toString()))
