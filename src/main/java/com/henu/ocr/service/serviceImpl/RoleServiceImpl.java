@@ -15,6 +15,7 @@ import com.henu.ocr.model.PageTreeModel;
 import com.henu.ocr.model.PermissionModel;
 import com.henu.ocr.service.PageService;
 import com.henu.ocr.service.RoleService;
+import com.henu.ocr.util.BatchSqlUtil;
 import com.henu.ocr.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Resource
     private RedisUtil redisUtil;
+    @Resource
+    private BatchSqlUtil batchSqlUtil;
     @Resource
     private PageService pageService;
 
@@ -164,15 +167,20 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             }
             allPermissionIds = allPermissionIds.stream().distinct().collect(Collectors.toList());
             Role role = getOne((new QueryWrapper<Role>()).eq("role_name", roleName));
-            for (Integer permissionId : allPermissionIds) {
-                Permission permission = new Permission();
-                permission.setPermissionId(permissionId.toString());
-                permission.setRoleId(role.getRoleId());
-                permissionMapper.insert(permission);
-            }
-            return true;
+//            for (Integer permissionId : allPermissionIds) {
+//                Permission permission = new Permission();
+//                permission.setPermissionId(permissionId.toString());
+//                permission.setRoleId(role.getRoleId());
+//                permissionMapper.insert(permission);
+//            }
+            return batchSqlUtil.batchUpdateOrInsert(
+                    (allPermissionIds.stream().map(
+                                    permissionId -> new Permission(role.getRoleId(), permissionId.toString()))
+                            .collect(Collectors.toList())), PermissionMapper.class, (item, permissionMapper) -> permissionMapper.insert(item)
+            ) >= 0;
+
         } catch (Exception e) {
-            throw new RuntimeException("Failed to add role with permissions", e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -210,12 +218,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         if (!permissionsDeleted) {
             return false;
         }
-        // 再删除role表中role_id等于roleId的记录
-        boolean roleDeleted = super.removeById(roleId);
-        if (!roleDeleted) {
-            return false;
-        }
-        return true;
+        return super.removeById(roleId);
     }
 
     @Override
@@ -224,7 +227,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         boolean success = true;
         if (roleName != null) {
             Role role = new Role(roleId, null, roleName);
-            success = roleMapper.updateById(role)>=0;
+            success = roleMapper.updateById(role) >= 0;
         }
         List<Integer> permissionList = java.util.Arrays.stream(permissions.split(","))
                 .map(String::trim)
@@ -238,9 +241,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             return false;
         }
         for (Integer permissionId : permissionList) {
-            Permission permission = new Permission();
-            permission.setPermissionId(permissionId.toString());
-            permission.setRoleId(roleId);
+            Permission permission = Permission.builder()
+                    .permissionId(permissionId.toString())
+                    .roleId(roleId).build();
             success = permissionMapper.insert(permission) >= 0;
             if (!success) {
                 return false;
