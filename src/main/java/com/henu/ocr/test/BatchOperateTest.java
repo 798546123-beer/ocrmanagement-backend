@@ -20,7 +20,6 @@ public class BatchOperateTest {
     @Resource
     private BatchSqlUtil batchSqlUtil;
 
-    // 提取公共测试数据
     private static List<Permission> testPermissions;
 
     @BeforeAll
@@ -34,7 +33,6 @@ public class BatchOperateTest {
     @Test
     public void testBatchInsertWithMyBatisPlus() {
         long startTime = System.currentTimeMillis();
-        // 使用 MyBatis-Plus 提供的 saveBatch 方法
         testPermissions.forEach(permission -> {permissionMapper.insert(permission);});
         long endTime = System.currentTimeMillis();
 
