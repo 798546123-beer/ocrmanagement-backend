@@ -16,7 +16,6 @@ import com.henu.ocr.model.PermissionModel;
 import com.henu.ocr.service.PageService;
 import com.henu.ocr.service.RoleService;
 import com.henu.ocr.util.BatchSqlUtil;
-import com.henu.ocr.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,26 +29,19 @@ import java.util.stream.Collectors;
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
 
     @Resource
-    private final RoleMapper roleMapper;
+    private RoleMapper roleMapper;
 
     @Resource
-    private final PermissionMapper permissionMapper;
+    private PermissionMapper permissionMapper;
 
     @Resource
-    private final PageMapper pageMapper;
+    private PageMapper pageMapper;
 
-    @Resource
-    private RedisUtil redisUtil;
     @Resource
     private BatchSqlUtil batchSqlUtil;
     @Resource
     private PageService pageService;
 
-    public RoleServiceImpl(RoleMapper roleMapper, PermissionMapper permissionMapper, PageMapper pageMapper) {
-        this.roleMapper = roleMapper;
-        this.permissionMapper = permissionMapper;
-        this.pageMapper = pageMapper;
-    }
 
     @Override
     public Role getRoleWithPermissions(Integer roleId) {
@@ -167,7 +159,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             }
             allPermissionIds = allPermissionIds.stream().distinct().collect(Collectors.toList());
             Role role = getOne((new QueryWrapper<Role>()).eq("role_name", roleName));
-            return batchSqlUtil.batchUpdateOrInsert(
+            return batchSqlUtil.batchOperate(
                     (allPermissionIds.stream().map(
                                     permissionId -> new Permission(role.getRoleId(), permissionId.toString()))
                             .collect(Collectors.toList())), PermissionMapper.class, (item, permissionMapper) -> permissionMapper.insert(item)

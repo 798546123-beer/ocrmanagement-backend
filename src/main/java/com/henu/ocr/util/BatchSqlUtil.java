@@ -25,7 +25,7 @@ public class BatchSqlUtil {
      * @param function 自定义处理逻辑
      * @return int 影响的总行数
      */
-    public  <T,U,R> int batchUpdateOrInsert(List<T> data, Class<U> mapperClass, BiFunction<T,U,R> function) {
+    public  <T,U,R> int batchOperate(List<T> data, Class<U> mapperClass, BiFunction<T,U,R> function) {
         int i = 1;
         SqlSession batchSqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH);
         try {
