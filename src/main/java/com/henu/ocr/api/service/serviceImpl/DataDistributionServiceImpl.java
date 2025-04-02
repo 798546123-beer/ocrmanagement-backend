@@ -1,5 +1,7 @@
 package com.henu.ocr.api.service.serviceImpl;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.henu.ocr.api.model.DataDistributionRequestModel;
 import com.henu.ocr.entity.Company;
 import com.henu.ocr.service.CompanyService;
@@ -49,11 +51,11 @@ public class DataDistributionServiceImpl {
 
     @Transactional
     public boolean dealWithOrg(DataDistributionRequestModel model) {
-        Company company = Company.builder()
-                .companyId((Integer) model.get("pk_corp"))
-                .companyName((String) model.get("unitname"))
-                .fatherCompanyId((Integer) model.get("fathercorp"))
-                .build();
+            Company company = Company.builder()
+                    .companyId(Integer.valueOf((String) model.get("pk_corp")))
+                    .companyName((String) model.get("unitname"))
+                    .fatherCompanyId(Integer.valueOf((String) model.get("fathercorp")))
+                    .build();
         return companyService.save(company);
     }
 }

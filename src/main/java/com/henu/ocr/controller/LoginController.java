@@ -1,7 +1,7 @@
 package com.henu.ocr.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.henu.ocr.IgnoreToken;
+import com.henu.ocr.annotation.IgnoreToken;
 import com.henu.ocr.entity.User;
 import com.henu.ocr.model.LoginModel;
 import com.henu.ocr.service.UserService;

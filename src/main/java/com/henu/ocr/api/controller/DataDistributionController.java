@@ -1,5 +1,7 @@
 package com.henu.ocr.api.controller;
 
+import com.henu.ocr.annotation.IgnoreToken;
+import com.henu.ocr.annotation.Timed;
 import com.henu.ocr.api.model.DataDistributionRequestModel;
 import com.henu.ocr.api.model.DataDistributionResponseModel;
 import com.henu.ocr.api.service.serviceImpl.DataDistributionServiceImpl;
@@ -19,7 +21,8 @@ import javax.annotation.Resource;
 public class DataDistributionController {
     @Resource
     DataDistributionServiceImpl dataDistributionService;
-
+    @IgnoreToken
+    @Timed
     @PostMapping("test")
     public DataDistributionResponseModel test(@RequestBody DataDistributionRequestModel model) {
         try {
@@ -30,7 +33,7 @@ public class DataDistributionController {
             }
             return new DataDistributionResponseModel("主数据分发失败",null,null,null);
         } catch (Exception e) {
-            return DataDistributionResponseModel.builder().message(e.getMessage()).build();
+            return DataDistributionResponseModel.builder().success("false").message(e.getMessage()).build();
         }
     }
 }

@@ -2,7 +2,7 @@ package com.henu.ocr.interceptor;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.henu.ocr.IgnoreToken;
+import com.henu.ocr.annotation.IgnoreToken;
 import com.henu.ocr.util.JWTUtil;
 import com.henu.ocr.util.Result;
 import lombok.extern.slf4j.Slf4j;

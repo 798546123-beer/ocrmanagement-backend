@@ -1,5 +1,6 @@
 package com.henu.ocr.test;
 
+import com.henu.ocr.annotation.Timed;
 import com.henu.ocr.entity.Permission;
 import com.henu.ocr.util.BatchSqlUtil;
 import com.henu.ocr.mapper.PermissionMapper;
