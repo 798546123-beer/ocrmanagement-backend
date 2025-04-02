@@ -3,10 +3,12 @@ package com.henu.ocr.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
 @TableName("company")
+@Builder
 public class Company {
 
 //    @ApiModelProperty(value = "公司ID，主键，不可为NULL")

@@ -25,7 +25,10 @@ public class DataDistributionController {
         try {
             log.info("test");
             boolean isSuccess = dataDistributionService.dealWithData(model);
-            return DataDistributionResponseModel.builder().success(String.valueOf(isSuccess)).message("fail").build();
+            if(isSuccess){
+                return new DataDistributionResponseModel("主数据分发成功",  model.get("mdmCode"),model.get("entityCode"), model.get("busiDataId"));
+            }
+            return new DataDistributionResponseModel("主数据分发失败",null,null,null);
         } catch (Exception e) {
             return DataDistributionResponseModel.builder().message(e.getMessage()).build();
         }

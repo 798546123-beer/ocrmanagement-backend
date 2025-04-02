@@ -5,23 +5,29 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class DataDistributionResponseModel {
-    private String success;
+    private String success="false";
     private String message;
-    private String mdMappings;
-    private String mdmCode;
-    private String entityCode;
-    private String busiDataId;
-    public DataDistributionResponseModel(String message, String mdMappings, String mdmCode, String entityCode, String busiDataId) {
-        this.success = String.valueOf(false);
+    private HashMap<String, Object> mdMappings;
+//    private String mdmCode;
+//    private String entityCode;
+//    private String busiDataId;
+    public DataDistributionResponseModel(String message, String mdmCode, String entityCode, String busiDataId) {
         this.message = message;
-        this.mdMappings = mdMappings;
-        this.mdmCode = mdmCode;
-        this.entityCode = entityCode;
-        this.busiDataId = busiDataId;
+        this.mdMappings = new HashMap<>();
+        this.mdMappings.put("mdmCode", mdmCode);
+        this.mdMappings.put("entityCode", entityCode);
+        this.mdMappings.put("busiDataId", busiDataId);
+    }
+    public DataDistributionResponseModel(String isSuccess, String message,String mdmCode, String entityCode, String busiDataId) {
+        this(message,mdmCode,entityCode,busiDataId);
+        this.success = String.valueOf(isSuccess);
     }
 }

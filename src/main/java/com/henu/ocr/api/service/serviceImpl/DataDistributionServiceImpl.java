@@ -1,49 +1,59 @@
 package com.henu.ocr.api.service.serviceImpl;
 
 import com.henu.ocr.api.model.DataDistributionRequestModel;
+import com.henu.ocr.entity.Company;
+import com.henu.ocr.service.CompanyService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+
 @Service
 public class DataDistributionServiceImpl {
+    @Resource
+    private CompanyService companyService;
     @Transactional
-    public boolean dealWithData(DataDistributionRequestModel model) throws Exception{
+    public boolean dealWithData(DataDistributionRequestModel model) throws Exception {
         String type = model.getMdType();
-        switch (type){
+        switch (type) {
             case "org001":
                 return this.dealWithOrg(model);
-                break;
             case "dept001":
                 return this.dealWithDept(model);
-                break;
             case "psn001":
                 return this.dealWithPsn(model);
-                break;
             case "trader001":
                 return this.dealWithTrader(model);
-                break;
             case "pro001":
                 return this.dealWithPro(model);
-                break;
             default:
                 throw new Exception("数据分发类型错误,mdType wrong");
         }
-        throw new Exception("未知异常, sort wrong");
     }
 
-    private boolean dealWithPro(DataDistributionRequestModel model) {
+    public boolean dealWithPro(DataDistributionRequestModel model) {
+        return false;
     }
 
-    private boolean dealWithTrader(DataDistributionRequestModel model) {
+    public boolean dealWithTrader(DataDistributionRequestModel model) {
+        return false;
     }
 
-    private boolean dealWithPsn(DataDistributionRequestModel model) {
+    public boolean dealWithPsn(DataDistributionRequestModel model) {
+        return false;
     }
 
-    private boolean dealWithDept(DataDistributionRequestModel model) {
+    public boolean dealWithDept(DataDistributionRequestModel model) {
+        return false;
     }
 
-    private boolean dealWithOrg(DataDistributionRequestModel model) {
-        
+    @Transactional
+    public boolean dealWithOrg(DataDistributionRequestModel model) {
+        Company company = Company.builder()
+                .companyId((Integer) model.get("pk_corp"))
+                .companyName((String) model.get("unitname"))
+                .fatherCompanyId((Integer) model.get("fathercorp"))
+                .build();
+        return companyService.save(company);
     }
 }
